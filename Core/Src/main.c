@@ -116,7 +116,7 @@ int main(void)
   //MX_USB_DEVICE_Init();
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
-  app_main();
+  app_main(); //keep mx_usb_device_init off here
 
 
   /* USER CODE END 2 */

@@ -27,7 +27,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "string.h"
+#include <string.h>
+#include "stddef.h"
 #include <ctype.h>
 #include "Uhr.h"
 #include "Utils.h"
@@ -36,6 +37,7 @@
 #include "sensirion_uart.h"
 #include "sps30.h"
 #include "internal_adc.h"
+
 static EmbeddedCli *cli;
 // Definitions for CLI UART peripheral
 #define UART_CLI_PERIPH &huart1
@@ -48,7 +50,7 @@ static EmbeddedCli *cli;
 uint32_t max_wait_time = 300000; //5min wait time
 uint32_t prev_max_wait_time = 0;
 
-uint32_t max_wait_time_motion = 20000;
+uint32_t max_wait_time_motion = 10000;
 uint32_t prev_max_wait_time_motion = 0;
 extern struct sps30_measurement m;
 /**
@@ -142,9 +144,9 @@ void receiveString(EmbeddedCli *cli, char *buffer, size_t bufferSize) {
 				buffer[index] = '\0'; // Null-terminate the string
 				flag_cli = 0;
 				// Convert the entered string to lowercase
-				for (size_t i = 0; buffer[i]; i++) {
-					buffer[i] = tolower(buffer[i]);
-				}
+//				for (size_t i = 0; buffer[i]; i++) {
+//					buffer[i] = tolower(buffer[i]);
+//				}
 				break;
 			} else {
 				// Check if the received character is an alphabet character
@@ -205,6 +207,8 @@ void DeviceSignature(EmbeddedCli *cli, char *args, void *context) {
 void SetID(EmbeddedCli *cli, char *args, void *context) {
 	uint16_t len;
     const char *newLine = "\r\n";
+	cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
+	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"Set the ID. Keep ID below 30 characters");
 	cli_other = 1;
 	flag_cli = 0;
@@ -237,6 +241,8 @@ void SetID(EmbeddedCli *cli, char *args, void *context) {
 void SetLocation(EmbeddedCli *cli, char *args, void *context) {
 	uint16_t len;
     const char *newLine = "\r\n";
+	cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
+	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"Set the Location. Keep Location below 15 characters");
 	cli_other = 1;
 	flag_cli = 0;
@@ -270,6 +276,8 @@ void SetLocation(EmbeddedCli *cli, char *args, void *context) {
 void Setname(EmbeddedCli *cli, char *args, void *context) {
 	uint16_t len;
     const char *newLine = "\r\n";
+	cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
+	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"Set the name. Keep name below 15 characters");
 	cli_other = 1;
 	flag_cli = 0;
@@ -303,6 +311,8 @@ void Setname(EmbeddedCli *cli, char *args, void *context) {
 void Setgroup(EmbeddedCli *cli, char *args, void *context) {
 	uint16_t len;
     const char *newLine = "\r\n";
+	cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
+	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"Set the group. Keep name below 15 characters");
 	cli_other = 1;
 	flag_cli = 0;
@@ -332,6 +342,33 @@ void Setgroup(EmbeddedCli *cli, char *args, void *context) {
 	cli_other = 0;
 
 }
+
+
+
+
+void GetID(EmbeddedCli *cli, char *args, void *context) {
+	cli_printf(cli,"ID: %s",	_Flash_Packet.id);
+}
+
+void GetLocation(EmbeddedCli *cli, char *args, void *context) {
+	cli_printf(cli,"Location: %s",	_Flash_Packet.location);
+
+}
+
+void Getname(EmbeddedCli *cli, char *args, void *context) {
+	cli_printf(cli,"Name: %s",	_Flash_Packet.name);
+
+}
+
+void Getgroup(EmbeddedCli *cli, char *args, void *context) {
+	cli_printf(cli,"Group: %s",	_Flash_Packet.group);
+
+}
+
+
+
+
+
 
 
 
@@ -409,6 +446,8 @@ void GetTime(EmbeddedCli *cli, char *args, void *context) {
 
 void SetInterval(EmbeddedCli *cli, char *args, void *context) {
 	  const char *newLine = "\r\n";
+		cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
+		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"Enter 1 for 5min.");
 	cli_printf(cli,"Enter 2 for 15min.");
 	cli_printf(cli,"Enter 3 for 60min.");
@@ -451,6 +490,8 @@ void GetInterval(EmbeddedCli *cli, char *args, void *context) {
 void SetFilename(EmbeddedCli *cli, char *args, void *context) {
 uint16_t len;
 	  const char *newLine = "\r\n";
+		cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
+		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"To set file name dont use special characters or space, '_' can be used and please keep the name below 18characters.");
 
 	cli_other = 1;
@@ -494,6 +535,8 @@ void GetFilename(EmbeddedCli *cli, char *args, void *context) {
 void SetFileformat(EmbeddedCli *cli, char *args, void *context) {
 
 	  const char *newLine = "\r\n";
+		cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
+		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"Following file formats are allowed:");
 	cli_printf(cli,"1. (.csv)");
 	cli_printf(cli,"2. (.json)");
@@ -533,13 +576,12 @@ void GetFileformat(EmbeddedCli *cli, char *args, void *context) {
 
 }
 
-void Devicecalibrate(EmbeddedCli *cli, char *args, void *context) {
+void fanclean(EmbeddedCli *cli, char *args, void *context) {
 	  const char *newLine = "\r\n";
-	  uint32_t val;
 	  int counter = 0;
-	  const char *dot = ".";
-	  uint8_t do_Calibration = 3;
-	cli_printf(cli,"Do you want to Calibrate Particle sensor y/n?");
+	  const char *dot = "........";
+	  uint8_t do_Calibration = 0;
+	cli_printf(cli,"Do you want to initiate particle sensor fan-cleaning? y/n?");
 
 	cli_other = 1;
 		flag_cli = 0;
@@ -551,17 +593,51 @@ void Devicecalibrate(EmbeddedCli *cli, char *args, void *context) {
         if(strstr(buffer, "n"))
 		{
 			_Flash_Packet.Calibration_Status=0;
-			cli_printf(cli,"Particle sensor Calibration aborted.");
+			_RunTime_Packet.PM_calibration=1;
+			cli_printf(cli,"Particle sensor fan-cleaning aborted.");
 			//set_param_flags();
-			do_Calibration &= ~1;
+			do_Calibration = 0;
 		}
         else if(strstr(buffer, "y"))
         {
-        	do_Calibration |= 1;
+        	_RunTime_Packet.PM_calibration=0;
+        	do_Calibration = 1;
         }
 
+
+
+		   if(do_Calibration == 1)
+		   {
+				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
+				cli_printf(cli,"Particle sensor fan-cleaning initiated, please wait.");
+		   while(counter < 20 )
+		   {
+				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)dot,  strlen(dot), 1000);
+                HAL_Delay(10);
+                counter++;
+		   }
+
+			HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
+			cli_printf(cli,"fan-cleaning done.");
+		   }
+
+		flag_cli = 0;
+		cli_other = 0;
+}
+
+
+void co2calibrate(EmbeddedCli *cli, char *args, void *context) {
+	  const char *newLine = "\r\n";
+	  uint32_t val;
+	  int counter = 0;
+	  const char *dot = "........";
+	  uint8_t do_Calibration = 0;
+
+
+	    cli_other = 1;
+		flag_cli = 0;
+		char buffer[50];
 		memset(buffer,'\0',sizeof(buffer));
-		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 		cli_printf(cli,"To calibrate Co2 sensor, please provide Co2 concentration value.");
 		cli_printf(cli,"If Co2 concentration is unknown then just press enter to cancel the calibration.");
 
@@ -578,23 +654,25 @@ void Devicecalibrate(EmbeddedCli *cli, char *args, void *context) {
                 {
                    _RunTime_Packet._target_co2_concentration = val;
                 }
+
             	cli_printf(cli,"Co2 sensor is going to be Calibrated now. Co2 concentration value provided : %d",_RunTime_Packet._target_co2_concentration);
-            	do_Calibration |= 2;
+            	do_Calibration = 1;
 			 }
 		   else
 		   {
 				cli_printf(cli,"Co2 sensor Calibration aborted.");
-				do_Calibration &= ~2;
+				_RunTime_Packet.CO2_calibration = 0;
+				do_Calibration = 0;
 		   }
 
-		   if(do_Calibration > 0)
+		   if(do_Calibration == 1)
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
-				cli_printf(cli,"Sensors are calibrating, please wait.");
+				cli_printf(cli,"Co2 is calibrating, please wait.");
 		   while(counter < 20 )
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)dot,  strlen(dot), 1000);
-                HAL_Delay(20);
+                HAL_Delay(10);
                 counter++;
 		   }
 
@@ -651,7 +729,7 @@ uint8_t prev_motion;
 
 void MotionDetection(EmbeddedCli *cli, char *args, void *context) {
 
-	cli_printf(cli,"For 20seconds system will poll here to detect motion.");
+	cli_printf(cli,"For 10seconds system will poll here to detect motion.");
 	HAL_Delay(1500);
          prev_max_wait_time_motion = HAL_GetTick();
          prev_motion = 0;
@@ -669,7 +747,7 @@ void MotionDetection(EmbeddedCli *cli, char *args, void *context) {
 //		if(prev_motion != _RunTime_Packet.motion_detection )
 //	         	{
 //			prev_motion = _RunTime_Packet.motion_detection ;
-			cli_printf(cli,"PIR Motion: %s\r\n",_RunTime_Packet.motion_detection ? "TRUE" : "FALSE");
+			cli_printf(cli,"PIR Motion: %s\r\n",_RunTime_Packet.motion_detection == 1 ? "TRUE" : "FALSE");
 //	         	}
 HAL_Delay(100);
 
@@ -682,10 +760,17 @@ HAL_Delay(100);
 void AirQuality(EmbeddedCli *cli, char *args, void *context) {
 
 	cli_printf(cli,"AirQuality Measured Values:");
+	if(_RunTime_Packet.pm1_0 == 0 && _RunTime_Packet.pm2_5 == 0 && _RunTime_Packet.pm4_0 == 0 && _RunTime_Packet.pm10_0 == 0)
+	{
+		cli_printf(cli,"Calculating, try again later");
+	}
+	else
+	{
 	cli_printf(cli,"%0.2f pm1.0", _RunTime_Packet.pm1_0);
 	cli_printf(cli,"%0.2f pm2.5 ",_RunTime_Packet.pm2_5);
 	cli_printf(cli,"%0.2f pm4.0 ",_RunTime_Packet.pm4_0);
 	cli_printf(cli,"%0.2f pm10.0",_RunTime_Packet.pm10_0);
+	}
 
 
 }
@@ -734,6 +819,22 @@ void initializeEmbeddedCli() {
 				"Sets group", .tokenizeArgs = true, .context = NULL,
 				.binding = Setgroup };
 
+	CliCommandBinding Get_ID = { .name = "get-id", .help =
+				"gets ID", .tokenizeArgs = true, .context = NULL,
+				.binding = GetID };
+
+	CliCommandBinding Get_Location = { .name = "get-location", .help =
+				"gets Location", .tokenizeArgs = true, .context = NULL,
+				.binding = GetLocation };
+
+	CliCommandBinding Get_name = { .name = "get-name", .help =
+				"gets name", .tokenizeArgs = true, .context = NULL,
+				.binding = Getname };
+
+	CliCommandBinding Get_group = { .name = "get-group", .help =
+				"gets group", .tokenizeArgs = true, .context = NULL,
+				.binding = Getgroup };
+
 	CliCommandBinding Set_Date = { .name = "set-date", .help =
 			"Set Systems Date", .tokenizeArgs = true, .context = NULL,
 			.binding = SetDate };
@@ -776,9 +877,13 @@ void initializeEmbeddedCli() {
 			"Get file format", .tokenizeArgs = true, .context = NULL,
 			.binding = GetFileformat };
 
-	CliCommandBinding DeviceCalibration = { .name = "device-calibration", .help =
-			"Calibrate the device", .tokenizeArgs = true, .context = NULL,
-			.binding = Devicecalibrate };
+	CliCommandBinding Fan_Clean = { .name = "fan-clean", .help =
+			"Particle sensor fan cleaning", .tokenizeArgs = true, .context = NULL,
+			.binding = fanclean };
+
+	CliCommandBinding Co2_Calibration = { .name = "co2-calibration", .help =
+			"Calibrate the co2 sensor", .tokenizeArgs = true, .context = NULL,
+			.binding = co2calibrate };
 
 	CliCommandBinding Systemreset = { .name = "system-restart", .help =
 			"Restart the system", .tokenizeArgs = true, .context = NULL,
@@ -818,6 +923,10 @@ void initializeEmbeddedCli() {
 	embeddedCliAddBinding(cli, Set_Location);
 	embeddedCliAddBinding(cli, Set_name);
 	embeddedCliAddBinding(cli, Set_group);
+	embeddedCliAddBinding(cli, Get_ID);
+	embeddedCliAddBinding(cli, Get_Location);
+	embeddedCliAddBinding(cli, Get_name);
+	embeddedCliAddBinding(cli, Get_group);
 	embeddedCliAddBinding(cli, Set_Date);
 	embeddedCliAddBinding(cli, Set_Time);
 	embeddedCliAddBinding(cli, Get_Date);
@@ -828,7 +937,8 @@ void initializeEmbeddedCli() {
 	embeddedCliAddBinding(cli, Get_Filename);
 	embeddedCliAddBinding(cli, Set_Fileformat);
 	embeddedCliAddBinding(cli, Get_Fileformat);
-	embeddedCliAddBinding(cli, DeviceCalibration);
+	embeddedCliAddBinding(cli, Fan_Clean);
+	embeddedCliAddBinding(cli, Co2_Calibration);
 	embeddedCliAddBinding(cli, Systemreset);
 	embeddedCliAddBinding(cli, Co2_Level);
 	embeddedCliAddBinding(cli, Temp_Level);

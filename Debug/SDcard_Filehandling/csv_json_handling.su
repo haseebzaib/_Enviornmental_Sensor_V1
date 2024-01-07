@@ -1,0 +1,5 @@
+../SDcard_Filehandling/csv_json_handling.c:24:6:json_update	40	static
+../SDcard_Filehandling/csv_json_handling.c:73:6:csv_update	64	static
+../SDcard_Filehandling/csv_json_handling.c:97:6:csv_header	8	static
+../SDcard_Filehandling/csv_json_handling.c:118:6:filesaving_process	8	static
+../SDcard_Filehandling/csv_json_handling.c:129:8:createfile	56	static

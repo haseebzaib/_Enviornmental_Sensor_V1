@@ -1,0 +1,23 @@
+How to use console.
+'Baudrate 115200'
+1)Install teraterm for best experience.
+2)Write 'help' on console and you can see all the commands which console supports and there instructions will also be written, about what each command does. 
+3)There is debug command which can be used to see updated data for Co2 and PM sensor. It is also if you want to verify sensors are working properly
+
+console navigation
+1)'tab' moves cursor to the end of autocompleted command
+2)'backspace' removes last typed character
+3) Esc[A (key up) and Esc[B (key down) navigates through history
+
+
+Basic Instructions
+1)System will wakeup after set interval. interval can be checked from console
+2)System will stay wakeup only for 20seconds in which 12seconds is dedicated for measurements(measurement time can reduced. In this time total 7 values of PM is taken and 3 values for co2,temp,humd).
+3)During USB is plugged in system wont go to sleep and if system is in sleep and usb plugs in system will wakeup.
+4)When USB is plugs in it takes about 13seconds to show mass storage, so during that time no measurement is taken as system focus on servicing USB, therefore
+  measurements are taken after 50seconds(this time can be reduced, but I set it for safe keeping as on 20 30sec the measurement would start before USB is serviced and this causes problem in PM sensor)
+
+
+
+
+

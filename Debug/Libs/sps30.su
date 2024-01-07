@@ -1,0 +1,15 @@
+../Libs/sps30.c:56:13:sps_get_driver_version	4	static
+../Libs/sps30.c:60:9:sps30_probe	48	static
+../Libs/sps30.c:69:9:sps30_get_serial	48	static
+../Libs/sps30.c:86:9:sps30_start_measurement	32	static
+../Libs/sps30.c:95:9:sps30_stop_measurement	32	static
+../Libs/sps30.c:102:9:sps30_read_measurement	80	static
+../Libs/sps30.c:136:9:sps30_sleep	32	static
+../Libs/sps30.c:143:9:sps30_wake_up	40	static
+../Libs/sps30.c:156:9:sps30_get_fan_auto_cleaning_interval	48	static
+../Libs/sps30.c:176:9:sps30_set_fan_auto_cleaning_interval	48	static
+../Libs/sps30.c:188:9:sps30_get_fan_auto_cleaning_interval_days	24	static
+../Libs/sps30.c:200:9:sps30_set_fan_auto_cleaning_interval_days	16	static
+../Libs/sps30.c:205:9:sps30_start_manual_fan_cleaning	32	static
+../Libs/sps30.c:213:1:sps30_read_version	48	static
+../Libs/sps30.c:241:9:sps30_reset	8	static

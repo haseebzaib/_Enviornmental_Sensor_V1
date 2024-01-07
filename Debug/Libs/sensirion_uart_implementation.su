@@ -1,0 +1,8 @@
+../Libs/sensirion_uart_implementation.c:56:9:sensirion_uart_select_port	16	static
+../Libs/sensirion_uart_implementation.c:63:6:sensirion_uart_interrupt	8	static
+../Libs/sensirion_uart_implementation.c:90:9:sensirion_uart_open	8	static
+../Libs/sensirion_uart_implementation.c:118:9:sensirion_uart_close	8	static
+../Libs/sensirion_uart_implementation.c:132:9:sensirion_uart_tx	16	static
+../Libs/sensirion_uart_implementation.c:146:6:HAL_UARTEx_RxEventCallback	16	static
+../Libs/sensirion_uart_implementation.c:161:9:sensirion_uart_rx	24	static
+../Libs/sensirion_uart_implementation.c:192:6:sensirion_sleep_usec	16	static

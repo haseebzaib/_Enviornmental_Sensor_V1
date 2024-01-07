@@ -1,0 +1,6 @@
+sensirion_i2c_hal.c:57:9:sensirion_i2c_hal_select_bus	1
+sensirion_i2c_hal.c:70:6:sensirion_i2c_hal_init	2
+sensirion_i2c_hal.c:91:6:sensirion_i2c_hal_free	1
+sensirion_i2c_hal.c:107:8:sensirion_i2c_hal_read	1
+sensirion_i2c_hal.c:124:8:sensirion_i2c_hal_write	1
+sensirion_i2c_hal.c:139:6:sensirion_i2c_hal_sleep_usec	1

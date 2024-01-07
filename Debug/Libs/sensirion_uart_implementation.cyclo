@@ -1,0 +1,8 @@
+sensirion_uart_implementation.c:56:9:sensirion_uart_select_port	1
+sensirion_uart_implementation.c:63:6:sensirion_uart_interrupt	4
+sensirion_uart_implementation.c:90:9:sensirion_uart_open	2
+sensirion_uart_implementation.c:118:9:sensirion_uart_close	1
+sensirion_uart_implementation.c:132:9:sensirion_uart_tx	2
+sensirion_uart_implementation.c:146:6:HAL_UARTEx_RxEventCallback	1
+sensirion_uart_implementation.c:161:9:sensirion_uart_rx	3
+sensirion_uart_implementation.c:192:6:sensirion_sleep_usec	1

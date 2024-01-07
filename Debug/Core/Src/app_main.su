@@ -1,0 +1,17 @@
+../Core/Src/app_main.c:68:6:pir_interrupt	8	static
+../Core/Src/app_main.c:79:6:timer_interrupt	8	static
+../Core/Src/app_main.c:105:13:clock_speed_slow	88	static
+../Core/Src/app_main.c:166:13:clock_speed_high	88	static
+../Core/Src/app_main.c:233:13:load_param	16	static
+../Core/Src/app_main.c:263:17:store_param	24	static,ignoring_inline_asm
+../Core/Src/app_main.c:332:13:save_data	8	static
+../Core/Src/app_main.c:355:13:init_scd4x_i2c	16	static
+../Core/Src/app_main.c:367:13:get_scd4x_measurement	72	static
+../Core/Src/app_main.c:400:13:init_sps30	56	static
+../Core/Src/app_main.c:443:13:get_sps30_measurement	160	static
+../Core/Src/app_main.c:488:13:check_peripheral_error	8	static
+../Core/Src/app_main.c:513:13:sensor_calibration	8	static
+../Core/Src/app_main.c:527:13:sleep	8	static
+../Core/Src/app_main.c:557:13:wakeup	8	static
+../Core/Src/app_main.c:589:7:ver_GetUid	24	static
+../Core/Src/app_main.c:614:6:app_main	40	static

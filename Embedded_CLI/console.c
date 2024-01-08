@@ -608,17 +608,21 @@ void fanclean(EmbeddedCli *cli, char *args, void *context) {
 
 		   if(do_Calibration == 1)
 		   {
+
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 				cli_printf(cli,"Particle sensor fan-cleaning initiated, please wait.");
-		   while(counter < 20 )
+		   while(counter < 5 )
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)dot,  strlen(dot), 1000);
-                HAL_Delay(10);
+                HAL_Delay(200);
+                BLUE_LED_TOGGLE();
                 counter++;
 		   }
 
 			HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 			cli_printf(cli,"fan-cleaning done.");
+
+
 		   }
 
 		flag_cli = 0;
@@ -669,10 +673,11 @@ void co2calibrate(EmbeddedCli *cli, char *args, void *context) {
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 				cli_printf(cli,"Co2 is calibrating, please wait.");
-		   while(counter < 20 )
+		   while(counter < 5 )
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)dot,  strlen(dot), 1000);
-                HAL_Delay(10);
+			    HAL_Delay(200);
+			    BLUE_LED_TOGGLE();
                 counter++;
 		   }
 

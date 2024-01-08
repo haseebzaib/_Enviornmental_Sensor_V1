@@ -16,6 +16,8 @@
 
 #include "main.h"
 
+#define BLUE_LED_TOGGLE() HAL_GPIO_TogglePin(BLUE_LED_GPIO_Port, BLUE_LED_Pin);
+
 #define disable_5v()  HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, GPIO_PIN_RESET);
 #define enable_5v()   HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, GPIO_PIN_SET);
 
@@ -69,6 +71,7 @@ typedef struct
     uint8_t CO2_calibration;
     uint16_t _target_co2_concentration;
     uint16_t _frc_correction;
+    uint8_t pwr_off_det;
 }RunTime_Packet;
 
 extern RunTime_Packet _RunTime_Packet;
@@ -94,6 +97,7 @@ extern uint32_t prev_sleep_time;
 
 extern uint32_t prev_usb_time_;
 
+extern void power_off_detect();
 int16_t sensirion_uart_receive(uint8_t* data);
 extern void pir_interrupt();
 extern void timer_interrupt();

@@ -43,7 +43,9 @@ extern UART_HandleTypeDef huart2;
 extern I2C_HandleTypeDef hi2c1;
 extern TIM_HandleTypeDef htim2;
 extern ADC_HandleTypeDef hadc1;
-
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim3;
+extern DMA_HandleTypeDef hdma_tim1_up;
 
 #define PACKED __attribute__((packed))
 
@@ -59,10 +61,14 @@ extern ADC_HandleTypeDef hadc1;
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 void MX_SDIO_SD_Init(void);
 void MX_TIM2_Init(void);
+void MX_TIM1_Init(void);
+void MX_TIM3_Init(void);
 
 /* USER CODE BEGIN EFP */
 
@@ -84,6 +90,15 @@ void MX_TIM2_Init(void);
 #define USB_DETECT_Pin GPIO_PIN_9
 #define USB_DETECT_GPIO_Port GPIOA
 #define USB_DETECT_EXTI_IRQn EXTI9_5_IRQn
+#define SW_DET_Pin GPIO_PIN_15
+#define SW_DET_GPIO_Port GPIOA
+#define SW_DET_EXTI_IRQn EXTI15_10_IRQn
+#define BLUE_LED_Pin GPIO_PIN_3
+#define BLUE_LED_GPIO_Port GPIOB
+#define GREEN_LED_Pin GPIO_PIN_4
+#define GREEN_LED_GPIO_Port GPIOB
+#define RED_LED_Pin GPIO_PIN_5
+#define RED_LED_GPIO_Port GPIOB
 #define CLI_UART1_TX_Pin GPIO_PIN_6
 #define CLI_UART1_TX_GPIO_Port GPIOB
 #define CLI_UART1_RX_Pin GPIO_PIN_7

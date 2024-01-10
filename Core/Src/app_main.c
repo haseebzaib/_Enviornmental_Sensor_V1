@@ -8,6 +8,7 @@
 /**
  * TODO
  * mass storage speed up
+ * mass storage malfunction fix needed
  * Add sd card error logging inside internal flash
  * also add led effect for sdcard error when awake if any error in sdcard
  */
@@ -838,7 +839,7 @@ void app_main() {
 				{
 					if (_RunTime_Packet.sd_file_creation == -1
 							&& _RunTime_Packet.usb_first_start) {
-						createfile(_Flash_Packet.File_Name,
+						_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
 								_Flash_Packet.File_Format);
 					}
 
@@ -898,16 +899,16 @@ void app_main() {
 //this routine is specifically to table the issue, if user keeps the usb plugged in for somereason
 //because the mostly the system will save data before going to sleep. if usb cable is plugged in it wont go to sleep, but with routine we still save the data after set intervals
 			if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)
-					&& set_alarm_Time && !_RunTime_Packet.usb_detection) {
+					&& set_alarm_Time && !_RunTime_Packet.usb_detection ) {
 				//if day changes create new file
 				//if user change filename or fileformat then also create new file with that format or name
 				if (_RunTime_Packet.day_changed
 						|| _RunTime_Packet.filename_changed
-						|| _RunTime_Packet.fileformat_changed) {
+						|| _RunTime_Packet.fileformat_changed || _RunTime_Packet.sd_file_creation == -1) {
 					_RunTime_Packet.day_changed = 0;
 					_RunTime_Packet.filename_changed = 0;
 					_RunTime_Packet.fileformat_changed = 0;
-					createfile(_Flash_Packet.File_Name,
+					_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
 							_Flash_Packet.File_Format);
 				}
 				filesaving_process();

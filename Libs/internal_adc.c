@@ -21,6 +21,8 @@
 #define adc_Stop()	    HAL_ADC_Stop(&hadc1)
 #define adc_Disable() HAL_ADC_DeInit(&hadc1)
 
+#define ratio 1.27  //r1+r2/r2 465k/365k
+
 static void adc_InitOneShotMode ()
 {
 	adc_Disable();
@@ -126,9 +128,9 @@ uint8_t adc_Measure (float *bat_volt)
 	val =(uint32_t)((val + adc_Getval()) / 2);	//Read and average ADC
 
 
-	// Max = 3.3Vref * 365k / 100k = 12.045V
 
-	*bat_volt = (float) val * (12.045f / 4096.0f);	// 12 bit
+
+	*bat_volt = (float)(( val * (3.3f / 4096.0f))*ratio);	// 12 bit
 
 
 	return 1;

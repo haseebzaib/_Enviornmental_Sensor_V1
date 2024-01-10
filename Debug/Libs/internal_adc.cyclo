@@ -1,3 +1,3 @@
-internal_adc.c:24:13:adc_InitOneShotMode	4
-internal_adc.c:71:17:adc_Getval	1
-internal_adc.c:78:9:adc_Measure	7
+internal_adc.c:26:13:adc_InitOneShotMode	4
+internal_adc.c:73:17:adc_Getval	1
+internal_adc.c:80:9:adc_Measure	7

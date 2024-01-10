@@ -2,10 +2,10 @@
 ../SDcard_Filehandling/File_Handling.c:60:6:Unmount_SD	16	static
 ../SDcard_Filehandling/File_Handling.c:70:9:Scan_SD	88	static
 ../SDcard_Filehandling/File_Handling.c:112:9:Format_SD	64	static
-../SDcard_Filehandling/File_Handling.c:145:9:Write_File	40	static
-../SDcard_Filehandling/File_Handling.c:204:9:Read_File	40	static
-../SDcard_Filehandling/File_Handling.c:271:9:Create_File	40	static
-../SDcard_Filehandling/File_Handling.c:321:9:Update_File	40	static
-../SDcard_Filehandling/File_Handling.c:385:9:Remove_File	32	static
-../SDcard_Filehandling/File_Handling.c:420:9:Create_Dir	24	static
-../SDcard_Filehandling/File_Handling.c:440:6:Check_SD_Space	16	static
+../SDcard_Filehandling/File_Handling.c:145:9:Write_File	168	static
+../SDcard_Filehandling/File_Handling.c:204:9:Read_File	176	static
+../SDcard_Filehandling/File_Handling.c:272:9:Create_File	168	static
+../SDcard_Filehandling/File_Handling.c:323:9:Update_File	168	static
+../SDcard_Filehandling/File_Handling.c:388:9:Remove_File	168	static
+../SDcard_Filehandling/File_Handling.c:424:9:Create_Dir	168	static
+../SDcard_Filehandling/File_Handling.c:445:6:Check_SD_Space	160	static

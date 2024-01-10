@@ -144,15 +144,15 @@ FRESULT Format_SD (void)
 
 FRESULT Write_File (char *name, char *data)
 {
-
+	char buf[150];
 	/**** check whether the file exists or not ****/
 	fresult = f_stat (name, &fno);
 	if (fresult != FR_OK)
 	{
-		char *buf = malloc(100*sizeof(char));
+
 		sprintf (buf, "ERROR!!! *%s* does not exists\n", name);
 		if(sdioPrints) printf (buf);
-	    free(buf);
+
 	    return fresult;
 	}
 
@@ -162,10 +162,10 @@ FRESULT Write_File (char *name, char *data)
 	    fresult = f_open(&fil, name, FA_OPEN_EXISTING | FA_WRITE);
 	    if (fresult != FR_OK)
 	    {
-	    	char *buf = malloc(100*sizeof(char));
+
 	    	sprintf (buf, "ERROR!!! No. %d in opening file *%s*\n", fresult, name);
 	    	if(sdioPrints) printf(buf);
-	        free(buf);
+
 	        return fresult;
 	    }
 
@@ -174,27 +174,27 @@ FRESULT Write_File (char *name, char *data)
 	    	fresult = f_write(&fil, data, strlen(data), &bw);
 	    	if (fresult != FR_OK)
 	    	{
-	    		char *buf = malloc(100*sizeof(char));
+
 	    		sprintf (buf, "ERROR!!! No. %d while writing to the FILE *%s*\n", fresult, name);
 	    		if(sdioPrints) printf(buf);
-	    		free(buf);
+
 	    	}
 
 	    	/* Close file */
 	    	fresult = f_close(&fil);
 	    	if (fresult != FR_OK)
 	    	{
-	    		char *buf = malloc(100*sizeof(char));
+
 	    		sprintf (buf, "ERROR!!! No. %d in closing file *%s* after writing it\n", fresult, name);
 	    		if(sdioPrints) printf(buf);
-	    		free(buf);
+
 	    	}
 	    	else
 	    	{
-	    		char *buf = malloc(100*sizeof(char));
+
 	    		sprintf (buf, "File *%s* is WRITTEN and CLOSED successfully\n", name);
 	    		if(sdioPrints) printf(buf);
-	    		free(buf);
+
 	    	}
 	    }
 	    return fresult;
@@ -203,14 +203,15 @@ FRESULT Write_File (char *name, char *data)
 
 FRESULT Read_File (char *name)
 {
+	char buf[150];
 	/**** check whether the file exists or not ****/
 	fresult = f_stat (name, &fno);
 	if (fresult != FR_OK)
 	{
-		char *buf = malloc(100*sizeof(char));
+
 		sprintf (buf, "ERRROR!!! *%s* does not exists\n", name);
 		if(sdioPrints) printf (buf);
-		free(buf);
+
 	    return fresult;
 	}
 
@@ -221,10 +222,10 @@ FRESULT Read_File (char *name)
 
 		if (fresult != FR_OK)
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			sprintf (buf, "ERROR!!! No. %d in opening file *%s*\n", fresult, name);
 			if(sdioPrints) printf(buf);
-		    free(buf);
+
 		    return fresult;
 		}
 
@@ -235,11 +236,11 @@ FRESULT Read_File (char *name)
 		fresult = f_read (&fil, buffer, f_size(&fil), &br);
 		if (fresult != FR_OK)
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			free(buffer);
 		 	sprintf (buf, "ERROR!!! No. %d in reading file *%s*\n", fresult, name);
 		 	if(sdioPrints) printf(buffer);
-		  	free(buf);
+
 		}
 
 		else
@@ -251,17 +252,17 @@ FRESULT Read_File (char *name)
 			fresult = f_close(&fil);
 			if (fresult != FR_OK)
 			{
-				char *buf = malloc(100*sizeof(char));
+
 				sprintf (buf, "ERROR!!! No. %d in closing file *%s*\n", fresult, name);
 				if(sdioPrints) printf(buf);
-				free(buf);
+
 			}
 			else
 			{
-				char *buf = malloc(100*sizeof(char));
+
 				sprintf (buf, "File *%s* CLOSED successfully\n", name);
 				if(sdioPrints) printf(buf);
-				free(buf);
+
 			}
 		}
 	    return fresult;
@@ -270,14 +271,15 @@ FRESULT Read_File (char *name)
 
 FRESULT Create_File (char *name)
 {
+	char buf[150];
 	fresult = f_stat (name, &fno);
 	if (fresult == FR_OK)
 	{
 		file_already_exist = 1; //file is alrready there so now we dont create csv header
-		char *buf = malloc(100*sizeof(char));
+
 		sprintf (buf, "ERROR!!! *%s* already exists!!!!\n use Update_File \n",name);
 		if(sdioPrints) printf(buf);
-		free(buf);
+
 	    return fresult;
 	}
 	else
@@ -285,34 +287,34 @@ FRESULT Create_File (char *name)
 		fresult = f_open(&fil, name, FA_CREATE_ALWAYS|FA_READ|FA_WRITE);
 		if (fresult != FR_OK)
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			sprintf (buf, "ERROR!!! No. %d in creating file *%s*\n", fresult, name);
 			if(sdioPrints) printf(buf);
-			free(buf);
+
 		    return fresult;
 		}
 		else
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			sprintf (buf, "*%s* created successfully\n Now use Write_File to write data\n",name);
 			if(sdioPrints) printf(buf);
-			free(buf);
+
 		}
 
 		fresult = f_close(&fil);
 		if (fresult != FR_OK)
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			sprintf (buf, "ERROR No. %d in closing file *%s*\n", fresult, name);
 			if(sdioPrints) printf(buf);
-			free(buf);
+
 		}
 		else
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			sprintf (buf, "File *%s* CLOSED successfully\n", name);
 			if(sdioPrints) printf(buf);
-			free(buf);
+
 		}
 	}
     return fresult;
@@ -320,14 +322,15 @@ FRESULT Create_File (char *name)
 
 FRESULT Update_File (char *name, char *data)
 {
+	char buf[150];
 	/**** check whether the file exists or not ****/
 	fresult = f_stat (name, &fno);
 	if (fresult != FR_OK)
 	{
-		char *buf = malloc(100*sizeof(char));
+
 		sprintf (buf, "ERROR!!! *%s* does not exists\n", name);
 		if(sdioPrints) printf (buf);
-		free(buf);
+
 	    return fresult;
 	}
 
@@ -337,10 +340,10 @@ FRESULT Update_File (char *name, char *data)
 	    fresult = f_open(&fil, name, FA_OPEN_APPEND | FA_WRITE);
 	    if (fresult != FR_OK)
 	    {
-	    	char *buf = malloc(100*sizeof(char));
+
 	    	sprintf (buf, "ERROR!!! No. %d in opening file *%s*\n", fresult, name);
 	    	if(sdioPrints) printf(buf);
-	        free(buf);
+
 	        return fresult;
 	    }
 
@@ -348,35 +351,35 @@ FRESULT Update_File (char *name, char *data)
 	    fresult = f_write(&fil, data, strlen (data), &bw);
 	    if (fresult != FR_OK)
 	    {
-	    	char *buf = malloc(100*sizeof(char));
+
 	    	sprintf (buf, "ERROR!!! No. %d in writing file *%s*\n", fresult, name);
 	    	if(sdioPrints) printf(buf);
-	    	free(buf);
+
 	    }
 
 	    else
 	    {
-	    	char *buf = malloc(100*sizeof(char));
+
 	    	sprintf (buf, "*%s* UPDATED successfully\n", name);
 	    	if(sdioPrints) printf(buf);
-	    	free(buf);
+
 	    }
 
 	    /* Close file */
 	    fresult = f_close(&fil);
 	    if (fresult != FR_OK)
 	    {
-	    	char *buf = malloc(100*sizeof(char));
+
 	    	sprintf (buf, "ERROR!!! No. %d in closing file *%s*\n", fresult, name);
 	    	if(sdioPrints) printf(buf);
-	    	free(buf);
+
 	    }
 	    else
 	    {
-	    	char *buf = malloc(100*sizeof(char));
+
 	    	sprintf (buf, "File *%s* CLOSED successfully\n", name);
 	    	if(sdioPrints) printf(buf);
-	    	free(buf);
+
 	     }
 	}
     return fresult;
@@ -384,14 +387,15 @@ FRESULT Update_File (char *name, char *data)
 
 FRESULT Remove_File (char *name)
 {
+	char buf[150];
 	/**** check whether the file exists or not ****/
 	fresult = f_stat (name, &fno);
 	if (fresult != FR_OK)
 	{
-		char *buf = malloc(100*sizeof(char));
+
 		sprintf (buf, "ERROR!!! *%s* does not exists\n", name);
 		if(sdioPrints) printf(buf);
-		free(buf);
+
 		return fresult;
 	}
 
@@ -400,18 +404,18 @@ FRESULT Remove_File (char *name)
 		fresult = f_unlink (name);
 		if (fresult == FR_OK)
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			sprintf (buf, "*%s* has been removed successfully\n", name);
 			if(sdioPrints) printf(buf);
-			free(buf);
+
 		}
 
 		else
 		{
-			char *buf = malloc(100*sizeof(char));
+
 			sprintf (buf, "ERROR No. %d in removing *%s*\n",fresult, name);
 			if(sdioPrints) printf(buf);
-			free(buf);
+
 		}
 	}
 	return fresult;
@@ -419,39 +423,40 @@ FRESULT Remove_File (char *name)
 
 FRESULT Create_Dir (char *name)
 {
+	char buf[150];
     fresult = f_mkdir(name);
     if (fresult == FR_OK)
     {
-    	char *buf = malloc(100*sizeof(char));
+
     	sprintf (buf, "*%s* has been created successfully\n", name);
     	if(sdioPrints) printf(buf);
-    	free(buf);
+
     }
     else
     {
-    	char *buf = malloc(100*sizeof(char));
+
     	sprintf (buf, "ERROR No. %d in creating directory *%s*\n", fresult,name);
     	if(sdioPrints) printf(buf);
-    	free(buf);
+
     }
     return fresult;
 }
 
 void Check_SD_Space (void)
-{
+{	char buf[150];
     /* Check free space */
     f_getfree("", &fre_clust, &pfs);
 
     total = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
-    char *buf = malloc(30*sizeof(char));
+
     sprintf (buf, "SD CARD Total Size: \t%lu\n",total);
     if(sdioPrints) printf(buf);
-    free(buf);
+
     free_space = (uint32_t)(fre_clust * pfs->csize * 0.5);
-    buf = malloc(30*sizeof(char));
+
     sprintf (buf, "SD CARD Free Space: \t%lu\n",free_space);
     if(sdioPrints) printf(buf);
-    free(buf);
+
 }
 
 

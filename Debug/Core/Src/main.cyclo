@@ -12,7 +12,7 @@ main.c:578:13:MX_USART2_UART_Init	2
 main.c:609:13:MX_DMA_Init	1
 main.c:627:13:MX_GPIO_Init	1
 main.c:726:6:HAL_TIM_PeriodElapsedCallback	2
-main.c:736:6:HAL_GPIO_EXTI_Callback	3
+main.c:736:6:HAL_GPIO_EXTI_Callback	4
 main.c:756:6:HAL_RTC_AlarmAEventCallback	1
 main.c:761:6:HAL_UART_ErrorCallback	3
 main.c:786:6:Error_Handler	1

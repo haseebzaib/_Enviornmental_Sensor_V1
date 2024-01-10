@@ -39,7 +39,15 @@ Libs/internal_adc.o: ../Libs/internal_adc.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
- ../Libs/internal_adc.h ../Core/Inc/app_main.h ../Core/Inc/main.h
+ ../Libs/internal_adc.h ../Core/Inc/app_main.h ../Core/Inc/main.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h \
+ ../FATFS/App/fatfs.h ../Middlewares/Third_Party/FatFs/src/ff.h \
+ ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
+ ../FATFS/Target/bsp_driver_sd.h \
+ ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
+ ../Middlewares/Third_Party/FatFs/src/diskio.h \
+ ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/sd_diskio.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -84,3 +92,14 @@ Libs/internal_adc.o: ../Libs/internal_adc.c ../Core/Inc/main.h \
 ../Libs/internal_adc.h:
 ../Core/Inc/app_main.h:
 ../Core/Inc/main.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h:
+../FATFS/App/fatfs.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../Middlewares/Third_Party/FatFs/src/integer.h:
+../FATFS/Target/ffconf.h:
+../FATFS/Target/bsp_driver_sd.h:
+../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h:
+../Middlewares/Third_Party/FatFs/src/diskio.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../FATFS/Target/sd_diskio.h:

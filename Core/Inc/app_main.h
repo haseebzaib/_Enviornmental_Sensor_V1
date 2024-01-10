@@ -15,7 +15,8 @@
 
 
 #include "main.h"
-
+#include "csv_json_handling.h"
+#include <File_Handling.h>
 #define BLUE_LED_TOGGLE() HAL_GPIO_TogglePin(BLUE_LED_GPIO_Port, BLUE_LED_Pin);
 
 #define disable_5v()  HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, GPIO_PIN_RESET);
@@ -67,11 +68,15 @@ typedef struct
     uint8_t usb_first_start;
     uint8_t usb_start_timer;
     int8_t sd_file_creation;
+    int8_t sd_card_disk_write_error;
     uint8_t PM_calibration;
     uint8_t CO2_calibration;
     uint16_t _target_co2_concentration;
     uint16_t _frc_correction;
     uint8_t pwr_off_det;
+    uint8_t day;
+    uint8_t month;
+    uint8_t year;
 }RunTime_Packet;
 
 extern RunTime_Packet _RunTime_Packet;
@@ -96,6 +101,8 @@ extern uint32_t sleep_time;
 extern uint32_t prev_sleep_time;
 
 extern uint32_t prev_usb_time_;
+
+
 
 extern void power_off_detect();
 int16_t sensirion_uart_receive(uint8_t* data);

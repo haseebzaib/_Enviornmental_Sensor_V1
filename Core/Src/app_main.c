@@ -9,8 +9,6 @@
  * TODO
  * mass storage speed up
  * mass storage malfunction fix needed
- * Add sd card error logging inside internal flash
- * also add led effect for sdcard error when awake if any error in sdcard
  */
 
 #include "main.h"
@@ -31,7 +29,7 @@
 #include "Utils.h"
 #include "File_Handling.h"
 
-
+char buf_sdcard[] = "sdcard error, this can cause issue in mass storage also\r\n";
 
 #define battery_Full 3.27f
 #define battery_Low  2.43f
@@ -64,7 +62,7 @@ uint16_t blue_led_pwm_val = 0;
 Flash_Packet _Flash_Packet;
 RunTime_Packet _RunTime_Packet;
 const Flash_Packet m_Flash_Packet = { "Enviornment_Sensor", ".CSV", 15, 0,
-		"0000000000000000", "default", "default", "default", 0x1840, };
+		"0000000000000000", "default", "default", "default" ,0x1840, };
 
 uint8_t debug_scd_pm = 0;
 uint8_t save_param = 0;
@@ -389,15 +387,15 @@ static void save_data() {
 
 }
 static void init_scd4x_i2c() {
-	int16_t error = 0;
+
 	sensirion_i2c_hal_init();
 	scd4x_wake_up();
-	error = scd4x_stop_periodic_measurement();
+	scd4x_stop_periodic_measurement();
 	scd4x_reinit();
 	uint16_t serial_0;
 	uint16_t serial_1;
 	uint16_t serial_2;
-	error = scd4x_get_serial_number(&serial_0, &serial_1, &serial_2);
+	scd4x_get_serial_number(&serial_0, &serial_1, &serial_2);
 
 }
 static void get_scd4x_measurement() {
@@ -436,7 +434,7 @@ static void get_scd4x_measurement() {
 }
 static void init_sps30() {
 	char serial[SPS30_MAX_SERIAL_LEN];
-	const uint8_t AUTO_CLEAN_DAYS = 4;
+
 	int16_t ret;
 	sensirion_sleep_usec(1000000); /* sleep for 1s */
 
@@ -654,6 +652,10 @@ static void green_led_blink() {
 }
 
 static void led_awake_routine() {
+
+
+if(_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard
+{
 	if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
 			{
 		GREEN_LED_PWM(0);
@@ -706,6 +708,11 @@ static void led_awake_routine() {
 		}
 
 	}
+}
+else
+{
+	RED_LED_PWM(red_led_pwm_val == 900 ? 0 : 900); //we toggle red led
+}
 }
 
 
@@ -798,6 +805,14 @@ void app_main() {
 		while (HAL_GetTick() - prev_sleep_time <= sleep_time) //stay awake for only 1min and then sleep
 		{
 
+			if(hsd.ErrorCode != 0)
+			{
+
+
+				HAL_UART_Transmit(&huart1, (uint8_t*)buf_sdcard, strlen(buf_sdcard), 1000);
+
+			}
+
 			if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is active dont go to sleep
 					{
 				prev_sleep_time = HAL_GetTick();
@@ -813,6 +828,10 @@ void app_main() {
 			HAL_RTC_GetTime(RTC_Handle, &gTime, RTC_FORMAT_BIN);
 			RTC_DateTypeDef sDate;
 			HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
+
+			_RunTime_Packet.day = sDate.Date;
+			_RunTime_Packet.month= sDate.Month;
+			_RunTime_Packet.year = sDate.Year;
 
 			if (_RunTime_Packet.prev_day != sDate.Date) {
 				_RunTime_Packet.day_changed = 1;

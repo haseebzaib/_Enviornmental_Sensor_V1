@@ -284,9 +284,9 @@ static void MX_RTC_Init(void)
 
   /* USER CODE END RTC_Init 0 */
 
-  RTC_TimeTypeDef sTime = {0};
-  RTC_DateTypeDef sDate = {0};
-  RTC_AlarmTypeDef sAlarm = {0};
+//  RTC_TimeTypeDef sTime = {0};
+//  RTC_DateTypeDef sDate = {0};
+//  RTC_AlarmTypeDef sAlarm = {0};
 
   /* USER CODE BEGIN RTC_Init 1 */
 
@@ -747,7 +747,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
         prev_usb_time_ = HAL_GetTick();
 		prev_sleep_time = HAL_GetTick();
     }
-    if(GPIO_Pin = SW_DET_Pin)
+    if(GPIO_Pin == SW_DET_Pin)
     {
     	power_off_detect();
     }

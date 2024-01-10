@@ -804,7 +804,7 @@ void initializeEmbeddedCli() {
 			"Enable/Disable debug messages for scd4x and PM sensor", .tokenizeArgs = true, .context = NULL,
 			.binding = debug_scd4x_PM25 };
 
-	CliCommandBinding Get_DeviceSignature = { .name = "get-Device-Signature", .help =
+	CliCommandBinding Get_DeviceSignature = { .name = "get-device-signature", .help =
 				"Device Signature-Electronic ID", .tokenizeArgs = true, .context = NULL,
 				.binding = DeviceSignature };
 
@@ -894,7 +894,7 @@ void initializeEmbeddedCli() {
 			"Restart the system", .tokenizeArgs = true, .context = NULL,
 			.binding = SystemRestart };
 
-	CliCommandBinding Co2_Level = { .name = "Co2-level", .help =
+	CliCommandBinding Co2_Level = { .name = "co2-level", .help =
 			"Check Co2 level", .tokenizeArgs = true, .context = NULL,
 			.binding = Co2Level };
 

@@ -95,6 +95,7 @@ void json_update() {
 
 		Unmount_SD("/");
 	}
+	_RunTime_Packet.sd_card_disk_write_error = fresult1;
 }
 void csv_update() {
 	RTC_DateTypeDef sDate;
@@ -179,6 +180,7 @@ void csv_update() {
 
 		Unmount_SD("/");
 	}
+	_RunTime_Packet.sd_card_disk_write_error = fresult1;
 }
 void csv_header() {
 
@@ -248,6 +250,9 @@ void csv_header() {
 
 		Unmount_SD("/");
 	}
+	_RunTime_Packet.sd_card_disk_write_error = fresult1;
+
+
 }
 void filesaving_process() {
 	memset(buffer,0,sizeof(buffer));

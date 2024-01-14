@@ -255,17 +255,20 @@ void csv_header() {
 
 }
 void filesaving_process() {
+	__disable_irq();
 	memset(buffer,0,sizeof(buffer));
 	if (_RunTime_Packet.fileformat_selection) {
 		csv_update();
 	} else {
 		json_update();
 	}
+	__enable_irq();
 }
 int8_t createfile(char *filename, char *fileformat) {
+	__disable_irq();
 	if (Mount_SD("/") == FR_OK) {
 	} else {
-
+		__enable_irq();
 		return -1;
 	}
 	Unmount_SD("/");
@@ -294,8 +297,9 @@ int8_t createfile(char *filename, char *fileformat) {
 		}
 
 	} else {
+		__enable_irq();
 		return -1;
 	}
-
+	__enable_irq();
 	return 0;
 }

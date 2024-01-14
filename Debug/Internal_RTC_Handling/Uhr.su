@@ -1,6 +1,6 @@
 ../Internal_RTC_Handling/Uhr.c:21:6:RtcInt	4	static
 ../Internal_RTC_Handling/Uhr.c:28:6:Set_Date	40	static
 ../Internal_RTC_Handling/Uhr.c:48:6:Rtc_set_alarm	80	static
-../Internal_RTC_Handling/Uhr.c:95:6:Set_Time	56	static
-../Internal_RTC_Handling/Uhr.c:113:6:Get_Date	16	static
-../Internal_RTC_Handling/Uhr.c:118:6:Get_Time	32	static
+../Internal_RTC_Handling/Uhr.c:97:6:Set_Time	56	static
+../Internal_RTC_Handling/Uhr.c:115:6:Get_Date	16	static
+../Internal_RTC_Handling/Uhr.c:120:6:Get_Time	32	static

@@ -135,7 +135,7 @@ void cli_printf(EmbeddedCli *cli, const char *format, ...) {
 
 void receiveString(EmbeddedCli *cli, char *buffer, size_t bufferSize) {
 	size_t index = 0;
-
+	   int i, j;
 	prev_max_wait_time = HAL_GetTick();
 	while (1) {
 		if (flag_cli) {
@@ -147,6 +147,22 @@ void receiveString(EmbeddedCli *cli, char *buffer, size_t bufferSize) {
 //				for (size_t i = 0; buffer[i]; i++) {
 //					buffer[i] = tolower(buffer[i]);
 //				}
+				  //Iterating each character and removing non alphabetical characters.
+				    for( i = 0; buffer[i] != '\0'; ++i)
+				    {
+				        while (!( (buffer[i] >= 'a' && buffer[i] <= 'z')
+				        		|| (buffer[i] >= 'A' && buffer[i] <= 'Z')
+								|| buffer[i] == '_'
+								|| (buffer[i] >= 0x30 && buffer[i] <= 0x39)
+								|| buffer[i] == '\0') )
+				        {
+				            for( j = i; buffer[j] != '\0'; ++j)
+				            {
+				            	buffer[j] = buffer[j+1];
+				            }
+				            buffer[j] = '\0';
+				        }
+				    }
 				break;
 			} else {
 				// Check if the received character is an alphabet character
@@ -493,6 +509,7 @@ uint16_t len;
 		cli_printf(cli,"Disclaimer: It takes 30second for any changes to save.");
 		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 	cli_printf(cli,"To set file name dont use special characters or space, '_' can be used and please keep the name below 18characters.");
+	cli_printf(cli,"If any special characters they will be omitted automatically.");
 
 	cli_other = 1;
 	flag_cli = 0;

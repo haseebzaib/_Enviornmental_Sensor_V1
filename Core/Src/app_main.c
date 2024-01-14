@@ -541,7 +541,7 @@ static void sensor_calibration() {
 
 	if (_RunTime_Packet.PM_calibration && !_RunTime_Packet.usb_detection) {
 		_RunTime_Packet.PM_calibration = 0;
-		sps30_set_fan_auto_cleaning_interval_days(4);
+		sps30_start_manual_fan_cleaning();
 	}
 
 	if (_RunTime_Packet.CO2_calibration) {

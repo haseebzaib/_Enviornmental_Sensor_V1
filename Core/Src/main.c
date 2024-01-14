@@ -765,7 +765,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart) {
     {
 
       //HMI_uart_err = 1;
-	  _RunTime_Packet.console_uart_error = 1;
+	 // _RunTime_Packet.console_uart_error = 1;
       __HAL_UART_CLEAR_FLAG(huart,huart->ErrorCode);
 
     }

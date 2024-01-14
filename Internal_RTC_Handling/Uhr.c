@@ -64,7 +64,12 @@ if(set_alarm_Time)
     if(minute > 59)
     {
     	minute = minute%_Flash_Packet.Time_Interval;
+    	if(minute == 0)
+    	{
+    		minute = 1;
+    	}
     }
+
       RTC_AlarmTypeDef sAlarm = {0};
 	  sAlarm.AlarmTime.Hours = 0;
 	  sAlarm.AlarmTime.Minutes = minute;
@@ -77,10 +82,7 @@ if(set_alarm_Time)
 	  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
 	  sAlarm.AlarmDateWeekDay = 1;
 	  sAlarm.Alarm = RTC_ALARM_A;
-	  if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BIN) != HAL_OK)
-	  {
-	    Error_Handler();
-	  }
+	  HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BIN);
 
 	  __HAL_RTC_ALARM_ENABLE_IT (&hrtc, RTC_IT_ALRA);
 	  __HAL_RTC_ALARM_CLEAR_FLAG (&hrtc, RTC_IT_ALRA);

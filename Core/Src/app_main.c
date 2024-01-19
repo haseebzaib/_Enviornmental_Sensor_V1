@@ -9,6 +9,7 @@
  * TODO
  * mass storage speed up
  * mass storage malfunction fix needed
+ * power off detection led need to be added
  */
 
 #include "main.h"

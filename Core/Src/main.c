@@ -106,6 +106,7 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 //comment usb initialization from here
+#ifdef Disable
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -118,11 +119,25 @@ int main(void)
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   MX_ADC1_Init();
- // MX_USB_DEVICE_Init();
+  MX_USB_DEVICE_Init();
   MX_FATFS_Init();
   MX_TIM1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+#endif
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_SDIO_SD_Init();
+  MX_USART1_UART_Init();
+  MX_RTC_Init();
+  MX_I2C1_Init();
+  MX_TIM2_Init();
+  MX_USART2_UART_Init();
+  MX_ADC1_Init();
+  MX_FATFS_Init();
+  MX_TIM1_Init();
+  MX_TIM3_Init();
+
   app_main(); //keep mx_usb_device_init off here
 
 
@@ -281,7 +296,7 @@ static void MX_RTC_Init(void)
 {
 
   /* USER CODE BEGIN RTC_Init 0 */
-
+#ifdef RTC_disable
   /* USER CODE END RTC_Init 0 */
 
   RTC_TimeTypeDef sTime = {0};
@@ -289,7 +304,7 @@ static void MX_RTC_Init(void)
   RTC_AlarmTypeDef sAlarm = {0};
 
   /* USER CODE BEGIN RTC_Init 1 */
-
+#endif
   /* USER CODE END RTC_Init 1 */
 
   /** Initialize RTC Only

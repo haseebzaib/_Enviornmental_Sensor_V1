@@ -22,6 +22,7 @@
 #define adc_Disable() HAL_ADC_DeInit(&hadc1)
 
 #define ratio 1.27  //r1+r2/r2 465k/365k
+#define offset 0    //add incase of any offset, sometimes there is offset in reading
 
 static void adc_InitOneShotMode ()
 {
@@ -130,7 +131,7 @@ uint8_t adc_Measure (float *bat_volt)
 
 
 
-	*bat_volt = (float)(( val * (3.3f / 4096.0f))*ratio);	// 12 bit
+	*bat_volt = (float)(( val * (3.3f / 4096.0f))*ratio) - offset ;	// 12 bit
 
 
 	return 1;

@@ -2,7 +2,7 @@
 ../Core/Src/main.c:147:6:SystemClock_Config	88	static
 ../Core/Src/main.c:194:13:MX_ADC1_Init	24	static
 ../Core/Src/main.c:246:13:MX_I2C1_Init	8	static
-../Core/Src/main.c:280:13:MX_RTC_Init	8	static
+../Core/Src/main.c:280:13:MX_RTC_Init	72	static
 ../Core/Src/main.c:363:6:MX_SDIO_SD_Init	4	static
 ../Core/Src/main.c:391:6:MX_TIM1_Init	32	static
 ../Core/Src/main.c:437:6:MX_TIM2_Init	32	static

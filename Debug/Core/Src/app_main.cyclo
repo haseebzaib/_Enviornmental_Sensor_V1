@@ -20,4 +20,4 @@ app_main.c:591:13:wakeup	2
 app_main.c:635:13:green_led_blink	1
 app_main.c:654:13:led_awake_routine	13
 app_main.c:725:7:ver_GetUid	3
-app_main.c:747:6:app_main	32
+app_main.c:747:6:app_main	33

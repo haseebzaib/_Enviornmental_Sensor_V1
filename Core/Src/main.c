@@ -118,7 +118,7 @@ int main(void)
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   MX_ADC1_Init();
-  //MX_USB_DEVICE_Init();
+ // MX_USB_DEVICE_Init();
   MX_FATFS_Init();
   MX_TIM1_Init();
   MX_TIM3_Init();
@@ -284,9 +284,9 @@ static void MX_RTC_Init(void)
 
   /* USER CODE END RTC_Init 0 */
 
-//  RTC_TimeTypeDef sTime = {0};
-//  RTC_DateTypeDef sDate = {0};
-//  RTC_AlarmTypeDef sAlarm = {0};
+  RTC_TimeTypeDef sTime = {0};
+  RTC_DateTypeDef sDate = {0};
+  RTC_AlarmTypeDef sAlarm = {0};
 
   /* USER CODE BEGIN RTC_Init 1 */
 

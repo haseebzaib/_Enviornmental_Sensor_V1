@@ -963,8 +963,14 @@ void app_main() {
 		}
 		filesaving_process();
 		prev_sleep_time = HAL_GetTick();
-		sleep();
-		wakeup();
+
+
+		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port,USB_DETECT_Pin))
+		 {
+
+			sleep();
+		    wakeup();
+		 }
 
 	}
 

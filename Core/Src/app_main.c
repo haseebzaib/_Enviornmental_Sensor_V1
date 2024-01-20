@@ -10,6 +10,7 @@
  * mass storage speed up
  * mass storage malfunction fix needed
  * power off detection led need to be added
+ * also add watchdog and test it in sleep mode
  */
 
 #include "main.h"
@@ -29,13 +30,14 @@
 #include "internal_adc.h"
 #include "Utils.h"
 #include "File_Handling.h"
+#include "stm32_hal_legacy.h"
 
 char buf_sdcard[] =
 		"sdcard error, this can cause issue in mass storage also\r\n";
 
-#define battery_Full 3.27f
-#define battery_Low  2.43f
-#define battery_very_low 2.25f
+#define battery_Full 4.1f
+#define battery_Low  3.5f
+#define battery_very_low 3.3f
 
 #define lengthSoftPWMbuffer 1000
 uint32_t dataA[lengthSoftPWMbuffer];
@@ -589,13 +591,19 @@ static void sleep() {
 	clock_speed_slow();
 
 	HAL_SuspendTick();
+
+
+
+
 	/*## Enter Stop Mode #######################################################*/
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+
 
 }
 static void wakeup() {
 
 	//also add usb stuff
+
 
 	HAL_ResumeTick();
 	clock_speed_high();
@@ -659,19 +667,47 @@ static void led_awake_routine() {
 			{
 		if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
 				{
-			GREEN_LED_PWM(disable_led);
-			RED_LED_PWM(disable_led);
-			BLUE_LED_PWM(0);
+
+
+
+
+			if (_RunTime_Packet.battery_voltage >= battery_Full) {
+							GREEN_LED_PWM(0);
+							RED_LED_PWM(disable_led);
+							BLUE_LED_PWM(disable_led);
+
+						}
+			else
+			{
+				GREEN_LED_PWM(disable_led);
+						RED_LED_PWM(disable_led);
+						BLUE_LED_PWM(0);
+			}
 
 		} else {
 			BLUE_LED_PWM(disable_led); //we turn off the blue led incase it was on before
-			if (_RunTime_Packet.battery_voltage >= battery_Full) {
-				GREEN_LED_PWM(0);
-				RED_LED_PWM(disable_led);
-				BLUE_LED_PWM(disable_led);
 
-			} else {
-				if (_RunTime_Packet.battery_voltage > battery_Low
+
+			if (_RunTime_Packet.battery_voltage >= battery_Full) {
+				RED_LED_PWM(disable_led);
+							BLUE_LED_PWM(disable_led);
+
+							if (!green_led_pwm_flag) {
+								green_led_pwm_val += 5;
+							} else {
+								green_led_pwm_val -= 5;
+							}
+
+							if (green_led_pwm_val > 1000) {
+								green_led_pwm_flag = 1;
+							} else if (green_led_pwm_val <= 0) {
+								green_led_pwm_flag = 0;
+							}
+
+							GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+
+						}
+			else if (_RunTime_Packet.battery_voltage > battery_Low
 						&& _RunTime_Packet.battery_voltage <= battery_Full) {
 					RED_LED_PWM(disable_led);
 					BLUE_LED_PWM(disable_led);
@@ -744,7 +780,7 @@ static void led_awake_routine() {
 					RED_LED_PWM(red_led_pwm_val); //we breathe red led
 				}
 
-			}
+
 
 		}
 	} else {

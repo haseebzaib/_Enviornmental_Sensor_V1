@@ -138,6 +138,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM3_Init();
 
+
   app_main(); //keep mx_usb_device_init off here
 
 

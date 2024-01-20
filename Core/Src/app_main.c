@@ -30,7 +30,8 @@
 #include "Utils.h"
 #include "File_Handling.h"
 
-char buf_sdcard[] = "sdcard error, this can cause issue in mass storage also\r\n";
+char buf_sdcard[] =
+		"sdcard error, this can cause issue in mass storage also\r\n";
 
 #define battery_Full 3.27f
 #define battery_Low  2.43f
@@ -51,19 +52,22 @@ static void setSoftPWM(uint16_t pin, uint32_t duty, uint32_t *softpwmbuffer) {
 
 }
 
+#define disable_led 1000
 #define GREEN_LED_PWM(x) TIM3->CCR1=x;
 #define RED_LED_PWM(x)   TIM3->CCR2=x;
 #define BLUE_LED_PWM(x)  setSoftPWM(BLUE_LED_Pin, x, (uint32_t*)&dataA);
 
-
-uint16_t green_led_pwm_val = 0;
-uint16_t red_led_pwm_val = 0;
-uint16_t blue_led_pwm_val = 0;
+uint8_t green_led_pwm_flag = 0;
+uint8_t red_led_pwm_flag = 0;
+uint8_t blue_led_pwm_flag = 0;
+int16_t green_led_pwm_val = 0;
+int16_t red_led_pwm_val = 0;
+int16_t blue_led_pwm_val = 0;
 
 Flash_Packet _Flash_Packet;
 RunTime_Packet _RunTime_Packet;
 const Flash_Packet m_Flash_Packet = { "Enviornment_Sensor", ".CSV", 15, 0,
-		"0000000000000000", "default", "default", "default" ,0x1840, };
+		"0000000000000000", "default", "default", "default", 0x1840, };
 
 uint8_t debug_scd_pm = 0;
 uint8_t save_param = 0;
@@ -84,6 +88,19 @@ uint32_t prev_sleep_time_pm_co2 = 0;
 
 uint32_t usb_time_ = 50000;
 uint32_t prev_usb_time_ = 0;
+
+void toggle_blue_led()
+{
+		if(blue_led_pwm_val != 0)
+    		{
+			blue_led_pwm_val = 0;
+    		}
+    		else
+    		{
+    			blue_led_pwm_val = 1000;
+    		}
+    		BLUE_LED_PWM(blue_led_pwm_val); //we toggle red led
+}
 
 //##############Interrupts###############
 void pir_interrupt() {
@@ -118,32 +135,28 @@ void timer_interrupt() {
 }
 
 void power_off_detect() {
- if(!HAL_GPIO_ReadPin(SW_DET_GPIO_Port,SW_DET_Pin))
- {
-	//_RunTime_Packet.pwr_off_det = 1;
- }
+	if (!HAL_GPIO_ReadPin(SW_DET_GPIO_Port, SW_DET_Pin)) {
+		//_RunTime_Packet.pwr_off_det = 1;
+	}
 }
 
 //######################################
 
-static void MX_DMA_Init(void)
- {
-	  /* DMA controller clock enable */
-	  __HAL_RCC_DMA2_CLK_ENABLE();
+static void MX_DMA_Init(void) {
+	/* DMA controller clock enable */
+	__HAL_RCC_DMA2_CLK_ENABLE();
 
-	  /* DMA interrupt init */
-	  /* DMA2_Stream5_IRQn interrupt configuration */
-	  HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 0, 0);
-	  HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
+	/* DMA interrupt init */
+	/* DMA2_Stream5_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
 
- }
+}
 
-static void pwr_off_detected()
-{
-	if(_RunTime_Packet.pwr_off_det)
-	{
+static void pwr_off_detected() {
+	if (_RunTime_Packet.pwr_off_det) {
 		_RunTime_Packet.pwr_off_det = 0;
-        BLUE_LED_PWM(900);
+		BLUE_LED_PWM(900);
 		HAL_Delay(5000);
 
 	}
@@ -537,9 +550,6 @@ static void check_peripheral_error() {
 }
 static void sensor_calibration() {
 
-
-
-
 	if (_RunTime_Packet.PM_calibration && !_RunTime_Packet.usb_detection) {
 		_RunTime_Packet.PM_calibration = 0;
 		sps30_start_manual_fan_cleaning();
@@ -552,16 +562,13 @@ static void sensor_calibration() {
 				&_RunTime_Packet._frc_correction);
 	}
 
-
-
-
 }
 static void sleep() {
 
 //save stuff to sd card right here then go to sleep
-	GREEN_LED_PWM(0);
-	RED_LED_PWM(0);
-	BLUE_LED_PWM(0);
+	GREEN_LED_PWM(disable_led);
+	RED_LED_PWM(disable_led);
+	BLUE_LED_PWM(disable_led);
 
 	HAL_ADC_DeInit(&hadc1);
 	HAL_UART_Transmit(&huart1, (uint8_t*) "sleepTime\r\n", 11, 1000);
@@ -578,9 +585,6 @@ static void sleep() {
 	HAL_TIM_Base_DeInit(&htim2);
 	HAL_TIM_Base_DeInit(&htim3);
 	HAL_DMA_DeInit(&hdma_tim1_up);
-
-
-
 
 	clock_speed_slow();
 
@@ -604,7 +608,6 @@ static void wakeup() {
 	MX_TIM2_Init();
 	MX_TIM3_Init();
 
-
 	init_scd4x_i2c();
 	MX_USB_DEVICE_Init(); //initialize usb anyways
 	if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {
@@ -621,12 +624,11 @@ static void wakeup() {
 			(uint32_t) &(BLUE_LED_GPIO_Port->BSRR),
 			sizeof(dataA) / sizeof(dataA[0]));
 	__HAL_TIM_ENABLE_DMA(&htim1, TIM_DMA_UPDATE);
-	BLUE_LED_PWM(0);
+	BLUE_LED_PWM(disable_led);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1); //for green led
-	GREEN_LED_PWM(0);
+	GREEN_LED_PWM(disable_led);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); //for red led
-	RED_LED_PWM(0);
-
+	RED_LED_PWM(disable_led);
 
 	pwr_off_detected();
 
@@ -634,91 +636,132 @@ static void wakeup() {
 }
 
 static void green_led_blink() {
-	GREEN_LED_PWM(900);
-	HAL_Delay(1000);
 
 	GREEN_LED_PWM(0);
-	HAL_Delay(1000);
+	HAL_Delay(800);
 
-	GREEN_LED_PWM(900);
-	HAL_Delay(1000);
+	GREEN_LED_PWM(disable_led);
+	HAL_Delay(800);
 
 	GREEN_LED_PWM(0);
-	HAL_Delay(1000);
+	HAL_Delay(800);
 
-	GREEN_LED_PWM(900);
-	HAL_Delay(1000);
+	GREEN_LED_PWM(disable_led);
+	HAL_Delay(800);
+
 	GREEN_LED_PWM(0);
 
 }
 
 static void led_awake_routine() {
 
-
-if(_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard
-{
-	if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
+	if (_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard
 			{
-		GREEN_LED_PWM(0);
-		RED_LED_PWM(0);
-		BLUE_LED_PWM(900);
-	} else {
-		BLUE_LED_PWM(0); //we turn off the blue led incase it was on before
-		if (_RunTime_Packet.battery_voltage >= battery_Full) {
-			GREEN_LED_PWM(900);
-			RED_LED_PWM(0);
+		if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
+				{
+			GREEN_LED_PWM(disable_led);
+			RED_LED_PWM(disable_led);
 			BLUE_LED_PWM(0);
+
 		} else {
-			if (_RunTime_Packet.battery_voltage > battery_Low
-					&& _RunTime_Packet.battery_voltage <= battery_Full) {
-				RED_LED_PWM(0);
-				BLUE_LED_PWM(0);
-				green_led_pwm_val += 70;
-				if (green_led_pwm_val > 1000) {
-					green_led_pwm_val = 0;
-				}
-				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-			} else if (_RunTime_Packet.battery_voltage > battery_very_low
-					&& _RunTime_Packet.battery_voltage <= battery_Low) {
-
-				BLUE_LED_PWM(0);
-
-				green_led_pwm_val += 70;
-				if (green_led_pwm_val > 1000) {
-					green_led_pwm_val = 0;
-				}
-
-				red_led_pwm_val += 70;
-				if (red_led_pwm_val > 1000) {
-					red_led_pwm_val = 0;
-				}
-				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-				RED_LED_PWM(red_led_pwm_val); //we breathe red led
-			} else //we now know battery is very low
-			{
+			BLUE_LED_PWM(disable_led); //we turn off the blue led incase it was on before
+			if (_RunTime_Packet.battery_voltage >= battery_Full) {
 				GREEN_LED_PWM(0);
-				BLUE_LED_PWM(0);
-				red_led_pwm_val += 70;
-				if (red_led_pwm_val > 1000) {
-					red_led_pwm_val = 0;
+				RED_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
+
+			} else {
+				if (_RunTime_Packet.battery_voltage > battery_Low
+						&& _RunTime_Packet.battery_voltage <= battery_Full) {
+					RED_LED_PWM(disable_led);
+					BLUE_LED_PWM(disable_led);
+
+					if (!green_led_pwm_flag) {
+						green_led_pwm_val += 5;
+					} else {
+						green_led_pwm_val -= 5;
+					}
+
+					if (green_led_pwm_val > 1000) {
+						green_led_pwm_flag = 1;
+					} else if (green_led_pwm_val <= 0) {
+						green_led_pwm_flag = 0;
+					}
+
+					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+				} else if (_RunTime_Packet.battery_voltage > battery_very_low
+						&& _RunTime_Packet.battery_voltage <= battery_Low) {
+
+					if(green_led_pwm_flag != red_led_pwm_flag) //for this we need flags to be sync with each other
+					{
+						green_led_pwm_flag = red_led_pwm_flag;
+					}
+
+					BLUE_LED_PWM(disable_led);
+
+					if (!green_led_pwm_flag) {
+						green_led_pwm_val += 5;
+					} else {
+						green_led_pwm_val -= 5;
+					}
+
+					if (green_led_pwm_val > 1000) {
+						green_led_pwm_flag = 1;
+					} else if (green_led_pwm_val <= 0) {
+						green_led_pwm_flag = 0;
+					}
+
+					if (!red_led_pwm_flag) {
+						red_led_pwm_val += 5;
+					} else {
+						red_led_pwm_val -= 5;
+					}
+
+					if (red_led_pwm_val > 1000) {
+						red_led_pwm_flag = 1;
+					} else if (red_led_pwm_val <= 0) {
+						red_led_pwm_flag = 0;
+					}
+
+					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+					RED_LED_PWM(red_led_pwm_val); //we breathe red led
+				} else //we now know battery is very low
+				{
+					GREEN_LED_PWM(disable_led);
+					BLUE_LED_PWM(disable_led);
+					if (!red_led_pwm_flag) {
+						red_led_pwm_val += 5;
+					} else {
+						red_led_pwm_val -= 5;
+					}
+
+					if (red_led_pwm_val > 1000) {
+						red_led_pwm_flag = 1;
+					} else if (red_led_pwm_val <= 0) {
+						red_led_pwm_flag = 0;
+					}
+
+					RED_LED_PWM(red_led_pwm_val); //we breathe red led
 				}
 
-				RED_LED_PWM(red_led_pwm_val); //we breathe red led
 			}
 
 		}
-
+	} else {
+		GREEN_LED_PWM(disable_led);
+		BLUE_LED_PWM(disable_led);
+		if(red_led_pwm_val != disable_led)
+		{
+			red_led_pwm_val = disable_led;
+		}
+		else
+		{
+			red_led_pwm_val =0;
+		}
+		RED_LED_PWM(red_led_pwm_val); //we toggle red led
+		HAL_Delay(300);
 	}
 }
-else
-{
-	RED_LED_PWM(red_led_pwm_val == 900 ? 0 : 900); //we toggle red led
-}
-}
-
-
-
-
 
 static uint8_t sUid[13];	//12-bit asci
 
@@ -752,6 +795,17 @@ void app_main() {
 
 	load_param();
 
+	HAL_TIM_Base_Start(&htim1);
+	HAL_DMA_Start(&hdma_tim1_up, (uint32_t) &(dataA[0]),
+			(uint32_t) &(BLUE_LED_GPIO_Port->BSRR),
+			sizeof(dataA) / sizeof(dataA[0]));
+	__HAL_TIM_ENABLE_DMA(&htim1, TIM_DMA_UPDATE);
+	BLUE_LED_PWM(disable_led);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1); //for green led
+	GREEN_LED_PWM(disable_led);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); //for red led
+	RED_LED_PWM(disable_led);
+
 	MX_USB_DEVICE_Init(); //initialize usb anyways
 	prev_usb_time_ = HAL_GetTick();
 //
@@ -779,21 +833,19 @@ void app_main() {
 	//as accessing both usb and sdcard is not possible
 	//therefore we will run file creation again when usb operation is completed. it takes about 30second
 	//untill that 30second we wont even go to sleep as usb is connected so power is not the issue
-	_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
-			_Flash_Packet.File_Format);
 
-	HAL_TIM_Base_Start(&htim1);
-		HAL_DMA_Start(&hdma_tim1_up, (uint32_t) &(dataA[0]),
-				(uint32_t) &(BLUE_LED_GPIO_Port->BSRR),
-				sizeof(dataA) / sizeof(dataA[0]));
-		__HAL_TIM_ENABLE_DMA(&htim1, TIM_DMA_UPDATE);
-		BLUE_LED_PWM(0);
-		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1); //for green led
-		GREEN_LED_PWM(0);
-		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); //for red led
-		RED_LED_PWM(0);
+    //if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))
+	//{
+	  _RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,_Flash_Packet.File_Format);
+	//}
+   // else
+   // {
+   // 	 _RunTime_Packet.sd_file_creation = -1;
+   // }
 
-	green_led_blink();
+
+
+    green_led_blink();
 
 //MX_USB_DEVICE_DeInit();
 	HAL_UART_Transmit(&huart1, (uint8_t*) "System Has Started \r\n", 21, 200);
@@ -806,13 +858,13 @@ void app_main() {
 		while (HAL_GetTick() - prev_sleep_time <= sleep_time) //stay awake for only 1min and then sleep
 		{
 
-			if(hsd.ErrorCode != 0)
-			{
-
-
-				HAL_UART_Transmit(&huart1, (uint8_t*)buf_sdcard, strlen(buf_sdcard), 1000);
-
-			}
+//			if(hsd.ErrorCode != 0)
+//			{
+//
+//
+//				HAL_UART_Transmit(&huart1, (uint8_t*)buf_sdcard, strlen(buf_sdcard), 1000);
+//
+//			}
 
 			if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is active dont go to sleep
 					{
@@ -831,7 +883,7 @@ void app_main() {
 			HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
 
 			_RunTime_Packet.day = sDate.Date;
-			_RunTime_Packet.month= sDate.Month;
+			_RunTime_Packet.month = sDate.Month;
 			_RunTime_Packet.year = sDate.Year;
 
 			if (_RunTime_Packet.prev_day != sDate.Date) {
@@ -859,7 +911,8 @@ void app_main() {
 				{
 					if (_RunTime_Packet.sd_file_creation == -1
 							&& _RunTime_Packet.usb_first_start) {
-						_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
+						_RunTime_Packet.sd_file_creation = createfile(
+								_Flash_Packet.File_Name,
 								_Flash_Packet.File_Format);
 					}
 
@@ -897,6 +950,7 @@ void app_main() {
 				adc_Measure(&_RunTime_Packet.battery_voltage);
 				led_awake_routine();
 				pwr_off_detected();
+				HAL_Delay(20);
 			}
 
 			/*
@@ -908,7 +962,7 @@ void app_main() {
 			if (stop_measurement && !_RunTime_Packet.usb_detection
 					&& !_RunTime_Packet.usb_first_start
 					&& !HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port,
-							USB_DETECT_Pin)) {
+					USB_DETECT_Pin)) {
 				scd4x_stop_periodic_measurement();
 				sps30_stop_measurement();
 				stop_measurement = 0;
@@ -919,17 +973,18 @@ void app_main() {
 //this routine is specifically to table the issue, if user keeps the usb plugged in for somereason
 //because the mostly the system will save data before going to sleep. if usb cable is plugged in it wont go to sleep, but with routine we still save the data after set intervals
 			if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)
-					&& set_alarm_Time && !_RunTime_Packet.usb_detection ) {
+					&& set_alarm_Time && !_RunTime_Packet.usb_detection) {
 				//if day changes create new file
 				//if user change filename or fileformat then also create new file with that format or name
 				if (_RunTime_Packet.day_changed
 						|| _RunTime_Packet.filename_changed
-						|| _RunTime_Packet.fileformat_changed || _RunTime_Packet.sd_file_creation == -1) {
+						|| _RunTime_Packet.fileformat_changed
+						|| _RunTime_Packet.sd_file_creation == -1) {
 					_RunTime_Packet.day_changed = 0;
 					_RunTime_Packet.filename_changed = 0;
 					_RunTime_Packet.fileformat_changed = 0;
-					_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
-							_Flash_Packet.File_Format);
+					_RunTime_Packet.sd_file_creation = createfile(
+							_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 				}
 				filesaving_process();
 
@@ -956,22 +1011,22 @@ void app_main() {
 		//if day changes create new file
 		//if user change filename or fileformat then also create new file with that format or name
 		if (_RunTime_Packet.day_changed || _RunTime_Packet.filename_changed
-				|| _RunTime_Packet.fileformat_changed || _RunTime_Packet.sd_file_creation == -1) {
+				|| _RunTime_Packet.fileformat_changed
+				|| _RunTime_Packet.sd_file_creation == -1) {
 			_RunTime_Packet.day_changed = 0;
 			_RunTime_Packet.filename_changed = 0;
 			_RunTime_Packet.fileformat_changed = 0;
-			_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name, _Flash_Packet.File_Format);
+			_RunTime_Packet.sd_file_creation = createfile(
+					_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 		}
 		filesaving_process();
 		prev_sleep_time = HAL_GetTick();
 
-
-		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port,USB_DETECT_Pin))
-		 {
+		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {
 
 			sleep();
-		    wakeup();
-		 }
+			wakeup();
+		}
 
 	}
 

@@ -153,6 +153,7 @@ void receiveString(EmbeddedCli *cli, char *buffer, size_t bufferSize) {
 				        while (!( (buffer[i] >= 'a' && buffer[i] <= 'z')
 				        		|| (buffer[i] >= 'A' && buffer[i] <= 'Z')
 								|| buffer[i] == '_'
+								|| buffer[i] == ':'
 								|| (buffer[i] >= 0x30 && buffer[i] <= 0x39)
 								|| buffer[i] == '\0') )
 				        {
@@ -166,8 +167,19 @@ void receiveString(EmbeddedCli *cli, char *buffer, size_t bufferSize) {
 				break;
 			} else {
 				// Check if the received character is an alphabet character
+				if ((UART_CLI_rxBuffer[0] == '\b' || UART_CLI_rxBuffer[0] == 0x7F))
+				{
+			        cli->writeChar(cli, '\b');
+			        cli->writeChar(cli, ' ');
+			        cli->writeChar(cli, '\b');
+					--index;
+				  	buffer[index] = '\0';
+				}
+				else
+				{
 				buffer[index++] = UART_CLI_rxBuffer[0];
 				cli->writeChar(cli, UART_CLI_rxBuffer[0]);
+				}
 			}
 			flag_cli = 0;
 		}
@@ -594,6 +606,7 @@ void GetFileformat(EmbeddedCli *cli, char *args, void *context) {
 }
 
 void fanclean(EmbeddedCli *cli, char *args, void *context) {
+
 	  const char *newLine = "\r\n";
 	  int counter = 0;
 	  const char *dot = "........";
@@ -628,11 +641,11 @@ void fanclean(EmbeddedCli *cli, char *args, void *context) {
 
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 				cli_printf(cli,"Particle sensor fan-cleaning initiated, please wait.");
-		   while(counter < 5 )
+		   while(counter < 8 )
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)dot,  strlen(dot), 1000);
-                HAL_Delay(200);
-                BLUE_LED_TOGGLE();
+                HAL_Delay(800);
+                toggle_blue_led();
                 counter++;
 		   }
 
@@ -690,11 +703,11 @@ void co2calibrate(EmbeddedCli *cli, char *args, void *context) {
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 				cli_printf(cli,"Co2 is calibrating, please wait.");
-		   while(counter < 5 )
+		   while(counter < 8 )
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)dot,  strlen(dot), 1000);
-			    HAL_Delay(200);
-			    BLUE_LED_TOGGLE();
+			    HAL_Delay(800);
+			    toggle_blue_led();
                 counter++;
 		   }
 

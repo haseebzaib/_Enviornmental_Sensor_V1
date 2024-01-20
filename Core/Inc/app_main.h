@@ -104,6 +104,7 @@ extern uint32_t prev_usb_time_;
 
 
 
+extern void toggle_blue_led();
 extern void power_off_detect();
 int16_t sensirion_uart_receive(uint8_t* data);
 extern void pir_interrupt();

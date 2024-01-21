@@ -979,7 +979,7 @@ void initializeEmbeddedCli() {
 				"Check air quality level", .tokenizeArgs = true, .context = NULL,
 				.binding = AirQuality };
 
-	CliCommandBinding Battery_Voltage = { .name = "battery-volt", .help =
+	CliCommandBinding Battery_Voltage = { .name = "battery-voltage", .help =
 				"Check battery voltage", .tokenizeArgs = true, .context = NULL,
 				.binding = BattVolt };
 

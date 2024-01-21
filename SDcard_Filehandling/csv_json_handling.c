@@ -33,7 +33,7 @@ void json_update() {
 		Update_File(filename_with_format, buffer);
 
 		memset(buffer,0,sizeof(buffer));
-		sprintf(buffer, "\"devEUI\":\"TF241_%s\",\n", ver_GetUid());
+		sprintf(buffer, "\"devEUI\":\"%s\",\n", ver_GetUid());
 		Update_File(filename_with_format, buffer);
 
 		memset(buffer,0,sizeof(buffer));
@@ -123,7 +123,7 @@ void csv_update() {
 
 
 
-		sprintf(buffer, "TF241_%s ,", ver_GetUid());
+		sprintf(buffer, "%s ,", ver_GetUid());
 		Update_File(filename_with_format, buffer);
 
 		memset(buffer,0,sizeof(buffer));

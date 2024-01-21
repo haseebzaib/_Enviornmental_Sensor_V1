@@ -67,7 +67,7 @@ int16_t blue_led_pwm_val = 0;
 
 Flash_Packet _Flash_Packet;
 RunTime_Packet _RunTime_Packet;
-const Flash_Packet m_Flash_Packet = { "Enviornment_Sensor", ".CSV", 15, 0,
+const Flash_Packet m_Flash_Packet = { "devEUI", ".CSV", 15, 0,
 		"0000000000000000", "default", "default", "default", 0x1840, };
 
 uint8_t debug_scd_pm = 0;
@@ -296,11 +296,18 @@ static void load_param() {
 	if (ipFlaPar->valid_pattern == m_Flash_Packet.valid_pattern) // 1. Sentence, pattern valid ?
 			{
 		memcpy(&_Flash_Packet, ipFlaPar, sizeof(Flash_Packet));
+
+		if(strstr(_Flash_Packet.File_Name, "devEUI"))
+		{
+			sprintf(_Flash_Packet.File_Name,"%s",ver_GetUid());
+		}
+
 	}
 
 	else //load default param
 	{
 		memcpy(&_Flash_Packet, &m_Flash_Packet, sizeof(Flash_Packet));
+		sprintf(_Flash_Packet.File_Name,"%s",ver_GetUid());
 	}
 
 	if (strstr(_Flash_Packet.File_Format, ".CSV")) {

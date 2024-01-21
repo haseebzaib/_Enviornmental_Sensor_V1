@@ -262,6 +262,12 @@ void filesaving_process() {
 	} else {
 		json_update();
 	}
+
+	if(_RunTime_Packet.sd_card_disk_write_error != 0)//means there is error
+	{
+        //blink red so user can know
+		blink_red();
+	}
 //	__enable_irq();
 }
 int8_t createfile(char *filename, char *fileformat) {

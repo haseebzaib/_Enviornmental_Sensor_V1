@@ -802,6 +802,22 @@ static void led_awake_routine() {
 }
 
 
+void blink_red()
+{
+	GREEN_LED_PWM(disable_led);
+	BLUE_LED_PWM(disable_led);
+	RED_LED_PWM(0); //we toggle red led
+	HAL_Delay(1000);
+	RED_LED_PWM(disable_led); //we toggle red led
+	HAL_Delay(1000);
+	RED_LED_PWM(0); //we toggle red led
+	HAL_Delay(1000);
+	RED_LED_PWM(disable_led); //we toggle red led
+	HAL_Delay(1000);
+	RED_LED_PWM(0); //we toggle red led
+}
+
+
 static void led_awake_routine1() {
 
 	if (_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard

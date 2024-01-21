@@ -20,6 +20,7 @@ app_main.c:570:13:sleep	1
 app_main.c:605:13:wakeup	2
 app_main.c:648:13:green_led_blink	1
 app_main.c:666:13:led_awake_routine	26
-app_main.c:805:13:led_awake_routine1	26
-app_main.c:947:7:ver_GetUid	3
-app_main.c:969:6:app_main	32
+app_main.c:805:6:blink_red	1
+app_main.c:821:13:led_awake_routine1	26
+app_main.c:963:7:ver_GetUid	3
+app_main.c:985:6:app_main	32

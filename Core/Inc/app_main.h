@@ -103,6 +103,8 @@ extern uint32_t prev_sleep_time;
 extern uint32_t prev_usb_time_;
 extern uint8_t stop_measurement;
 
+
+extern void blink_red();
 extern  void get_sps30_measurement();
 extern void get_scd4x_measurement();
 extern void toggle_blue_led();

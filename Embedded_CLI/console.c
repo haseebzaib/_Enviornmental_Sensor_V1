@@ -37,6 +37,8 @@
 #include "sensirion_uart.h"
 #include "sps30.h"
 #include "internal_adc.h"
+#include "scd4x_i2c.h"
+
 
 static EmbeddedCli *cli;
 // Definitions for CLI UART peripheral
@@ -703,6 +705,11 @@ void co2calibrate(EmbeddedCli *cli, char *args, void *context) {
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)newLine,  strlen(newLine), 1000);
 				cli_printf(cli,"Co2 is calibrating, please wait.");
+				if (!_RunTime_Packet.scd4x_i2c_error) {
+				scd4x_perform_forced_recalibration(
+						_RunTime_Packet._target_co2_concentration,
+						&_RunTime_Packet._frc_correction);
+				}
 		   while(counter < 8 )
 		   {
 				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t *)dot,  strlen(dot), 1000);
@@ -747,15 +754,29 @@ void SystemRestart(EmbeddedCli *cli, char *args, void *context) {
 
 void Co2Level(EmbeddedCli *cli, char *args, void *context) {
 
+	if (!_RunTime_Packet.scd4x_i2c_error) {
+						get_scd4x_measurement();
+					}
+
 	cli_printf(cli,"Co2 Value: %d",_RunTime_Packet.co2);
 }
 
 void TempLevel(EmbeddedCli *cli, char *args, void *context) {
 
+
+
+	if (!_RunTime_Packet.scd4x_i2c_error) {
+						get_scd4x_measurement();
+					}
+
 	cli_printf(cli,"Temperature Value: %dC ",_RunTime_Packet.temperature);
 }
 
 void HumidLevel(EmbeddedCli *cli, char *args, void *context) {
+
+	if (!_RunTime_Packet.scd4x_i2c_error) {
+						get_scd4x_measurement();
+					}
 
 	cli_printf(cli,"Humidity Value: %d ",_RunTime_Packet.humidity);
 }
@@ -795,17 +816,31 @@ HAL_Delay(100);
 void AirQuality(EmbeddedCli *cli, char *args, void *context) {
 
 	cli_printf(cli,"AirQuality Measured Values:");
-	if(_RunTime_Packet.pm1_0 == 0 && _RunTime_Packet.pm2_5 == 0 && _RunTime_Packet.pm4_0 == 0 && _RunTime_Packet.pm10_0 == 0)
-	{
-		cli_printf(cli,"Calculating, try again later");
-	}
-	else
-	{
+//	if(_RunTime_Packet.pm1_0 == 0 && _RunTime_Packet.pm2_5 == 0 && _RunTime_Packet.pm4_0 == 0 && _RunTime_Packet.pm10_0 == 0)
+//	{
+//		cli_printf(cli,"Calculating, try again later");
+//	}
+//	else
+//	{
+//	cli_printf(cli,"%0.2f pm1.0", _RunTime_Packet.pm1_0);
+//	cli_printf(cli,"%0.2f pm2.5 ",_RunTime_Packet.pm2_5);
+//	cli_printf(cli,"%0.2f pm4.0 ",_RunTime_Packet.pm4_0);
+//	cli_printf(cli,"%0.2f pm10.0",_RunTime_Packet.pm10_0);
+//	}
+
+if(	_RunTime_Packet.usb_detection || _RunTime_Packet.usb_first_start)
+{
+	cli_printf(cli,"Calculating, try again later");
+}
+else
+{
+
+	get_sps30_measurement();
 	cli_printf(cli,"%0.2f pm1.0", _RunTime_Packet.pm1_0);
 	cli_printf(cli,"%0.2f pm2.5 ",_RunTime_Packet.pm2_5);
 	cli_printf(cli,"%0.2f pm4.0 ",_RunTime_Packet.pm4_0);
 	cli_printf(cli,"%0.2f pm10.0",_RunTime_Packet.pm10_0);
-	}
+}
 
 
 }

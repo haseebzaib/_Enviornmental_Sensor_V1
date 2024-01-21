@@ -1,4 +1,4 @@
-app_main.c:44:13:setSoftPWM	3
+app_main.c:43:13:setSoftPWM	3
 app_main.c:94:6:toggle_blue_led	2
 app_main.c:108:6:pir_interrupt	2
 app_main.c:117:6:timer_interrupt	2
@@ -11,14 +11,15 @@ app_main.c:291:13:load_param	4
 app_main.c:317:17:store_param	4
 app_main.c:384:13:save_data	4
 app_main.c:407:13:init_scd4x_i2c	1
-app_main.c:419:13:get_scd4x_measurement	5
+app_main.c:419:6:get_scd4x_measurement	5
 app_main.c:453:13:init_sps30	1
-app_main.c:490:13:get_sps30_measurement	4
+app_main.c:490:7:get_sps30_measurement	4
 app_main.c:534:13:check_peripheral_error	4
-app_main.c:555:13:sensor_calibration	4
+app_main.c:555:13:sensor_calibration	3
 app_main.c:570:13:sleep	1
 app_main.c:605:13:wakeup	2
 app_main.c:648:13:green_led_blink	1
 app_main.c:666:13:led_awake_routine	26
-app_main.c:807:7:ver_GetUid	3
-app_main.c:829:6:app_main	32
+app_main.c:805:13:led_awake_routine1	26
+app_main.c:947:7:ver_GetUid	3
+app_main.c:969:6:app_main	32

@@ -9,7 +9,6 @@
  * TODO
  * mass storage speed up
  * mass storage malfunction fix needed
- * power off detection led need to be added
  * also add watchdog and test it in sleep mode
  */
 
@@ -90,6 +89,7 @@ uint32_t prev_sleep_time_pm_co2 = 0;
 
 uint32_t usb_time_ = 50000;
 uint32_t prev_usb_time_ = 0;
+uint8_t stop_measurement = 1;
 
 void toggle_blue_led()
 {
@@ -416,7 +416,7 @@ static void init_scd4x_i2c() {
 	scd4x_get_serial_number(&serial_0, &serial_1, &serial_2);
 
 }
-static void get_scd4x_measurement() {
+void get_scd4x_measurement() {
 	int16_t error = 0;
 
 	error = scd4x_start_periodic_measurement();
@@ -487,7 +487,7 @@ static void init_sps30() {
 //	}
 
 }
-static void get_sps30_measurement() {
+ void get_sps30_measurement() {
 
 	int16_t ret;
 	char buffer[100];
@@ -559,12 +559,12 @@ static void sensor_calibration() {
 		sps30_start_manual_fan_cleaning();
 	}
 
-	if (_RunTime_Packet.CO2_calibration) {
-		_RunTime_Packet.CO2_calibration = 0;
-		scd4x_perform_forced_recalibration(
-				_RunTime_Packet._target_co2_concentration,
-				&_RunTime_Packet._frc_correction);
-	}
+//	if (_RunTime_Packet.CO2_calibration) {
+//		_RunTime_Packet.CO2_calibration = 0;
+//		scd4x_perform_forced_recalibration(
+//				_RunTime_Packet._target_co2_concentration,
+//				&_RunTime_Packet._frc_correction);
+//	}
 
 }
 static void sleep() {
@@ -801,6 +801,146 @@ static void led_awake_routine() {
 	}
 }
 
+
+static void led_awake_routine1() {
+
+	if (_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard
+			{
+		if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
+				{
+
+
+
+
+			if (_RunTime_Packet.battery_voltage >= battery_Full) {
+							GREEN_LED_PWM(0);
+							RED_LED_PWM(disable_led);
+							BLUE_LED_PWM(disable_led);
+
+						}
+			else
+			{
+				GREEN_LED_PWM(disable_led);
+						RED_LED_PWM(disable_led);
+						BLUE_LED_PWM(0);
+			}
+
+		} else {
+			BLUE_LED_PWM(disable_led); //we turn off the blue led incase it was on before
+
+
+			if (_RunTime_Packet.battery_voltage >= battery_Full) {
+				RED_LED_PWM(disable_led);
+							BLUE_LED_PWM(disable_led);
+
+							if (!green_led_pwm_flag) {
+								green_led_pwm_val += 40;
+							} else {
+								green_led_pwm_val -= 40;
+							}
+
+							if (green_led_pwm_val > 1000) {
+								green_led_pwm_flag = 1;
+							} else if (green_led_pwm_val <= 0) {
+								green_led_pwm_flag = 0;
+							}
+
+							GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+
+						}
+			else if (_RunTime_Packet.battery_voltage > battery_Low
+						&& _RunTime_Packet.battery_voltage <= battery_Full) {
+					RED_LED_PWM(disable_led);
+					BLUE_LED_PWM(disable_led);
+
+					if (!green_led_pwm_flag) {
+						green_led_pwm_val += 40;
+					} else {
+						green_led_pwm_val -= 40;
+					}
+
+					if (green_led_pwm_val > 1000) {
+						green_led_pwm_flag = 1;
+					} else if (green_led_pwm_val <= 0) {
+						green_led_pwm_flag = 0;
+					}
+
+					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+				} else if (_RunTime_Packet.battery_voltage > battery_very_low
+						&& _RunTime_Packet.battery_voltage <= battery_Low) {
+
+					if(green_led_pwm_flag != red_led_pwm_flag) //for this we need flags to be sync with each other
+					{
+						green_led_pwm_flag = red_led_pwm_flag;
+					}
+
+					BLUE_LED_PWM(disable_led);
+
+					if (!green_led_pwm_flag) {
+						green_led_pwm_val += 40;
+					} else {
+						green_led_pwm_val -= 40;
+					}
+
+					if (green_led_pwm_val > 1000) {
+						green_led_pwm_flag = 1;
+					} else if (green_led_pwm_val <= 0) {
+						green_led_pwm_flag = 0;
+					}
+
+					if (!red_led_pwm_flag) {
+						red_led_pwm_val += 40;
+					} else {
+						red_led_pwm_val -= 40;
+					}
+
+					if (red_led_pwm_val > 1000) {
+						red_led_pwm_flag = 1;
+					} else if (red_led_pwm_val <= 0) {
+						red_led_pwm_flag = 0;
+					}
+
+					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+					RED_LED_PWM(red_led_pwm_val); //we breathe red led
+				} else //we now know battery is very low
+				{
+					GREEN_LED_PWM(disable_led);
+					BLUE_LED_PWM(disable_led);
+					if (!red_led_pwm_flag) {
+						red_led_pwm_val += 40;
+					} else {
+						red_led_pwm_val -= 40;
+					}
+
+					if (red_led_pwm_val > 1000) {
+						red_led_pwm_flag = 1;
+					} else if (red_led_pwm_val <= 0) {
+						red_led_pwm_flag = 0;
+					}
+
+					RED_LED_PWM(red_led_pwm_val); //we breathe red led
+				}
+
+
+
+		}
+	} else {
+		GREEN_LED_PWM(disable_led);
+		BLUE_LED_PWM(disable_led);
+		if(red_led_pwm_val != disable_led)
+		{
+			red_led_pwm_val = disable_led;
+		}
+		else
+		{
+			red_led_pwm_val =0;
+		}
+		RED_LED_PWM(red_led_pwm_val); //we toggle red led
+		HAL_Delay(300);
+	}
+}
+
+
 static uint8_t sUid[13];	//12-bit asci
 
 //unique ID from MCU
@@ -828,7 +968,7 @@ char* ver_GetUid(void) {
 
 void app_main() {
 
-	uint8_t stop_measurement = 1;
+
 	memset(&_RunTime_Packet, 0, sizeof(_RunTime_Packet));
 
 	load_param();
@@ -986,9 +1126,9 @@ void app_main() {
 				get_sps30_measurement();
 
 				adc_Measure(&_RunTime_Packet.battery_voltage);
-				led_awake_routine();
+				led_awake_routine1();
 				pwr_off_detected();
-				HAL_Delay(20);
+				//HAL_Delay(20);
 			}
 
 			/*

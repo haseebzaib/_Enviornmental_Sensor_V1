@@ -231,7 +231,7 @@ void DeviceSignature(EmbeddedCli *cli, char *args, void *context) {
 
 //	cli_printf(cli,"Device ID/Signature: TF241_0x%04X.",_ID_GetSignature());
 
-	cli_printf(cli,"Device ID/Signature: TF241_%s.",	ver_GetUid());
+	cli_printf(cli,"Device ID/Signature: %s.",	ver_GetUid());
 }
 
 void SetID(EmbeddedCli *cli, char *args, void *context) {
@@ -786,7 +786,7 @@ uint8_t prev_motion;
 void MotionDetection(EmbeddedCli *cli, char *args, void *context) {
 
 	cli_printf(cli,"For 10seconds system will poll here to detect motion.");
-	HAL_Delay(1500);
+	HAL_Delay(2000);
          prev_max_wait_time_motion = HAL_GetTick();
          prev_motion = 0;
 	while(HAL_GetTick() - prev_max_wait_time_motion < max_wait_time_motion)
@@ -806,6 +806,17 @@ void MotionDetection(EmbeddedCli *cli, char *args, void *context) {
 			cli_printf(cli,"PIR Motion: %s\r\n",_RunTime_Packet.motion_detection == 1 ? "TRUE" : "FALSE");
 //	         	}
 HAL_Delay(100);
+
+
+if(_RunTime_Packet.motion_detection == 1)
+{
+disable_motion();
+HAL_Delay(500);
+enable_motion();
+HAL_Delay(500);
+}
+
+
 
 	}
 

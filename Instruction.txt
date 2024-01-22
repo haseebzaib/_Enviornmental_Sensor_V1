@@ -21,3 +21,14 @@ Basic Instructions
 
 
 
+Project file system
+
+1)App_Main : includes main function that runs the logic
+2)Embedded_CLI: console is processed here and all the functions related to it
+3)Internal_RTC_Handling : system wakeup time and intervals are handled in this file including time and date setting
+4)SDcard_Filehandling : This handles all the handling related to sdcard writing and reading making csv and json files
+5)libs : This folder includes library files for sps30 and scdxx sensor, this folder also includes files for adc for reading battery voltage and utility file 
+
+
+
+

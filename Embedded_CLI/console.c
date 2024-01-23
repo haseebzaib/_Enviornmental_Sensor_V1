@@ -808,14 +808,14 @@ void MotionDetection(EmbeddedCli *cli, char *args, void *context) {
 HAL_Delay(100);
 
 
-if(_RunTime_Packet.motion_detection == 1)
-{
-disable_motion();
-HAL_Delay(500);
-enable_motion();
-HAL_Delay(500);
-}
-
+//if(_RunTime_Packet.motion_detection == 1)
+//{
+//disable_motion();
+//HAL_Delay(500);
+//enable_motion();
+//HAL_Delay(500);
+//}
+//
 
 
 	}

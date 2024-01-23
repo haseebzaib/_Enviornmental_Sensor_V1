@@ -29,7 +29,7 @@ console.c:729:6:SystemRestart	3
 console.c:755:6:Co2Level	2
 console.c:764:6:TempLevel	2
 console.c:775:6:HumidLevel	2
-console.c:786:6:MotionDetection	5
+console.c:786:6:MotionDetection	4
 console.c:827:6:AirQuality	3
 console.c:859:6:BattVolt	1
 console.c:872:6:initializeEmbeddedCli	1

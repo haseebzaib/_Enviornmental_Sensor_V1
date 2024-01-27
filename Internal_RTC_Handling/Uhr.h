@@ -15,6 +15,7 @@
 
 #define RTC_Handle &hrtc
 extern uint8_t set_alarm_Time ;
+extern char scheduled_packet[30];
 extern void RtcInt();
 extern void Rtc_set_alarm();
 extern void Set_Date(char *Datebuffer);

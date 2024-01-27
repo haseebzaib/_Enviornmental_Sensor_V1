@@ -17,10 +17,10 @@ app_main.c:497:7:get_sps30_measurement	4
 app_main.c:541:13:check_peripheral_error	4
 app_main.c:562:13:sensor_calibration	3
 app_main.c:577:13:sleep	1
-app_main.c:612:13:wakeup	2
-app_main.c:655:13:green_led_blink	1
-app_main.c:673:13:led_awake_routine	26
-app_main.c:812:6:blink_red	1
-app_main.c:828:13:led_awake_routine1	26
-app_main.c:970:7:ver_GetUid	3
-app_main.c:992:6:app_main	32
+app_main.c:612:13:wakeup	3
+app_main.c:668:13:green_led_blink	1
+app_main.c:686:13:led_awake_routine	26
+app_main.c:825:6:blink_red	1
+app_main.c:841:13:led_awake_routine1	26
+app_main.c:983:7:ver_GetUid	3
+app_main.c:1005:6:app_main	39

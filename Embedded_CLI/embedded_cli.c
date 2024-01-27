@@ -820,13 +820,21 @@ static void parseCommand(EmbeddedCli *cli) {
 
 static void initInternalBindings(EmbeddedCli *cli) {
     CliCommandBinding b = {
-            "help",
+            "help" ,
             "Print list of commands",
             true,
             NULL,
             onHelp
     };
+//    CliCommandBinding _b = {
+//            "?",
+//            "Print list of commands",
+//            true,
+//            NULL,
+//            onHelp
+//    };
     embeddedCliAddBinding(cli, b);
+//    embeddedCliAddBinding(cli, _b);
 }
 
 static void onHelp(EmbeddedCli *cli, char *tokens, void *context) {
@@ -851,6 +859,19 @@ static void onHelp(EmbeddedCli *cli, char *tokens, void *context) {
                 writeToOutput(cli, lineBreak);
             }
         }
+
+        writeToOutput(cli, lineBreak);
+        writeToOutput(cli, lineBreak);
+        writeToOutput(cli, lineBreak);
+		writeToOutput(cli, "   BuildUp! Edge\x99 C02 Data Logger "); //TM 0x99
+		writeToOutput(cli, lineBreak);
+		writeToOutput(cli, "   \xA9 Thingsfactory Co. Montreal Canada "); //copyright 0xA9
+        writeToOutput(cli, lineBreak);
+        writeToOutput(cli, "   thingsfactory.com");
+        writeToOutput(cli, lineBreak);
+
+
+
     } else if (tokenCount == 1) {
         // try find command
         const char *helpStr = NULL;

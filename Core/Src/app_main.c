@@ -626,7 +626,20 @@ static void wakeup() {
 	MX_TIM3_Init();
 
 	init_scd4x_i2c();
-	MX_USB_DEVICE_Init(); //initialize usb anyways
+
+
+	if (Mount_SD("/") == FR_OK) {
+		Unmount_SD("/");
+		MX_USB_DEVICE_Init(); //initialize usb anyways
+	}
+	else
+	{
+		datawritten = 2;
+	}
+
+
+
+
 	if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {
 		init_sps30();
 	} else {
@@ -1007,7 +1020,18 @@ void app_main() {
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); //for red led
 	RED_LED_PWM(disable_led);
 
-	MX_USB_DEVICE_Init(); //initialize usb anyways
+	if (Mount_SD("/") == FR_OK) {
+
+		Unmount_SD("/");
+	    MX_USB_DEVICE_Init(); //initialize usb anyways
+
+
+
+	}
+	else
+	{
+		datawritten = 2;
+	}
 	prev_usb_time_ = HAL_GetTick();
 //
 //
@@ -1187,7 +1211,18 @@ void app_main() {
 					_RunTime_Packet.sd_file_creation = createfile(
 							_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 				}
-				filesaving_process();
+				if(filesaving_process())
+						{
+							HAL_Delay(1500);
+							if(filesaving_process())
+							{
+								HAL_Delay(1500);
+								if(filesaving_process())
+								{
+									HAL_NVIC_SystemReset();
+								}
+							}
+						}
 
 				prev_sleep_time_pm_co2 = HAL_GetTick(); //we also enable sensors to take reading then
 			}
@@ -1207,6 +1242,8 @@ void app_main() {
 
 			}
 			pwr_off_detected();
+
+
 		}
 
 		//if day changes create new file
@@ -1220,7 +1257,18 @@ void app_main() {
 			_RunTime_Packet.sd_file_creation = createfile(
 					_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 		}
-		filesaving_process();
+		if(filesaving_process())
+		{
+			HAL_Delay(1500);
+			if(filesaving_process())
+			{
+				HAL_Delay(1500);
+				if(filesaving_process())
+				{
+					HAL_NVIC_SystemReset();
+				}
+			}
+		}
 		prev_sleep_time = HAL_GetTick();
 
 		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {

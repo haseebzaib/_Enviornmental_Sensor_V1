@@ -125,6 +125,7 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 #endif
+HAL_Delay(1000);
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_SDIO_SD_Init();
@@ -804,6 +805,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+  HAL_NVIC_SystemReset();
   while (1)
   {
   }

@@ -17,7 +17,7 @@
 #include "Utils.h"
 
 uint8_t set_alarm_Time = 1;
-
+char scheduled_packet[30] = "NULL";
 void RtcInt()
 {
 
@@ -53,6 +53,8 @@ uint16_t minute;
 
 if(set_alarm_Time)
 {
+	uint8_t hour = 0;
+
 	RTC_TimeTypeDef gTime;
 	HAL_RTC_GetTime(RTC_Handle, &gTime, RTC_FORMAT_BIN);
 	RTC_DateTypeDef sDate;
@@ -60,15 +62,26 @@ if(set_alarm_Time)
 
 
     minute = gTime.Minutes + _Flash_Packet.Time_Interval;
-
+    hour = gTime.Hours;
     if(minute > 59)
     {
     	minute = minute%_Flash_Packet.Time_Interval;
-    	if(minute == 0)
+//    	if(minute == 0)
+//    	{
+//    		minute = 1;
+//    	}
+
+    	hour = hour + 1; //we go to next hour as our time is schedualed for next hour
+
+    	if(hour > 23)
     	{
-    		minute = 1;
+          hour = 0;
     	}
+
+
     }
+
+    sprintf(scheduled_packet,"%02d:%02d:%02d",hour,minute,gTime.Seconds);
 
       RTC_AlarmTypeDef sAlarm = {0};
 	  sAlarm.AlarmTime.Hours = 0;

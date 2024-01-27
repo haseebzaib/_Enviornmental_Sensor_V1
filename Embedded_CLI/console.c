@@ -38,6 +38,7 @@
 #include "sps30.h"
 #include "internal_adc.h"
 #include "scd4x_i2c.h"
+#include "csv_json_handling.h"
 
 
 static EmbeddedCli *cli;
@@ -865,6 +866,94 @@ void BattVolt(EmbeddedCli *cli, char *args, void *context) {
 
 }
 
+void port(EmbeddedCli *cli, char *args, void *context)
+{
+	cli_printf(cli,"Auxiliary port value measured(inactive)");
+}
+
+
+void showall(EmbeddedCli *cli, char *args, void *context)
+{
+	char buff_pm[20];
+	char buff_filewritten[50];
+
+	if(	_RunTime_Packet.usb_detection || _RunTime_Packet.usb_first_start)
+	{
+		sprintf(buff_pm,"Calculating");
+	}
+	else
+	{
+
+		get_sps30_measurement();
+		sprintf(buff_pm,"%0.2f",_RunTime_Packet.pm2_5);
+
+	}
+	adc_Measure(&_RunTime_Packet.battery_voltage);
+	if (HAL_GPIO_ReadPin(OUT_MOTION_GPIO_Port, OUT_MOTION_Pin)) {
+				_RunTime_Packet.motion_detection = 1;
+			}
+			else {
+				_RunTime_Packet.motion_detection = 0;
+			}
+
+
+
+			if (!_RunTime_Packet.scd4x_i2c_error) {
+								get_scd4x_measurement();
+							}
+
+			RTC_DateTypeDef gDate;
+			HAL_RTC_GetDate(RTC_Handle, &gDate, RTC_FORMAT_BIN);
+			RTC_TimeTypeDef gTime;
+			HAL_RTC_GetTime(RTC_Handle, &gTime, RTC_FORMAT_BIN);
+
+
+			if(datawritten == 0)
+			{
+
+			sprintf(buff_filewritten,"Data not written yet");
+
+			}
+			else if(datawritten == 1)
+			{
+				sprintf(buff_filewritten," **SUCCESSFUL** ");
+			}
+			else if(datawritten == 2)
+			{
+
+				sprintf(buff_filewritten," **FAILED** ");
+			}
+
+
+			cli_printf(cli,"");
+			cli_printf(cli,"");
+			cli_printf(cli,"");
+
+	cli_printf(cli," *devEUI           | %s                       ",ver_GetUid());
+	cli_printf(cli," *Id               | %s                       ",_Flash_Packet.id);
+	cli_printf(cli," *Timestamp        | %02d:%02d:%02d           ",gTime.Hours,gTime.Minutes,gTime.Seconds);
+	cli_printf(cli," *Location         | %s                       ",_Flash_Packet.location);
+	cli_printf(cli," *Filename         | %s                       ",_Flash_Packet.File_Name);
+	cli_printf(cli," *Fileformat       | %s                       ",_Flash_Packet.File_Format);
+	cli_printf(cli," *Group            | %s                       ",_Flash_Packet.group);
+	cli_printf(cli," *Interval         | %dmin                       ",_Flash_Packet.Time_Interval);
+	cli_printf(cli," *Co2              | %d                       ",_RunTime_Packet.co2);
+	cli_printf(cli," *Temperature      | %dC                      ",_RunTime_Packet.temperature);
+	cli_printf(cli," *Humidity         | %d%%                     ",_RunTime_Packet.humidity);
+	cli_printf(cli," *PIR              | %s                       ",_RunTime_Packet.motion_detection == 1 ? "TRUE" : "FALSE");
+	cli_printf(cli," *Pm2.5            | %s                       ",buff_pm);
+	cli_printf(cli," *Port             | Inactive                 ");
+	cli_printf(cli," *Battery          | %0.2f                    ",_RunTime_Packet.battery_voltage);
+	cli_printf(cli," *Last_Packet      | [Date:%02d.%02d.%02d] [Time: %02d:%02d:%02d] [Filename: %s] [Packet Status: %s]",fileWrite_day,fileWrite_month,fileWrite_year,fileWrite_hour,fileWrite_min,fileWrite_sec,_Flash_Packet.File_Name,buff_filewritten);
+	cli_printf(cli," *Scheduled_Packet | [Time: %s]               ",scheduled_packet);
+
+
+
+	cli_printf(cli,"");
+	cli_printf(cli,"");
+	cli_printf(cli,"");
+}
+
 
 /**
  * Initializes the Embedded CLI instance and sets up command bindings.
@@ -881,23 +970,23 @@ void initializeEmbeddedCli() {
 			.binding = debug_scd4x_PM25 };
 
 	CliCommandBinding Get_DeviceSignature = { .name = "get-device-signature", .help =
-				"Device Signature-Electronic ID", .tokenizeArgs = true, .context = NULL,
+				"Unique device identifier(from STM32 electronic signature)", .tokenizeArgs = true, .context = NULL,
 				.binding = DeviceSignature };
 
 	CliCommandBinding Set_ID = { .name = "set-id", .help =
-				"Sets ID", .tokenizeArgs = true, .context = NULL,
+				"Asset number assigned to the device", .tokenizeArgs = true, .context = NULL,
 				.binding = SetID };
 
 	CliCommandBinding Set_Location = { .name = "set-location", .help =
-				"Sets Location", .tokenizeArgs = true, .context = NULL,
+				"Optional field to assign a physical location to the device", .tokenizeArgs = true, .context = NULL,
 				.binding = SetLocation };
 
-	CliCommandBinding Set_name = { .name = "set-name", .help =
-				"Sets name", .tokenizeArgs = true, .context = NULL,
-				.binding = Setname };
+//	CliCommandBinding Set_name = { .name = "set-name", .help =
+//				"Optional field to assign name to the device", .tokenizeArgs = true, .context = NULL,
+//				.binding = Setname };
 
 	CliCommandBinding Set_group = { .name = "set-group", .help =
-				"Sets group", .tokenizeArgs = true, .context = NULL,
+				"Optional field to assign group to the device", .tokenizeArgs = true, .context = NULL,
 				.binding = Setgroup };
 
 	CliCommandBinding Get_ID = { .name = "get-id", .help =
@@ -908,20 +997,20 @@ void initializeEmbeddedCli() {
 				"gets Location", .tokenizeArgs = true, .context = NULL,
 				.binding = GetLocation };
 
-	CliCommandBinding Get_name = { .name = "get-name", .help =
-				"gets name", .tokenizeArgs = true, .context = NULL,
-				.binding = Getname };
+//	CliCommandBinding Get_name = { .name = "get-name", .help =
+//				"gets name", .tokenizeArgs = true, .context = NULL,
+//				.binding = Getname };
 
 	CliCommandBinding Get_group = { .name = "get-group", .help =
 				"gets group", .tokenizeArgs = true, .context = NULL,
 				.binding = Getgroup };
 
 	CliCommandBinding Set_Date = { .name = "set-date", .help =
-			"Set Systems Date", .tokenizeArgs = true, .context = NULL,
+			"In day:month:year", .tokenizeArgs = true, .context = NULL,
 			.binding = SetDate };
 
 	CliCommandBinding Set_Time = { .name = "set-time", .help =
-			"Set Systems Time", .tokenizeArgs = true, .context = NULL,
+			"In hh:mm:ss", .tokenizeArgs = true, .context = NULL,
 			.binding = SetTime };
 
 	CliCommandBinding Get_Date = { .name = "get-date", .help =
@@ -942,7 +1031,7 @@ void initializeEmbeddedCli() {
 
 
 	CliCommandBinding Set_Filename = { .name = "set-filename", .help =
-			"Set desired filename", .tokenizeArgs = true, .context = NULL,
+			"Filename prefix as in \"value+date\" in file naming convention", .tokenizeArgs = true, .context = NULL,
 			.binding = SetFilename };
 
 	CliCommandBinding Get_Filename = { .name = "get-filename", .help =
@@ -971,19 +1060,19 @@ void initializeEmbeddedCli() {
 			.binding = SystemRestart };
 
 	CliCommandBinding Co2_Level = { .name = "co2-level", .help =
-			"Check Co2 level", .tokenizeArgs = true, .context = NULL,
+			"Co2 measured in ppm", .tokenizeArgs = true, .context = NULL,
 			.binding = Co2Level };
 
 	CliCommandBinding Temp_Level = { .name = "temperature-level", .help =
-			"Check Temperature level", .tokenizeArgs = true, .context = NULL,
+			"Temperature measured in Celsius", .tokenizeArgs = true, .context = NULL,
 			.binding = TempLevel };
 
 	CliCommandBinding Humid_Level = { .name = "humidity-level", .help =
-			"Check Humidity level", .tokenizeArgs = true, .context = NULL,
+			"Humidity measured in % of relative", .tokenizeArgs = true, .context = NULL,
 			.binding = HumidLevel };
 
 	CliCommandBinding Motion_Detection = { .name = "motion-detection", .help =
-			"Detect Motion", .tokenizeArgs = true, .context = NULL,
+			"Movement detected - yes or no", .tokenizeArgs = true, .context = NULL,
 			.binding = MotionDetection };
 
 	CliCommandBinding Air_Quality = { .name = "air-quality", .help =
@@ -991,8 +1080,16 @@ void initializeEmbeddedCli() {
 				.binding = AirQuality };
 
 	CliCommandBinding Battery_Voltage = { .name = "battery-voltage", .help =
-				"Check battery voltage", .tokenizeArgs = true, .context = NULL,
+				"Voltage measured - at full charge between 2.9 and 3.1 Volts DC", .tokenizeArgs = true, .context = NULL,
 				.binding = BattVolt };
+
+	CliCommandBinding _port = { .name = "port", .help =
+				"Inactive field", .tokenizeArgs = true, .context = NULL,
+				.binding = port };
+
+	CliCommandBinding _showall = { .name = "show-all", .help =
+				"Shows all parameters", .tokenizeArgs = true, .context = NULL,
+				.binding = showall };
 
 
 
@@ -1002,11 +1099,11 @@ void initializeEmbeddedCli() {
 	embeddedCliAddBinding(cli, Get_DeviceSignature);
 	embeddedCliAddBinding(cli, Set_ID);
 	embeddedCliAddBinding(cli, Set_Location);
-	embeddedCliAddBinding(cli, Set_name);
+//	embeddedCliAddBinding(cli, Set_name);
 	embeddedCliAddBinding(cli, Set_group);
 	embeddedCliAddBinding(cli, Get_ID);
 	embeddedCliAddBinding(cli, Get_Location);
-	embeddedCliAddBinding(cli, Get_name);
+//	embeddedCliAddBinding(cli, Get_name);
 	embeddedCliAddBinding(cli, Get_group);
 	embeddedCliAddBinding(cli, Set_Date);
 	embeddedCliAddBinding(cli, Set_Time);
@@ -1027,6 +1124,8 @@ void initializeEmbeddedCli() {
 	embeddedCliAddBinding(cli, Motion_Detection);
 	embeddedCliAddBinding(cli, Air_Quality);
 	embeddedCliAddBinding(cli, Battery_Voltage);
+	embeddedCliAddBinding(cli, _port);
+	embeddedCliAddBinding(cli, _showall);
 	// Assign character write function
 	cli->writeChar = writeCharToCli;
 	// cli->onCommand = onCommand;

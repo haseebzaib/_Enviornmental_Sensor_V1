@@ -18,9 +18,9 @@
 ../Core/Src/app_main.c:562:13:sensor_calibration	8	static
 ../Core/Src/app_main.c:577:13:sleep	8	static
 ../Core/Src/app_main.c:612:13:wakeup	8	static
-../Core/Src/app_main.c:655:13:green_led_blink	8	static
-../Core/Src/app_main.c:673:13:led_awake_routine	8	static
-../Core/Src/app_main.c:812:6:blink_red	8	static
-../Core/Src/app_main.c:828:13:led_awake_routine1	8	static
-../Core/Src/app_main.c:970:7:ver_GetUid	24	static
-../Core/Src/app_main.c:992:6:app_main	40	static
+../Core/Src/app_main.c:668:13:green_led_blink	8	static
+../Core/Src/app_main.c:686:13:led_awake_routine	8	static
+../Core/Src/app_main.c:825:6:blink_red	8	static
+../Core/Src/app_main.c:841:13:led_awake_routine1	8	static
+../Core/Src/app_main.c:983:7:ver_GetUid	24	static
+../Core/Src/app_main.c:1005:6:app_main	40	static

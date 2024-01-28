@@ -19,15 +19,15 @@ FRESULT fresult1;
 char filename_with_format[100];
 char filename_ver_date[100];
 uint8_t file_already_exist = 0;
- uint8_t fileWrite_day =0;
- uint8_t fileWrite_month=0;
- uint8_t fileWrite_year=0;
+uint8_t fileWrite_day = 0;
+uint8_t fileWrite_month = 0;
+uint8_t fileWrite_year = 0;
 
- uint8_t fileWrite_hour=0;
- uint8_t fileWrite_min=0;
- uint8_t fileWrite_sec=0;
+uint8_t fileWrite_hour = 0;
+uint8_t fileWrite_min = 0;
+uint8_t fileWrite_sec = 0;
 
- uint8_t datawritten =0;
+uint8_t datawritten = 0;
 char buffer[255];
 
 void json_update() {
@@ -38,75 +38,75 @@ void json_update() {
 	fileWrite_day = sDate.Date;
 	fileWrite_month = sDate.Month;
 	fileWrite_year = sDate.Year;
-	fileWrite_hour=sTime.Hours;
-	  fileWrite_min=sTime.Minutes;
-	  fileWrite_sec=sTime.Seconds;
+	fileWrite_hour = sTime.Hours;
+	fileWrite_min = sTime.Minutes;
+	fileWrite_sec = sTime.Seconds;
 
 	fresult1 = Mount_SD("/");
 
 	if (fresult1 == FR_OK) {
 		//CAN Bus
 		sprintf(buffer, "{\n");
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"devEUI\":\"%s\",\n", ver_GetUid());
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"id\":\"%s\",\n", _Flash_Packet.id);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"timestamp\":\"%02d:%02d:%02d\",\n", sTime.Hours,
 				sTime.Minutes, sTime.Seconds);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"location\":\"%s\",\n", _Flash_Packet.location);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"Filename\":\"%s\",\n", filename_ver_date);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"group\":\"%s\",\n", _Flash_Packet.group);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"co2\":\"%d\",\n", _RunTime_Packet.co2);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"temperature\":\"%ld\",\n",
 				_RunTime_Packet.temperature);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"humidity\":\"%ld\",\n", _RunTime_Packet.humidity);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"pir\":\"%s\",\n",
 				_RunTime_Packet.motion_detection ? "TRUE" : "FALSE");
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"pm2.5\":\"%.02f\",\n", _RunTime_Packet.pm2_5);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"port\":\"none\",\n");
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"battery\":\"%.02f\",\n",
 				_RunTime_Packet.battery_voltage);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
 		//we end it
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "}\n\n");
 		fresult1 = Update_File(filename_with_format, buffer);
 
@@ -122,9 +122,9 @@ void csv_update() {
 	fileWrite_day = sDate.Date;
 	fileWrite_month = sDate.Month;
 	fileWrite_year = sDate.Year;
-	fileWrite_hour=sTime.Hours;
-	  fileWrite_min=sTime.Minutes;
-	  fileWrite_sec=sTime.Seconds;
+	fileWrite_hour = sTime.Hours;
+	fileWrite_min = sTime.Minutes;
+	fileWrite_sec = sTime.Seconds;
 	fresult1 = Mount_SD("/");
 
 	if (fresult1 == FR_OK) {
@@ -144,62 +144,62 @@ void csv_update() {
 //		sprintf(buffer, "\n");
 //		Update_File(filename_with_format, buffer);
 
-
-
 		sprintf(buffer, "%s ,", ver_GetUid());
 		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%s ,", _Flash_Packet.id);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
-		sprintf(buffer, "%02d:%02d:%02d ,", sTime.Hours, sTime.Minutes, sTime.Seconds);
-		fresult1 =	Update_File(filename_with_format, buffer);
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "%02d:%02d:%02d ,", sTime.Hours, sTime.Minutes,
+				sTime.Seconds);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%s ,", _Flash_Packet.location);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%s ,", filename_ver_date);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%s ,", _Flash_Packet.group);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%d ,", _RunTime_Packet.co2);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%ld ,", _RunTime_Packet.temperature);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
-		sprintf(buffer, "%ld ,",  _RunTime_Packet.humidity);
-		fresult1 =Update_File(filename_with_format, buffer);
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "%ld ,", _RunTime_Packet.humidity);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
-		sprintf(buffer, "%s ,", _RunTime_Packet.motion_detection == 1 ? "TRUE" : "FALSE");
-		fresult1 =Update_File(filename_with_format, buffer);
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "%s ,",
+				_RunTime_Packet.motion_detection == 1 ? "TRUE" : "FALSE");
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%.02f ,", _RunTime_Packet.pm2_5);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "NONE ,");
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%.02f ,", _RunTime_Packet.battery_voltage);
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\n");
-		fresult1 =Update_File(filename_with_format, buffer);
+		fresult1 = Update_File(filename_with_format, buffer);
 
 		Unmount_SD("/");
 	}
@@ -223,51 +223,51 @@ void csv_header() {
 		sprintf(buffer, "devEUI ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "id ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "timestamp ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "location ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "Filename ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "group ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "co2 ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "temperature ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "humidity ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "pir ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "pm2.5 ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "port ,");
 		Update_File(filename_with_format, buffer);
 
-		memset(buffer,0,sizeof(buffer));
+		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "battery \n\n");
 		Update_File(filename_with_format, buffer);
 
@@ -275,30 +275,27 @@ void csv_header() {
 	}
 	_RunTime_Packet.sd_card_disk_write_error = fresult1;
 
-
 }
 uint8_t filesaving_process() {
 //	__disable_irq();
 
-	memset(buffer,0,sizeof(buffer));
+	memset(buffer, 0, sizeof(buffer));
 	if (_RunTime_Packet.fileformat_selection) {
 		csv_update();
 	} else {
 		json_update();
 	}
 
-	if(_RunTime_Packet.sd_card_disk_write_error != 0)//means there is error
-	{
-        //blink red so user can know
+	if (_RunTime_Packet.sd_card_disk_write_error != 0) //means there is error
+			{
+		//blink red so user can know
 		blink_red();
 		datawritten = 2;
-	return 1; //not working
-	}
-	else //packet written succesfully
+		return 1; //not working
+	} else //packet written succesfully
 	{
-datawritten = 1;
+		datawritten = 1;
 	}
-
 
 	return 0; //all good
 //	__enable_irq();
@@ -307,7 +304,7 @@ int8_t createfile(char *filename, char *fileformat) {
 	//__disable_irq();
 	if (Mount_SD("/") == FR_OK) {
 	} else {
-	//	__enable_irq();
+		//	__enable_irq();
 		return -1;
 	}
 	Unmount_SD("/");
@@ -323,8 +320,8 @@ int8_t createfile(char *filename, char *fileformat) {
 		sprintf(filename_with_format, "%s_%02d-%02d-%02d%s", filename,
 				sDate.Year, sDate.Month, sDate.Date, fileformat);
 
-		sprintf(filename_ver_date, "%s_%02d-%02d-%02d", filename,
-				sDate.Year, sDate.Month, sDate.Date);
+		sprintf(filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,
+				sDate.Month, sDate.Date);
 
 		fresult1 = Create_File(filename_with_format);
 
@@ -339,7 +336,7 @@ int8_t createfile(char *filename, char *fileformat) {
 		}
 
 	} else {
-	//	__enable_irq();
+		//	__enable_irq();
 		return -1;
 	}
 //	__enable_irq();

@@ -12,7 +12,6 @@
 
 //If fresult == FR_INVALID_NAME, make sure that the macro _USE_LFN is set to 2 in FATFS > Target > ffconf.h
 
-
 /* =============================>>>>>>>> NO CHANGES AFTER THIS LINE =====================================>>>>>>> */
 
 FATFS fs;  // file system
@@ -25,7 +24,6 @@ UINT br, bw;  // File read/write count
 FATFS *pfs;
 DWORD fre_clust;
 uint32_t total, free_space;
-
 
 //Debugging
 const short sdioPrints = 0;
@@ -46,417 +44,410 @@ const short sdioPrints = 0;
 //	}
 //}
 
-FRESULT Mount_SD (const TCHAR* path)
-{
+FRESULT Mount_SD(const TCHAR *path) {
 	fresult = f_mount(&fs, path, 1);
 	if (fresult != FR_OK) {
-		if(sdioPrints) printf("ERROR!!! in mounting SD CARD...\n");
-	}
-	else if(sdioPrints) printf("SD CARD mounted successfully...\n");
+		if (sdioPrints)
+			printf("ERROR!!! in mounting SD CARD...\n");
+	} else if (sdioPrints)
+		printf("SD CARD mounted successfully...\n");
 
 	return fresult;
 }
 
-void Unmount_SD (const TCHAR* path)
-{
+void Unmount_SD(const TCHAR *path) {
 	fresult = f_mount(NULL, path, 1);
 	if (fresult == FR_OK) {
-		if(sdioPrints) printf("SD CARD UNMOUNTED successfully...\n\n");
-	}
-	else if(sdioPrints) printf("ERROR!!! in UNMOUNTING SD CARD\n\n");
+		if (sdioPrints)
+			printf("SD CARD UNMOUNTED successfully...\n\n");
+	} else if (sdioPrints)
+		printf("ERROR!!! in UNMOUNTING SD CARD\n\n");
 }
 
 /* Start node to be scanned (***also used as work area***) */
-FRESULT Scan_SD (char* pat)
-{
-    DIR dir;
-    UINT i;
-    char *path = malloc(20*sizeof (char));
-    sprintf (path, "%s",pat);
+FRESULT Scan_SD(char *pat) {
+	DIR dir;
+	UINT i;
+	char *path = malloc(20 * sizeof(char));
+	sprintf(path, "%s", pat);
 
-    fresult = f_opendir(&dir, path);                       /* Open the directory */
-    if (fresult == FR_OK)
-    {
-        for (;;)
-        {
-            fresult = f_readdir(&dir, &fno);                   /* Read a directory item */
-            if (fresult != FR_OK || fno.fname[0] == 0) break;  /* Break on error or end of dir */
-            if (fno.fattrib & AM_DIR)     /* It is a directory */
-            {
-            	if (!(strcmp ("SYSTEM~1", fno.fname))) continue;
-            	char *buf = malloc(30*sizeof(char));
-            	sprintf (buf, "Dir: %s\r\n", fno.fname);
-            	if(sdioPrints) printf(buf);
-            	free(buf);
-                i = strlen(path);
-                sprintf(&path[i], "/%s", fno.fname);
-                fresult = Scan_SD(path);                     /* Enter the directory */
-                if (fresult != FR_OK) break;
-                path[i] = 0;
-            }
-            else
-            {   /* It is a file. */
-           	   char *buf = malloc(30*sizeof(char));
-               sprintf(buf,"File: %s/%s\n", path, fno.fname);
-               if(sdioPrints) printf(buf);
-               free(buf);
-            }
-        }
-        f_closedir(&dir);
-    }
-    free(path);
-    return fresult;
+	fresult = f_opendir(&dir, path); /* Open the directory */
+	if (fresult == FR_OK) {
+		for (;;) {
+			fresult = f_readdir(&dir, &fno); /* Read a directory item */
+			if (fresult != FR_OK || fno.fname[0] == 0)
+				break; /* Break on error or end of dir */
+			if (fno.fattrib & AM_DIR) /* It is a directory */
+			{
+				if (!(strcmp("SYSTEM~1", fno.fname)))
+					continue;
+				char *buf = malloc(30 * sizeof(char));
+				sprintf(buf, "Dir: %s\r\n", fno.fname);
+				if (sdioPrints)
+					printf(buf);
+				free(buf);
+				i = strlen(path);
+				sprintf(&path[i], "/%s", fno.fname);
+				fresult = Scan_SD(path); /* Enter the directory */
+				if (fresult != FR_OK)
+					break;
+				path[i] = 0;
+			} else { /* It is a file. */
+				char *buf = malloc(30 * sizeof(char));
+				sprintf(buf, "File: %s/%s\n", path, fno.fname);
+				if (sdioPrints)
+					printf(buf);
+				free(buf);
+			}
+		}
+		f_closedir(&dir);
+	}
+	free(path);
+	return fresult;
 }
 
 /* Only supports removing files from home directory */
-FRESULT Format_SD (void)
-{
-    DIR dir;
-    char *path = malloc(20*sizeof (char));
-    sprintf (path, "%s","/");
+FRESULT Format_SD(void) {
+	DIR dir;
+	char *path = malloc(20 * sizeof(char));
+	sprintf(path, "%s", "/");
 
-    fresult = f_opendir(&dir, path);                       /* Open the directory */
-    if (fresult == FR_OK)
-    {
-        for (;;)
-        {
-            fresult = f_readdir(&dir, &fno);                   /* Read a directory item */
-            if (fresult != FR_OK || fno.fname[0] == 0) break;  /* Break on error or end of dir */
-            if (fno.fattrib & AM_DIR)     /* It is a directory */
-            {
-            	if (!(strcmp ("SYSTEM~1", fno.fname))) continue;
-            	fresult = f_unlink(fno.fname);
-            	if (fresult == FR_DENIED) continue;
-            }
-            else
-            {   /* It is a file. */
-               fresult = f_unlink(fno.fname);
-            }
-        }
-        f_closedir(&dir);
-    }
-    free(path);
-    return fresult;
-}
-
-
-
-
-FRESULT Write_File (char *name, char *data)
-{
-	char buf[150];
-	/**** check whether the file exists or not ****/
-	fresult = f_stat (name, &fno);
-	if (fresult != FR_OK)
-	{
-
-		sprintf (buf, "ERROR!!! *%s* does not exists\n", name);
-		if(sdioPrints) printf (buf);
-
-	    return fresult;
-	}
-
-	else
-	{
-	    /* Create a file with read write access and open it */
-	    fresult = f_open(&fil, name, FA_OPEN_EXISTING | FA_WRITE);
-	    if (fresult != FR_OK)
-	    {
-
-	    	sprintf (buf, "ERROR!!! No. %d in opening file *%s*\n", fresult, name);
-	    	if(sdioPrints) printf(buf);
-
-	        return fresult;
-	    }
-
-	    else
-	    {
-	    	fresult = f_write(&fil, data, strlen(data), &bw);
-	    	if (fresult != FR_OK)
-	    	{
-
-	    		sprintf (buf, "ERROR!!! No. %d while writing to the FILE *%s*\n", fresult, name);
-	    		if(sdioPrints) printf(buf);
-
-	    	}
-
-	    	/* Close file */
-	    	fresult = f_close(&fil);
-	    	if (fresult != FR_OK)
-	    	{
-
-	    		sprintf (buf, "ERROR!!! No. %d in closing file *%s* after writing it\n", fresult, name);
-	    		if(sdioPrints) printf(buf);
-
-	    	}
-	    	else
-	    	{
-
-	    		sprintf (buf, "File *%s* is WRITTEN and CLOSED successfully\n", name);
-	    		if(sdioPrints) printf(buf);
-
-	    	}
-	    }
-	    return fresult;
-	}
-}
-
-FRESULT Read_File (char *name)
-{
-	char buf[150];
-	/**** check whether the file exists or not ****/
-	fresult = f_stat (name, &fno);
-	if (fresult != FR_OK)
-	{
-
-		sprintf (buf, "ERRROR!!! *%s* does not exists\n", name);
-		if(sdioPrints) printf (buf);
-
-	    return fresult;
-	}
-
-	else
-	{
-		/* Open file to read */
-		fresult = f_open(&fil, name, FA_READ);
-
-		if (fresult != FR_OK)
-		{
-
-			sprintf (buf, "ERROR!!! No. %d in opening file *%s*\n", fresult, name);
-			if(sdioPrints) printf(buf);
-
-		    return fresult;
-		}
-
-		/* Read data from the file
-		* see the function details for the arguments */
-
-		char *buffer = malloc(sizeof(f_size(&fil)));
-		fresult = f_read (&fil, buffer, f_size(&fil), &br);
-		if (fresult != FR_OK)
-		{
-
-			free(buffer);
-		 	sprintf (buf, "ERROR!!! No. %d in reading file *%s*\n", fresult, name);
-		 	if(sdioPrints) printf(buffer);
-
-		}
-
-		else
-		{
-			if(sdioPrints) printf(buffer);
-			free(buffer);
-
-			/* Close file */
-			fresult = f_close(&fil);
-			if (fresult != FR_OK)
+	fresult = f_opendir(&dir, path); /* Open the directory */
+	if (fresult == FR_OK) {
+		for (;;) {
+			fresult = f_readdir(&dir, &fno); /* Read a directory item */
+			if (fresult != FR_OK || fno.fname[0] == 0)
+				break; /* Break on error or end of dir */
+			if (fno.fattrib & AM_DIR) /* It is a directory */
 			{
-
-				sprintf (buf, "ERROR!!! No. %d in closing file *%s*\n", fresult, name);
-				if(sdioPrints) printf(buf);
-
-			}
-			else
-			{
-
-				sprintf (buf, "File *%s* CLOSED successfully\n", name);
-				if(sdioPrints) printf(buf);
-
+				if (!(strcmp("SYSTEM~1", fno.fname)))
+					continue;
+				fresult = f_unlink(fno.fname);
+				if (fresult == FR_DENIED)
+					continue;
+			} else { /* It is a file. */
+				fresult = f_unlink(fno.fname);
 			}
 		}
-	    return fresult;
+		f_closedir(&dir);
 	}
+	free(path);
+	return fresult;
 }
 
-FRESULT Create_File (char *name)
-{
-	char buf[150];
-	fresult = f_stat (name, &fno);
-	if (fresult == FR_OK)
-	{
-		file_already_exist = 1; //file is alrready there so now we dont create csv header
-
-		sprintf (buf, "ERROR!!! *%s* already exists!!!!\n use Update_File \n",name);
-		if(sdioPrints) printf(buf);
-
-	    return fresult;
-	}
-	else
-	{
-		fresult = f_open(&fil, name, FA_CREATE_ALWAYS|FA_READ|FA_WRITE);
-		if (fresult != FR_OK)
-		{
-
-			sprintf (buf, "ERROR!!! No. %d in creating file *%s*\n", fresult, name);
-			if(sdioPrints) printf(buf);
-
-		    return fresult;
-		}
-		else
-		{
-
-			sprintf (buf, "*%s* created successfully\n Now use Write_File to write data\n",name);
-			if(sdioPrints) printf(buf);
-
-		}
-
-		fresult = f_close(&fil);
-		if (fresult != FR_OK)
-		{
-
-			sprintf (buf, "ERROR No. %d in closing file *%s*\n", fresult, name);
-			if(sdioPrints) printf(buf);
-
-		}
-		else
-		{
-
-			sprintf (buf, "File *%s* CLOSED successfully\n", name);
-			if(sdioPrints) printf(buf);
-
-		}
-	}
-    return fresult;
-}
-
-FRESULT Update_File (char *name, char *data)
-{
+FRESULT Write_File(char *name, char *data) {
 	char buf[150];
 	/**** check whether the file exists or not ****/
-	fresult = f_stat (name, &fno);
-	if (fresult != FR_OK)
-	{
+	fresult = f_stat(name, &fno);
+	if (fresult != FR_OK) {
 
-		sprintf (buf, "ERROR!!! *%s* does not exists\n", name);
-		if(sdioPrints) printf (buf);
-
-	    return fresult;
-	}
-
-	else
-	{
-		 /* Create a file with read write access and open it */
-	    fresult = f_open(&fil, name, FA_OPEN_APPEND | FA_WRITE);
-	    if (fresult != FR_OK)
-	    {
-
-	    	sprintf (buf, "ERROR!!! No. %d in opening file *%s*\n", fresult, name);
-	    	if(sdioPrints) printf(buf);
-
-	        return fresult;
-	    }
-
-	    /* Writing text */
-	    fresult = f_write(&fil, data, strlen (data), &bw);
-	    if (fresult != FR_OK)
-	    {
-
-	    	sprintf (buf, "ERROR!!! No. %d in writing file *%s*\n", fresult, name);
-	    	if(sdioPrints) printf(buf);
-
-	    }
-
-	    else
-	    {
-
-	    	sprintf (buf, "*%s* UPDATED successfully\n", name);
-	    	if(sdioPrints) printf(buf);
-
-	    }
-
-	    /* Close file */
-	    fresult = f_close(&fil);
-	    if (fresult != FR_OK)
-	    {
-
-	    	sprintf (buf, "ERROR!!! No. %d in closing file *%s*\n", fresult, name);
-	    	if(sdioPrints) printf(buf);
-
-	    }
-	    else
-	    {
-
-	    	sprintf (buf, "File *%s* CLOSED successfully\n", name);
-	    	if(sdioPrints) printf(buf);
-
-	     }
-	}
-    return fresult;
-}
-
-FRESULT Remove_File (char *name)
-{
-	char buf[150];
-	/**** check whether the file exists or not ****/
-	fresult = f_stat (name, &fno);
-	if (fresult != FR_OK)
-	{
-
-		sprintf (buf, "ERROR!!! *%s* does not exists\n", name);
-		if(sdioPrints) printf(buf);
+		sprintf(buf, "ERROR!!! *%s* does not exists\n", name);
+		if (sdioPrints)
+			printf(buf);
 
 		return fresult;
 	}
 
-	else
-	{
-		fresult = f_unlink (name);
-		if (fresult == FR_OK)
-		{
+	else {
+		/* Create a file with read write access and open it */
+		fresult = f_open(&fil, name, FA_OPEN_EXISTING | FA_WRITE);
+		if (fresult != FR_OK) {
 
-			sprintf (buf, "*%s* has been removed successfully\n", name);
-			if(sdioPrints) printf(buf);
+			sprintf(buf, "ERROR!!! No. %d in opening file *%s*\n", fresult,
+					name);
+			if (sdioPrints)
+				printf(buf);
+
+			return fresult;
+		}
+
+		else {
+			fresult = f_write(&fil, data, strlen(data), &bw);
+			if (fresult != FR_OK) {
+
+				sprintf(buf, "ERROR!!! No. %d while writing to the FILE *%s*\n",
+						fresult, name);
+				if (sdioPrints)
+					printf(buf);
+
+			}
+
+			/* Close file */
+			fresult = f_close(&fil);
+			if (fresult != FR_OK) {
+
+				sprintf(buf,
+						"ERROR!!! No. %d in closing file *%s* after writing it\n",
+						fresult, name);
+				if (sdioPrints)
+					printf(buf);
+
+			} else {
+
+				sprintf(buf, "File *%s* is WRITTEN and CLOSED successfully\n",
+						name);
+				if (sdioPrints)
+					printf(buf);
+
+			}
+		}
+		return fresult;
+	}
+}
+
+FRESULT Read_File(char *name) {
+	char buf[150];
+	/**** check whether the file exists or not ****/
+	fresult = f_stat(name, &fno);
+	if (fresult != FR_OK) {
+
+		sprintf(buf, "ERRROR!!! *%s* does not exists\n", name);
+		if (sdioPrints)
+			printf(buf);
+
+		return fresult;
+	}
+
+	else {
+		/* Open file to read */
+		fresult = f_open(&fil, name, FA_READ);
+
+		if (fresult != FR_OK) {
+
+			sprintf(buf, "ERROR!!! No. %d in opening file *%s*\n", fresult,
+					name);
+			if (sdioPrints)
+				printf(buf);
+
+			return fresult;
+		}
+
+		/* Read data from the file
+		 * see the function details for the arguments */
+
+		char *buffer = malloc(sizeof(f_size(&fil)));
+		fresult = f_read(&fil, buffer, f_size(&fil), &br);
+		if (fresult != FR_OK) {
+
+			free(buffer);
+			sprintf(buf, "ERROR!!! No. %d in reading file *%s*\n", fresult,
+					name);
+			if (sdioPrints)
+				printf(buffer);
 
 		}
 
-		else
-		{
+		else {
+			if (sdioPrints)
+				printf(buffer);
+			free(buffer);
 
-			sprintf (buf, "ERROR No. %d in removing *%s*\n",fresult, name);
-			if(sdioPrints) printf(buf);
+			/* Close file */
+			fresult = f_close(&fil);
+			if (fresult != FR_OK) {
+
+				sprintf(buf, "ERROR!!! No. %d in closing file *%s*\n", fresult,
+						name);
+				if (sdioPrints)
+					printf(buf);
+
+			} else {
+
+				sprintf(buf, "File *%s* CLOSED successfully\n", name);
+				if (sdioPrints)
+					printf(buf);
+
+			}
+		}
+		return fresult;
+	}
+}
+
+FRESULT Create_File(char *name) {
+	char buf[150];
+	fresult = f_stat(name, &fno);
+	if (fresult == FR_OK) {
+		file_already_exist = 1; //file is alrready there so now we dont create csv header
+
+		sprintf(buf, "ERROR!!! *%s* already exists!!!!\n use Update_File \n",
+				name);
+		if (sdioPrints)
+			printf(buf);
+
+		return fresult;
+	} else {
+		fresult = f_open(&fil, name, FA_CREATE_ALWAYS | FA_READ | FA_WRITE);
+		if (fresult != FR_OK) {
+
+			sprintf(buf, "ERROR!!! No. %d in creating file *%s*\n", fresult,
+					name);
+			if (sdioPrints)
+				printf(buf);
+
+			return fresult;
+		} else {
+
+			sprintf(buf,
+					"*%s* created successfully\n Now use Write_File to write data\n",
+					name);
+			if (sdioPrints)
+				printf(buf);
+
+		}
+
+		fresult = f_close(&fil);
+		if (fresult != FR_OK) {
+
+			sprintf(buf, "ERROR No. %d in closing file *%s*\n", fresult, name);
+			if (sdioPrints)
+				printf(buf);
+
+		} else {
+
+			sprintf(buf, "File *%s* CLOSED successfully\n", name);
+			if (sdioPrints)
+				printf(buf);
 
 		}
 	}
 	return fresult;
 }
 
-FRESULT Create_Dir (char *name)
-{
+FRESULT Update_File(char *name, char *data) {
 	char buf[150];
-    fresult = f_mkdir(name);
-    if (fresult == FR_OK)
-    {
+	/**** check whether the file exists or not ****/
+	fresult = f_stat(name, &fno);
+	if (fresult != FR_OK) {
 
-    	sprintf (buf, "*%s* has been created successfully\n", name);
-    	if(sdioPrints) printf(buf);
+		sprintf(buf, "ERROR!!! *%s* does not exists\n", name);
+		if (sdioPrints)
+			printf(buf);
 
-    }
-    else
-    {
+		return fresult;
+	}
 
-    	sprintf (buf, "ERROR No. %d in creating directory *%s*\n", fresult,name);
-    	if(sdioPrints) printf(buf);
+	else {
+		/* Create a file with read write access and open it */
+		fresult = f_open(&fil, name, FA_OPEN_APPEND | FA_WRITE);
+		if (fresult != FR_OK) {
 
-    }
-    return fresult;
+			sprintf(buf, "ERROR!!! No. %d in opening file *%s*\n", fresult,
+					name);
+			if (sdioPrints)
+				printf(buf);
+
+			return fresult;
+		}
+
+		/* Writing text */
+		fresult = f_write(&fil, data, strlen(data), &bw);
+		if (fresult != FR_OK) {
+
+			sprintf(buf, "ERROR!!! No. %d in writing file *%s*\n", fresult,
+					name);
+			if (sdioPrints)
+				printf(buf);
+
+		}
+
+		else {
+
+			sprintf(buf, "*%s* UPDATED successfully\n", name);
+			if (sdioPrints)
+				printf(buf);
+
+		}
+
+		/* Close file */
+		fresult = f_close(&fil);
+		if (fresult != FR_OK) {
+
+			sprintf(buf, "ERROR!!! No. %d in closing file *%s*\n", fresult,
+					name);
+			if (sdioPrints)
+				printf(buf);
+
+		} else {
+
+			sprintf(buf, "File *%s* CLOSED successfully\n", name);
+			if (sdioPrints)
+				printf(buf);
+
+		}
+	}
+	return fresult;
 }
 
-void Check_SD_Space (void)
-{	char buf[150];
-    /* Check free space */
-    f_getfree("", &fre_clust, &pfs);
+FRESULT Remove_File(char *name) {
+	char buf[150];
+	/**** check whether the file exists or not ****/
+	fresult = f_stat(name, &fno);
+	if (fresult != FR_OK) {
 
-    total = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
+		sprintf(buf, "ERROR!!! *%s* does not exists\n", name);
+		if (sdioPrints)
+			printf(buf);
 
-    sprintf (buf, "SD CARD Total Size: \t%lu\n",total);
-    if(sdioPrints) printf(buf);
+		return fresult;
+	}
 
-    free_space = (uint32_t)(fre_clust * pfs->csize * 0.5);
+	else {
+		fresult = f_unlink(name);
+		if (fresult == FR_OK) {
 
-    sprintf (buf, "SD CARD Free Space: \t%lu\n",free_space);
-    if(sdioPrints) printf(buf);
+			sprintf(buf, "*%s* has been removed successfully\n", name);
+			if (sdioPrints)
+				printf(buf);
 
+		}
+
+		else {
+
+			sprintf(buf, "ERROR No. %d in removing *%s*\n", fresult, name);
+			if (sdioPrints)
+				printf(buf);
+
+		}
+	}
+	return fresult;
 }
 
+FRESULT Create_Dir(char *name) {
+	char buf[150];
+	fresult = f_mkdir(name);
+	if (fresult == FR_OK) {
+
+		sprintf(buf, "*%s* has been created successfully\n", name);
+		if (sdioPrints)
+			printf(buf);
+
+	} else {
+
+		sprintf(buf, "ERROR No. %d in creating directory *%s*\n", fresult,
+				name);
+		if (sdioPrints)
+			printf(buf);
+
+	}
+	return fresult;
+}
+
+void Check_SD_Space(void) {
+	char buf[150];
+	/* Check free space */
+	f_getfree("", &fre_clust, &pfs);
+
+	total = (uint32_t) ((pfs->n_fatent - 2) * pfs->csize * 0.5);
+
+	sprintf(buf, "SD CARD Total Size: \t%lu\n", total);
+	if (sdioPrints)
+		printf(buf);
+
+	free_space = (uint32_t) (fre_clust * pfs->csize * 0.5);
+
+	sprintf(buf, "SD CARD Free Space: \t%lu\n", free_space);
+	if (sdioPrints)
+		printf(buf);
+
+}
 

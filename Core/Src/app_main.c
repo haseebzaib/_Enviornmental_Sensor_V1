@@ -91,17 +91,13 @@ uint32_t usb_time_ = 50000;
 uint32_t prev_usb_time_ = 0;
 uint8_t stop_measurement = 1;
 
-void toggle_blue_led()
-{
-		if(blue_led_pwm_val != 0)
-    		{
-			blue_led_pwm_val = 0;
-    		}
-    		else
-    		{
-    			blue_led_pwm_val = 1000;
-    		}
-    		BLUE_LED_PWM(blue_led_pwm_val); //we toggle red led
+void toggle_blue_led() {
+	if (blue_led_pwm_val != 0) {
+		blue_led_pwm_val = 0;
+	} else {
+		blue_led_pwm_val = 1000;
+	}
+	BLUE_LED_PWM(blue_led_pwm_val); //we toggle red led
 }
 
 //##############Interrupts###############
@@ -297,9 +293,8 @@ static void load_param() {
 			{
 		memcpy(&_Flash_Packet, ipFlaPar, sizeof(Flash_Packet));
 
-		if(strstr(_Flash_Packet.File_Name, "devEUI"))
-		{
-			sprintf(_Flash_Packet.File_Name,"%s",ver_GetUid());
+		if (strstr(_Flash_Packet.File_Name, "devEUI")) {
+			sprintf(_Flash_Packet.File_Name, "%s", ver_GetUid());
 		}
 
 	}
@@ -307,7 +302,7 @@ static void load_param() {
 	else //load default param
 	{
 		memcpy(&_Flash_Packet, &m_Flash_Packet, sizeof(Flash_Packet));
-		sprintf(_Flash_Packet.File_Name,"%s",ver_GetUid());
+		sprintf(_Flash_Packet.File_Name, "%s", ver_GetUid());
 	}
 
 	if (strstr(_Flash_Packet.File_Format, ".CSV")) {
@@ -494,7 +489,7 @@ static void init_sps30() {
 //	}
 
 }
- void get_sps30_measurement() {
+void get_sps30_measurement() {
 
 	int16_t ret;
 	char buffer[100];
@@ -601,18 +596,13 @@ static void sleep() {
 
 	HAL_SuspendTick();
 
-
-
-
 	/*## Enter Stop Mode #######################################################*/
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-
 
 }
 static void wakeup() {
 
 	//also add usb stuff
-
 
 	HAL_ResumeTick();
 	clock_speed_high();
@@ -627,18 +617,12 @@ static void wakeup() {
 
 	init_scd4x_i2c();
 
-
 	if (Mount_SD("/") == FR_OK) {
 		Unmount_SD("/");
 		MX_USB_DEVICE_Init(); //initialize usb anyways
-	}
-	else
-	{
+	} else {
 		datawritten = 2;
 	}
-
-
-
 
 	if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {
 		init_sps30();
@@ -690,140 +674,126 @@ static void led_awake_routine() {
 		if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
 				{
 
-
-
-
 			if (_RunTime_Packet.battery_voltage >= battery_Full) {
-							GREEN_LED_PWM(0);
-							RED_LED_PWM(disable_led);
-							BLUE_LED_PWM(disable_led);
+				GREEN_LED_PWM(0);
+				RED_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
 
-						}
-			else
-			{
+			} else {
 				GREEN_LED_PWM(disable_led);
-						RED_LED_PWM(disable_led);
-						BLUE_LED_PWM(0);
+				RED_LED_PWM(disable_led);
+				BLUE_LED_PWM(0);
 			}
 
 		} else {
 			BLUE_LED_PWM(disable_led); //we turn off the blue led incase it was on before
 
-
 			if (_RunTime_Packet.battery_voltage >= battery_Full) {
 				RED_LED_PWM(disable_led);
-							BLUE_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
 
-							if (!green_led_pwm_flag) {
-								green_led_pwm_val += 5;
-							} else {
-								green_led_pwm_val -= 5;
-							}
-
-							if (green_led_pwm_val > 1000) {
-								green_led_pwm_flag = 1;
-							} else if (green_led_pwm_val <= 0) {
-								green_led_pwm_flag = 0;
-							}
-
-							GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-
-						}
-			else if (_RunTime_Packet.battery_voltage > battery_Low
-						&& _RunTime_Packet.battery_voltage <= battery_Full) {
-					RED_LED_PWM(disable_led);
-					BLUE_LED_PWM(disable_led);
-
-					if (!green_led_pwm_flag) {
-						green_led_pwm_val += 5;
-					} else {
-						green_led_pwm_val -= 5;
-					}
-
-					if (green_led_pwm_val > 1000) {
-						green_led_pwm_flag = 1;
-					} else if (green_led_pwm_val <= 0) {
-						green_led_pwm_flag = 0;
-					}
-
-					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-				} else if (_RunTime_Packet.battery_voltage > battery_very_low
-						&& _RunTime_Packet.battery_voltage <= battery_Low) {
-
-					if(green_led_pwm_flag != red_led_pwm_flag) //for this we need flags to be sync with each other
-					{
-						green_led_pwm_flag = red_led_pwm_flag;
-					}
-
-					BLUE_LED_PWM(disable_led);
-
-					if (!green_led_pwm_flag) {
-						green_led_pwm_val += 5;
-					} else {
-						green_led_pwm_val -= 5;
-					}
-
-					if (green_led_pwm_val > 1000) {
-						green_led_pwm_flag = 1;
-					} else if (green_led_pwm_val <= 0) {
-						green_led_pwm_flag = 0;
-					}
-
-					if (!red_led_pwm_flag) {
-						red_led_pwm_val += 5;
-					} else {
-						red_led_pwm_val -= 5;
-					}
-
-					if (red_led_pwm_val > 1000) {
-						red_led_pwm_flag = 1;
-					} else if (red_led_pwm_val <= 0) {
-						red_led_pwm_flag = 0;
-					}
-
-					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-					RED_LED_PWM(red_led_pwm_val); //we breathe red led
-				} else //we now know battery is very low
-				{
-					GREEN_LED_PWM(disable_led);
-					BLUE_LED_PWM(disable_led);
-					if (!red_led_pwm_flag) {
-						red_led_pwm_val += 5;
-					} else {
-						red_led_pwm_val -= 5;
-					}
-
-					if (red_led_pwm_val > 1000) {
-						red_led_pwm_flag = 1;
-					} else if (red_led_pwm_val <= 0) {
-						red_led_pwm_flag = 0;
-					}
-
-					RED_LED_PWM(red_led_pwm_val); //we breathe red led
+				if (!green_led_pwm_flag) {
+					green_led_pwm_val += 5;
+				} else {
+					green_led_pwm_val -= 5;
 				}
 
+				if (green_led_pwm_val > 1000) {
+					green_led_pwm_flag = 1;
+				} else if (green_led_pwm_val <= 0) {
+					green_led_pwm_flag = 0;
+				}
 
+				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+
+			} else if (_RunTime_Packet.battery_voltage > battery_Low
+					&& _RunTime_Packet.battery_voltage <= battery_Full) {
+				RED_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
+
+				if (!green_led_pwm_flag) {
+					green_led_pwm_val += 5;
+				} else {
+					green_led_pwm_val -= 5;
+				}
+
+				if (green_led_pwm_val > 1000) {
+					green_led_pwm_flag = 1;
+				} else if (green_led_pwm_val <= 0) {
+					green_led_pwm_flag = 0;
+				}
+
+				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+			} else if (_RunTime_Packet.battery_voltage > battery_very_low
+					&& _RunTime_Packet.battery_voltage <= battery_Low) {
+
+				if (green_led_pwm_flag != red_led_pwm_flag) //for this we need flags to be sync with each other
+						{
+					green_led_pwm_flag = red_led_pwm_flag;
+				}
+
+				BLUE_LED_PWM(disable_led);
+
+				if (!green_led_pwm_flag) {
+					green_led_pwm_val += 5;
+				} else {
+					green_led_pwm_val -= 5;
+				}
+
+				if (green_led_pwm_val > 1000) {
+					green_led_pwm_flag = 1;
+				} else if (green_led_pwm_val <= 0) {
+					green_led_pwm_flag = 0;
+				}
+
+				if (!red_led_pwm_flag) {
+					red_led_pwm_val += 5;
+				} else {
+					red_led_pwm_val -= 5;
+				}
+
+				if (red_led_pwm_val > 1000) {
+					red_led_pwm_flag = 1;
+				} else if (red_led_pwm_val <= 0) {
+					red_led_pwm_flag = 0;
+				}
+
+				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+				RED_LED_PWM(red_led_pwm_val); //we breathe red led
+			} else //we now know battery is very low
+			{
+				GREEN_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
+				if (!red_led_pwm_flag) {
+					red_led_pwm_val += 5;
+				} else {
+					red_led_pwm_val -= 5;
+				}
+
+				if (red_led_pwm_val > 1000) {
+					red_led_pwm_flag = 1;
+				} else if (red_led_pwm_val <= 0) {
+					red_led_pwm_flag = 0;
+				}
+
+				RED_LED_PWM(red_led_pwm_val); //we breathe red led
+			}
 
 		}
 	} else {
 		GREEN_LED_PWM(disable_led);
 		BLUE_LED_PWM(disable_led);
-		if(red_led_pwm_val != disable_led)
-		{
+		if (red_led_pwm_val != disable_led) {
 			red_led_pwm_val = disable_led;
-		}
-		else
-		{
-			red_led_pwm_val =0;
+		} else {
+			red_led_pwm_val = 0;
 		}
 		RED_LED_PWM(red_led_pwm_val); //we toggle red led
 		HAL_Delay(300);
 	}
 }
 
-
-void blink_red()
-{
+void blink_red() {
 	GREEN_LED_PWM(disable_led);
 	BLUE_LED_PWM(disable_led);
 	RED_LED_PWM(0); //we toggle red led
@@ -837,7 +807,6 @@ void blink_red()
 	RED_LED_PWM(0); //we toggle red led
 }
 
-
 static void led_awake_routine1() {
 
 	if (_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard
@@ -845,137 +814,124 @@ static void led_awake_routine1() {
 		if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
 				{
 
-
-
-
 			if (_RunTime_Packet.battery_voltage >= battery_Full) {
-							GREEN_LED_PWM(0);
-							RED_LED_PWM(disable_led);
-							BLUE_LED_PWM(disable_led);
+				GREEN_LED_PWM(0);
+				RED_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
 
-						}
-			else
-			{
+			} else {
 				GREEN_LED_PWM(disable_led);
-						RED_LED_PWM(disable_led);
-						BLUE_LED_PWM(0);
+				RED_LED_PWM(disable_led);
+				BLUE_LED_PWM(0);
 			}
 
 		} else {
 			BLUE_LED_PWM(disable_led); //we turn off the blue led incase it was on before
 
-
 			if (_RunTime_Packet.battery_voltage >= battery_Full) {
 				RED_LED_PWM(disable_led);
-							BLUE_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
 
-							if (!green_led_pwm_flag) {
-								green_led_pwm_val += 40;
-							} else {
-								green_led_pwm_val -= 40;
-							}
-
-							if (green_led_pwm_val > 1000) {
-								green_led_pwm_flag = 1;
-							} else if (green_led_pwm_val <= 0) {
-								green_led_pwm_flag = 0;
-							}
-
-							GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-
-						}
-			else if (_RunTime_Packet.battery_voltage > battery_Low
-						&& _RunTime_Packet.battery_voltage <= battery_Full) {
-					RED_LED_PWM(disable_led);
-					BLUE_LED_PWM(disable_led);
-
-					if (!green_led_pwm_flag) {
-						green_led_pwm_val += 40;
-					} else {
-						green_led_pwm_val -= 40;
-					}
-
-					if (green_led_pwm_val > 1000) {
-						green_led_pwm_flag = 1;
-					} else if (green_led_pwm_val <= 0) {
-						green_led_pwm_flag = 0;
-					}
-
-					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-				} else if (_RunTime_Packet.battery_voltage > battery_very_low
-						&& _RunTime_Packet.battery_voltage <= battery_Low) {
-
-					if(green_led_pwm_flag != red_led_pwm_flag) //for this we need flags to be sync with each other
-					{
-						green_led_pwm_flag = red_led_pwm_flag;
-					}
-
-					BLUE_LED_PWM(disable_led);
-
-					if (!green_led_pwm_flag) {
-						green_led_pwm_val += 40;
-					} else {
-						green_led_pwm_val -= 40;
-					}
-
-					if (green_led_pwm_val > 1000) {
-						green_led_pwm_flag = 1;
-					} else if (green_led_pwm_val <= 0) {
-						green_led_pwm_flag = 0;
-					}
-
-					if (!red_led_pwm_flag) {
-						red_led_pwm_val += 40;
-					} else {
-						red_led_pwm_val -= 40;
-					}
-
-					if (red_led_pwm_val > 1000) {
-						red_led_pwm_flag = 1;
-					} else if (red_led_pwm_val <= 0) {
-						red_led_pwm_flag = 0;
-					}
-
-					GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
-					RED_LED_PWM(red_led_pwm_val); //we breathe red led
-				} else //we now know battery is very low
-				{
-					GREEN_LED_PWM(disable_led);
-					BLUE_LED_PWM(disable_led);
-					if (!red_led_pwm_flag) {
-						red_led_pwm_val += 40;
-					} else {
-						red_led_pwm_val -= 40;
-					}
-
-					if (red_led_pwm_val > 1000) {
-						red_led_pwm_flag = 1;
-					} else if (red_led_pwm_val <= 0) {
-						red_led_pwm_flag = 0;
-					}
-
-					RED_LED_PWM(red_led_pwm_val); //we breathe red led
+				if (!green_led_pwm_flag) {
+					green_led_pwm_val += 40;
+				} else {
+					green_led_pwm_val -= 40;
 				}
 
+				if (green_led_pwm_val > 1000) {
+					green_led_pwm_flag = 1;
+				} else if (green_led_pwm_val <= 0) {
+					green_led_pwm_flag = 0;
+				}
 
+				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+
+			} else if (_RunTime_Packet.battery_voltage > battery_Low
+					&& _RunTime_Packet.battery_voltage <= battery_Full) {
+				RED_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
+
+				if (!green_led_pwm_flag) {
+					green_led_pwm_val += 40;
+				} else {
+					green_led_pwm_val -= 40;
+				}
+
+				if (green_led_pwm_val > 1000) {
+					green_led_pwm_flag = 1;
+				} else if (green_led_pwm_val <= 0) {
+					green_led_pwm_flag = 0;
+				}
+
+				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+			} else if (_RunTime_Packet.battery_voltage > battery_very_low
+					&& _RunTime_Packet.battery_voltage <= battery_Low) {
+
+				if (green_led_pwm_flag != red_led_pwm_flag) //for this we need flags to be sync with each other
+						{
+					green_led_pwm_flag = red_led_pwm_flag;
+				}
+
+				BLUE_LED_PWM(disable_led);
+
+				if (!green_led_pwm_flag) {
+					green_led_pwm_val += 40;
+				} else {
+					green_led_pwm_val -= 40;
+				}
+
+				if (green_led_pwm_val > 1000) {
+					green_led_pwm_flag = 1;
+				} else if (green_led_pwm_val <= 0) {
+					green_led_pwm_flag = 0;
+				}
+
+				if (!red_led_pwm_flag) {
+					red_led_pwm_val += 40;
+				} else {
+					red_led_pwm_val -= 40;
+				}
+
+				if (red_led_pwm_val > 1000) {
+					red_led_pwm_flag = 1;
+				} else if (red_led_pwm_val <= 0) {
+					red_led_pwm_flag = 0;
+				}
+
+				GREEN_LED_PWM(green_led_pwm_val); //we breathe the greem led
+				RED_LED_PWM(red_led_pwm_val); //we breathe red led
+			} else //we now know battery is very low
+			{
+				GREEN_LED_PWM(disable_led);
+				BLUE_LED_PWM(disable_led);
+				if (!red_led_pwm_flag) {
+					red_led_pwm_val += 40;
+				} else {
+					red_led_pwm_val -= 40;
+				}
+
+				if (red_led_pwm_val > 1000) {
+					red_led_pwm_flag = 1;
+				} else if (red_led_pwm_val <= 0) {
+					red_led_pwm_flag = 0;
+				}
+
+				RED_LED_PWM(red_led_pwm_val); //we breathe red led
+			}
 
 		}
 	} else {
 		GREEN_LED_PWM(disable_led);
 		BLUE_LED_PWM(disable_led);
-		if(red_led_pwm_val != disable_led)
-		{
+		if (red_led_pwm_val != disable_led) {
 			red_led_pwm_val = disable_led;
-		}
-		else
-		{
-			red_led_pwm_val =0;
+		} else {
+			red_led_pwm_val = 0;
 		}
 		RED_LED_PWM(red_led_pwm_val); //we toggle red led
 		HAL_Delay(300);
 	}
 }
-
 
 static uint8_t sUid[13];	//12-bit asci
 
@@ -1004,7 +960,6 @@ char* ver_GetUid(void) {
 
 void app_main() {
 
-
 	memset(&_RunTime_Packet, 0, sizeof(_RunTime_Packet));
 
 	load_param();
@@ -1023,13 +978,9 @@ void app_main() {
 	if (Mount_SD("/") == FR_OK) {
 
 		Unmount_SD("/");
-	    MX_USB_DEVICE_Init(); //initialize usb anyways
+		MX_USB_DEVICE_Init(); //initialize usb anyways
 
-
-
-	}
-	else
-	{
+	} else {
 		datawritten = 2;
 	}
 	prev_usb_time_ = HAL_GetTick();
@@ -1059,18 +1010,17 @@ void app_main() {
 	//therefore we will run file creation again when usb operation is completed. it takes about 30second
 	//untill that 30second we wont even go to sleep as usb is connected so power is not the issue
 
-    //if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))
+	//if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))
 	//{
-	  _RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,_Flash_Packet.File_Format);
+	_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
+			_Flash_Packet.File_Format);
 	//}
-   // else
-   // {
-   // 	 _RunTime_Packet.sd_file_creation = -1;
-   // }
+	// else
+	// {
+	// 	 _RunTime_Packet.sd_file_creation = -1;
+	// }
 
-
-
-    green_led_blink();
+	green_led_blink();
 
 //MX_USB_DEVICE_DeInit();
 	HAL_UART_Transmit(&huart1, (uint8_t*) "System Has Started \r\n", 21, 200);
@@ -1211,18 +1161,15 @@ void app_main() {
 					_RunTime_Packet.sd_file_creation = createfile(
 							_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 				}
-				if(filesaving_process())
-						{
-							HAL_Delay(1500);
-							if(filesaving_process())
-							{
-								HAL_Delay(1500);
-								if(filesaving_process())
-								{
-									HAL_NVIC_SystemReset();
-								}
-							}
+				if (filesaving_process()) {
+					HAL_Delay(1500);
+					if (filesaving_process()) {
+						HAL_Delay(1500);
+						if (filesaving_process()) {
+							HAL_NVIC_SystemReset();
 						}
+					}
+				}
 
 				prev_sleep_time_pm_co2 = HAL_GetTick(); //we also enable sensors to take reading then
 			}
@@ -1243,7 +1190,6 @@ void app_main() {
 			}
 			pwr_off_detected();
 
-
 		}
 
 		//if day changes create new file
@@ -1257,14 +1203,11 @@ void app_main() {
 			_RunTime_Packet.sd_file_creation = createfile(
 					_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 		}
-		if(filesaving_process())
-		{
+		if (filesaving_process()) {
 			HAL_Delay(1500);
-			if(filesaving_process())
-			{
+			if (filesaving_process()) {
 				HAL_Delay(1500);
-				if(filesaving_process())
-				{
+				if (filesaving_process()) {
 					HAL_NVIC_SystemReset();
 				}
 			}

@@ -301,6 +301,19 @@ uint8_t filesaving_process() {
 //	__enable_irq();
 }
 int8_t createfile(char *filename, char *fileformat) {
+
+	RTC_DateTypeDef sDate;
+	HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
+	RTC_TimeTypeDef sTime;
+	HAL_RTC_GetTime(RTC_Handle, &sTime, RTC_FORMAT_BIN);
+
+	sprintf(filename_with_format, "%s_%02d-%02d-%02d%s", filename,
+			sDate.Year, sDate.Month, sDate.Date, fileformat);
+
+	sprintf(filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,
+				sDate.Month, sDate.Date);
+
+
 	//__disable_irq();
 	if (Mount_SD("/") == FR_OK) {
 	} else {
@@ -309,19 +322,14 @@ int8_t createfile(char *filename, char *fileformat) {
 	}
 	Unmount_SD("/");
 
-	RTC_DateTypeDef sDate;
-	HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
-	RTC_TimeTypeDef sTime;
-	HAL_RTC_GetTime(RTC_Handle, &sTime, RTC_FORMAT_BIN);
+
 
 	fresult1 = Mount_SD("/");
 	if (fresult1 == FR_OK) {
 
-		sprintf(filename_with_format, "%s_%02d-%02d-%02d%s", filename,
-				sDate.Year, sDate.Month, sDate.Date, fileformat);
 
-		sprintf(filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,
-				sDate.Month, sDate.Date);
+
+
 
 		fresult1 = Create_File(filename_with_format);
 

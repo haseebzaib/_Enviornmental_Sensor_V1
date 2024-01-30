@@ -508,6 +508,14 @@ void SetFilename(EmbeddedCli *cli, char *args, void *context) {
 				_RunTime_Packet.filename_changed = 1;
 				cli_printf(cli, "Filename is set to: %s",
 						_Flash_Packet.File_Name);
+
+				RTC_DateTypeDef sDate;
+				HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
+				RTC_TimeTypeDef sTime;
+				HAL_RTC_GetTime(RTC_Handle, &sTime, RTC_FORMAT_BIN);
+
+
+				sprintf(filename_ver_date, "%s_%02d-%02d-%02d", _Flash_Packet.File_Name, sDate.Year,sDate.Month, sDate.Date);
 			}
 		}
 	} else {
@@ -521,7 +529,7 @@ void SetFilename(EmbeddedCli *cli, char *args, void *context) {
 
 void GetFilename(EmbeddedCli *cli, char *args, void *context) {
 
-	cli_printf(cli, "Filename is set to: %s", _Flash_Packet.File_Name);
+	cli_printf(cli, "Filename is set to: %s", filename_ver_date);
 
 }
 
@@ -865,7 +873,7 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 	cli_printf(cli, " *Location         | %s                       ",
 			_Flash_Packet.location);
 	cli_printf(cli, " *Filename         | %s                       ",
-			_Flash_Packet.File_Name);
+			filename_ver_date);
 	cli_printf(cli, " *Fileformat       | %s                       ",
 			_Flash_Packet.File_Format);
 	cli_printf(cli, " *Group            | %s                       ",

@@ -904,6 +904,23 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 	cli_printf(cli, "");
 }
 
+void systemversion(EmbeddedCli *cli, char *args, void *context) {
+
+
+	cli_printf(cli, "");
+		cli_printf(cli, "");
+		cli_printf(cli, "");
+
+		cli_printf(cli, " *Hardware | TF410 Version 1.3                       ");
+		cli_printf(cli, " *Software | TF410 Version 1.5                       ");
+
+		cli_printf(cli, "");
+			cli_printf(cli, "");
+			cli_printf(cli, "");
+
+}
+
+
 /**
  * Initializes the Embedded CLI instance and sets up command bindings.
  */
@@ -1024,7 +1041,7 @@ void initializeEmbeddedCli() {
 			.binding = AirQuality };
 
 	CliCommandBinding Battery_Voltage = { .name = "battery-voltage", .help =
-			"Voltage measured - at full charge between 2.9 and 3.1 Volts DC",
+			"Measured voltage",
 			.tokenizeArgs = true, .context = NULL, .binding = BattVolt };
 
 	CliCommandBinding _port = { .name = "port", .help = "Inactive field",
@@ -1033,6 +1050,10 @@ void initializeEmbeddedCli() {
 	CliCommandBinding _showall = { .name = "show-all", .help =
 			"Shows all parameters", .tokenizeArgs = true, .context = NULL,
 			.binding = showall };
+
+	CliCommandBinding getversion = { .name = "get-version", .help =
+				"Shows hardware and software version", .tokenizeArgs = true, .context = NULL,
+				.binding = systemversion };
 
 	// EmbeddedCli *cli = getCliPointer;debug_scd4x_PM25
 	embeddedCliAddBinding(cli, clear_binding);
@@ -1067,6 +1088,7 @@ void initializeEmbeddedCli() {
 	embeddedCliAddBinding(cli, Battery_Voltage);
 	embeddedCliAddBinding(cli, _port);
 	embeddedCliAddBinding(cli, _showall);
+	embeddedCliAddBinding(cli, getversion);
 	// Assign character write function
 	cli->writeChar = writeCharToCli;
 	// cli->onCommand = onCommand;

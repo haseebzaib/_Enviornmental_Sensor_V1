@@ -34,8 +34,9 @@ console.c:782:6:AirQuality	3
 console.c:810:6:BattVolt	1
 console.c:818:6:port	1
 console.c:822:6:showall	9
-console.c:910:6:initializeEmbeddedCli	1
-console.c:1078:6:console_process	1
-console.c:1082:6:console_uart_deinit	1
-console.c:1086:6:console_uart_init	2
-console.c:1102:6:console_init	1
+console.c:907:6:systemversion	1
+console.c:927:6:initializeEmbeddedCli	1
+console.c:1100:6:console_process	1
+console.c:1104:6:console_uart_deinit	1
+console.c:1108:6:console_uart_init	2
+console.c:1124:6:console_init	1

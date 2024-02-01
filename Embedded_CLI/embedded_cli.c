@@ -863,11 +863,11 @@ static void onHelp(EmbeddedCli *cli, char *tokens, void *context) {
         writeToOutput(cli, lineBreak);
         writeToOutput(cli, lineBreak);
         writeToOutput(cli, lineBreak);
-		writeToOutput(cli, "   BuildUp! Edge\x99 C02 Data Logger "); //TM 0x99
+		writeToOutput(cli, "BuildUp! Edge C02 Data Logger "); //TM 0x99
 		writeToOutput(cli, lineBreak);
-		writeToOutput(cli, "   \xA9 Thingsfactory Co. Montreal Canada "); //copyright 0xA9
+		writeToOutput(cli, "Thingsfactory Co. Montreal Canada "); //copyright 0xA9
         writeToOutput(cli, lineBreak);
-        writeToOutput(cli, "   thingsfactory.com");
+        writeToOutput(cli, "thingsfactory.com");
         writeToOutput(cli, lineBreak);
 
 

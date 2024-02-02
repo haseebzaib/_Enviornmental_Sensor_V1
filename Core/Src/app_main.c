@@ -135,9 +135,7 @@ void timer_interrupt() {
 void power_off_detect() {
 	if (!HAL_GPIO_ReadPin(SW_DET_GPIO_Port, SW_DET_Pin)) {
 		_RunTime_Packet.pwr_off_det = 1;
-//		GREEN_LED_PWM(disable_led);
-//		RED_LED_PWM(disable_led);
-//		BLUE_LED_PWM(0);
+		HAL_GPIO_WritePin(BLUE_LED_GPIO_Port, BLUE_LED_Pin, RESET);
 	}
 }
 
@@ -160,7 +158,7 @@ static void pwr_off_detected() {
 		GREEN_LED_PWM(disable_led);
 		RED_LED_PWM(disable_led);
 		BLUE_LED_PWM(0);
-		HAL_Delay(5000);
+		HAL_Delay(3500);
 
 	}
 }

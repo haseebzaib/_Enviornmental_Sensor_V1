@@ -894,7 +894,7 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 			_RunTime_Packet.battery_voltage);
 	cli_printf(cli, " *Last_Packet      | [Date:%02d.%02d.%02d] [Time: %02d:%02d:%02d] [Filename: %s] [Packet Status: %s]",
 			fileWrite_day, fileWrite_month, fileWrite_year, fileWrite_hour,
-			fileWrite_min, fileWrite_sec, _Flash_Packet.File_Name,
+			fileWrite_min, fileWrite_sec, filename_ver_date,
 			buff_filewritten);
 	cli_printf(cli, " *Scheduled_Packet | [Time: %s]               ",
 			scheduled_packet);
@@ -1041,7 +1041,7 @@ void initializeEmbeddedCli() {
 			.binding = AirQuality };
 
 	CliCommandBinding Battery_Voltage = { .name = "battery-voltage", .help =
-			"Measured voltage",
+			"Measure voltage from 4.17v(Full Charge) to 3.0v",
 			.tokenizeArgs = true, .context = NULL, .binding = BattVolt };
 
 	CliCommandBinding _port = { .name = "port", .help = "Inactive field",

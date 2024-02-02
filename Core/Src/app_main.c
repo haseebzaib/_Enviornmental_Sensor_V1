@@ -135,6 +135,9 @@ void timer_interrupt() {
 void power_off_detect() {
 	if (!HAL_GPIO_ReadPin(SW_DET_GPIO_Port, SW_DET_Pin)) {
 		_RunTime_Packet.pwr_off_det = 1;
+		GREEN_LED_PWM(disable_led);
+		RED_LED_PWM(disable_led);
+		BLUE_LED_PWM(0);
 	}
 }
 
@@ -1030,9 +1033,10 @@ void app_main() {
 		prev_sleep_time = HAL_GetTick();
 		prev_sleep_time_pm_co2 = HAL_GetTick();
 		stop_measurement = 1;
+		pwr_off_detected();
 		while (HAL_GetTick() - prev_sleep_time <= sleep_time) //stay awake for only 1min and then sleep
 		{
-
+			pwr_off_detected();
 //			if(hsd.ErrorCode != 0)
 //			{
 //
@@ -1218,7 +1222,9 @@ void app_main() {
 
 			sleep();
 			wakeup();
+
 		}
+		pwr_off_detected();
 
 	}
 

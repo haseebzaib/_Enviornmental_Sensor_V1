@@ -5,12 +5,6 @@
  *      Author: hzaib
  */
 
-/**
- * TODO
- * mass storage speed up
- * mass storage malfunction fix needed
- * also add watchdog and test it in sleep mode
- */
 
 #include "main.h"
 #include "app_main.h"
@@ -32,9 +26,8 @@
 #include "File_Handling.h"
 #include "stm32_hal_legacy.h"
 
-
- uint8_t RetainState  __attribute__ ((section(".noinit")));
- uint8_t show_prompt = 0;
+uint8_t RetainState __attribute__ ((section(".noinit")));
+uint8_t show_prompt = 0;
 
 char buf_sdcard[] =
 		"sdcard error, this can cause issue in mass storage also\r\n";
@@ -462,52 +455,50 @@ void get_scd4x_measurement() {
 }
 
 #elif use_scd30
-static void init_scd30_i2c()
-{
-	 int16_t error = 0;
-	  sensirion_i2c_hal_init();
-	  init_driver(SCD30_I2C_ADDR_61);
-	    scd30_stop_periodic_measurement();
-	 //   scd30_soft_reset();
-	    uint8_t major = 0;
-	    uint8_t minor = 0;
-	    error = scd30_read_firmware_version(&major, &minor);
+static void init_scd30_i2c() {
+	int16_t error = 0;
+	sensirion_i2c_hal_init();
+	init_driver(SCD30_I2C_ADDR_61);
+	scd30_stop_periodic_measurement();
+	//   scd30_soft_reset();
+	uint8_t major = 0;
+	uint8_t minor = 0;
+	error = scd30_read_firmware_version(&major, &minor);
 }
 
-void get_scd30_measurement()
-{
-	 int16_t error = NO_ERROR;
+void get_scd30_measurement() {
+	int16_t error = NO_ERROR;
 	scd30_start_periodic_measurement(0);
 
-	  uint16_t repetition = 0;
-	    for (repetition = 0; repetition < 1; repetition++) {
-	    	sensirion_i2c_hal_sleep_usec(1500000);
-	        error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
-					&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);
+	uint16_t repetition = 0;
+	for (repetition = 0; repetition < 1; repetition++) {
+		sensirion_i2c_hal_sleep_usec(1500000);
+		error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
+				&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);
 
-			if (debug_scd_pm) {
-				char buf[100];
-				if (error) {
-					sprintf(buf, "error executing blocking_read_measurement_data(): %i\n",
-							error);
-					HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
-				} else if (_RunTime_Packet.co2 == 0) {
-					sprintf(buf, "Invalid sample detected, skipping.\n");
-					HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
-				} else {
+		if (debug_scd_pm) {
+			char buf[100];
+			if (error) {
+				sprintf(buf,
+						"error executing blocking_read_measurement_data(): %i\n",
+						error);
+				HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+			} else if (_RunTime_Packet.co2 == 0) {
+				sprintf(buf, "Invalid sample detected, skipping.\n");
+				HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+			} else {
 
-					sprintf(buf, "Co2: %.2f , Temperature: %.2f C, Humidity: %.2f  \r\n",
-										_RunTime_Packet.co2, _RunTime_Packet.temperature,
-										_RunTime_Packet.humidity);
-					HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
-				}
+				sprintf(buf,
+						"Co2: %.2f , Temperature: %.2f C, Humidity: %.2f  \r\n",
+						_RunTime_Packet.co2, _RunTime_Packet.temperature,
+						_RunTime_Packet.humidity);
+				HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
 			}
-	    }
+		}
+	}
 }
 
 #endif
-
-
 
 static void init_sps30() {
 	char serial[SPS30_MAX_SERIAL_LEN];
@@ -614,10 +605,11 @@ static void check_peripheral_error() {
 	if (HAL_I2C_IsDeviceReady(&hi2c1, (uint16_t) (0x61 << 1), 5, 1000)
 			!= HAL_OK) {
 
-		if(debug_scd_pm)
-		{char buf_error[50];
-		sprintf(buf_error, "error in scd30 i2c so not running it\n");
-					HAL_UART_Transmit(&huart1, (uint8_t*) buf_error, strlen(buf_error), 1000);
+		if (debug_scd_pm) {
+			char buf_error[50];
+			sprintf(buf_error, "error in scd30 i2c so not running it\n");
+			HAL_UART_Transmit(&huart1, (uint8_t*) buf_error, strlen(buf_error),
+					1000);
 		}
 		_RunTime_Packet.scd4x_i2c_error = 1;
 	}
@@ -1096,10 +1088,9 @@ void app_main() {
 
 	//if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))
 	//{
-	if(RetainState != 1)
-	{
+	if (RetainState != 1) {
 		_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
-			_Flash_Packet.File_Format);
+				_Flash_Packet.File_Format);
 
 		RetainState = 1;
 	}
@@ -1210,7 +1201,7 @@ void app_main() {
 #ifdef use_scd40x
 					get_scd4x_measurement();
 #elif use_scd30
-		get_scd30_measurement();
+					get_scd30_measurement();
 #endif
 
 				}
@@ -1236,7 +1227,7 @@ void app_main() {
 #ifdef use_scd40x
 				scd4x_stop_periodic_measurement();
 #elif use_scd30
-				 scd30_stop_periodic_measurement();
+				scd30_stop_periodic_measurement();
 #endif
 
 				sps30_stop_measurement();
@@ -1251,7 +1242,8 @@ void app_main() {
 					&& set_alarm_Time && !_RunTime_Packet.usb_detection) {
 				//if day changes create new file
 				//if user change filename or fileformat then also create new file with that format or name
-				if (_RunTime_Packet.year_changed || _RunTime_Packet.filename_changed
+				if (_RunTime_Packet.year_changed
+						|| _RunTime_Packet.filename_changed
 						|| _RunTime_Packet.fileformat_changed
 						|| _RunTime_Packet.sd_file_creation == -1) {
 					_RunTime_Packet.year_changed = 0;
@@ -1298,7 +1290,6 @@ void app_main() {
 				|| _RunTime_Packet.fileformat_changed
 				|| _RunTime_Packet.sd_file_creation == -1) {
 
-
 			_RunTime_Packet.year_changed = 0;
 			_RunTime_Packet.filename_changed = 0;
 			_RunTime_Packet.fileformat_changed = 0;
@@ -1327,6 +1318,4 @@ void app_main() {
 	}
 
 }
-
-
 

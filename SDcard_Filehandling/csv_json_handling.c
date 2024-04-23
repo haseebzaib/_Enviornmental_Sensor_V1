@@ -142,21 +142,7 @@ void csv_update() {
 	fresult1 = Mount_SD("/");
 
 	if (fresult1 == FR_OK) {
-//		sprintf(buffer, " TF241_%s , %s , %02d:%02d:%02d ,", ver_GetUid(),
-//				_Flash_Packet.id, sTime.Hours, sTime.Minutes, sTime.Seconds);
-//		Update_File(filename_with_format, buffer);
-//		sprintf(buffer, " %s , %s , %s ,", _Flash_Packet.location,
-//				_Flash_Packet.name, _Flash_Packet.group);
-//		Update_File(filename_with_format, buffer);
-//		sprintf(buffer, " %d , %ld , %ld ,", _RunTime_Packet.co2,
-//				_RunTime_Packet.temperature, _RunTime_Packet.humidity);
-//		Update_File(filename_with_format, buffer);
-//		sprintf(buffer, " %s , %.02f , none ,%.02f ,",
-//				_RunTime_Packet.motion_detection ? "TRUE" : "FALSE",
-//				_RunTime_Packet.pm2_5, _RunTime_Packet.battery_voltage);
-//		Update_File(filename_with_format, buffer);
-//		sprintf(buffer, "\n");
-//		Update_File(filename_with_format, buffer);
+
 
 		sprintf(buffer, "%s ,", ver_GetUid());
 		fresult1 = Update_File(filename_with_format, buffer);
@@ -236,15 +222,7 @@ void csv_header() {
 	fresult1 = Mount_SD("/");
 
 	if (fresult1 == FR_OK) {
-		//CAN Bus
-//		sprintf(buffer, " devEUI , id , timestamp ,");
-//		Update_File(filename_with_format, buffer);
-//		sprintf(buffer, " location , name , group ,");
-//		Update_File(filename_with_format, buffer);
-//		sprintf(buffer, " co2 , temperature , humidity ,");
-//		Update_File(filename_with_format, buffer);
-//		sprintf(buffer, " pir , pm2.5 , port ,battery\n\n");
-//		Update_File(filename_with_format, buffer);
+
 
 		sprintf(buffer, "devEUI ,");
 		Update_File(filename_with_format, buffer);

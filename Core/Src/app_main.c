@@ -661,10 +661,16 @@ static void sleep() {
 	clock_speed_slow();
 
 	HAL_SuspendTick();
-
+	Rtc_Alarm_watchdog();
+	do {
+	HAL_IWDG_Refresh(&hiwdg);
 	/*## Enter Stop Mode #######################################################*/
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+	HAL_IWDG_Refresh(&hiwdg);
+	Rtc_Alarm_watchdog();
+	}while(set_alarm_Time == 0 && _RunTime_Packet.pwr_off_det == 0 && _RunTime_Packet.usb_detection == 0);
 
+	Rtc_Alarm_watchdog_disable();
 }
 static void wakeup() {
 

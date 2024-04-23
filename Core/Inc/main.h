@@ -46,7 +46,7 @@ extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
 extern DMA_HandleTypeDef hdma_tim1_up;
-
+extern IWDG_HandleTypeDef hiwdg;
 
 #define PACKED __attribute__((packed))
 

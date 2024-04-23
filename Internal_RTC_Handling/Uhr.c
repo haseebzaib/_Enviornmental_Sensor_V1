@@ -25,6 +25,46 @@ void RtcInt()
 	//Rtc_set_alarm();
 }
 
+void Rtc_Alarm_watchdog_disable()
+{
+  __HAL_RTC_ALARM_DISABLE_IT(&hrtc, RTC_IT_ALRB);
+}
+
+void Rtc_Alarm_watchdog()
+{
+	uint16_t seconds;
+	RTC_TimeTypeDef gTime;
+	HAL_RTC_GetTime(RTC_Handle, &gTime, RTC_FORMAT_BIN);
+	RTC_DateTypeDef sDate;
+    HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
+
+    seconds = gTime.Seconds + 25;
+
+    if(seconds > 59)
+    {
+    	seconds = 0;
+
+    }
+
+      RTC_AlarmTypeDef sAlarm = {0};
+	  sAlarm.AlarmTime.Hours = 0;
+	  sAlarm.AlarmTime.Minutes = 0;
+	  sAlarm.AlarmTime.Seconds = seconds;
+	  sAlarm.AlarmTime.SubSeconds = 0;
+	  sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+	  sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
+	  sAlarm.AlarmMask = RTC_ALARMMASK_MINUTES| RTC_ALARMMASK_HOURS | RTC_ALARMMASK_DATEWEEKDAY;
+	  sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
+	  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
+	  sAlarm.AlarmDateWeekDay = 1;
+	  sAlarm.Alarm = RTC_ALARM_B;
+	  HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BIN);
+
+	  __HAL_RTC_ALARM_ENABLE_IT (&hrtc, RTC_IT_ALRB);
+	  __HAL_RTC_ALARM_CLEAR_FLAG (&hrtc, RTC_IT_ALRB);
+
+}
+
 void Set_Date(char *Datebuffer) {
 
 	RTC_DateTypeDef sDate;
@@ -102,6 +142,7 @@ if(set_alarm_Time)
 
 
 	  set_alarm_Time = 0;
+
 
 		//HAL_UART_Transmit(&huart1, (uint8_t*) "Interrupt\r\n",11, 1000);
 }

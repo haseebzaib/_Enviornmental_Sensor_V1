@@ -17,7 +17,10 @@
 extern uint8_t set_alarm_Time ;
 extern char scheduled_packet[30];
 extern void RtcInt();
+extern void Rtc_Alarm_watchdog_disable();
+extern void Rtc_Alarm_watchdog();
 extern void Rtc_set_alarm();
+
 extern void Set_Date(char *Datebuffer);
 extern void Set_Time(char *Timebuffer);
 extern void Get_Date();

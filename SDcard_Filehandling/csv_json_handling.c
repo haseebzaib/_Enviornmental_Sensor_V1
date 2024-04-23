@@ -311,11 +311,9 @@ int8_t createfile(char *filename, char *fileformat) {
 	RTC_TimeTypeDef sTime;
 	HAL_RTC_GetTime(RTC_Handle, &sTime, RTC_FORMAT_BIN);
 
-	sprintf(filename_with_format, "%s_%02d-%02d-%02d%s", filename,
-			sDate.Year, sDate.Month, sDate.Date, fileformat);
+	sprintf(filename_with_format, "%s_%02d-%02d-%02d%s", filename,sDate.Year, sDate.Month, sDate.Date, fileformat);
 
-	sprintf(filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,
-				sDate.Month, sDate.Date);
+	sprintf(filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,sDate.Month, sDate.Date);
 
 
 	//__disable_irq();

@@ -125,7 +125,7 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 #endif
-HAL_Delay(1000);
+  HAL_Delay(1000);
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_SDIO_SD_Init();
@@ -271,7 +271,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.ClockSpeed = 100000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -758,6 +758,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
     if(GPIO_Pin == USB_DETECT_Pin)
     {
+        _RunTime_Packet.showPrompt = 1;
         _RunTime_Packet.usb_detection = 1;
         _RunTime_Packet.usb_start_timer = 1;
         usb_time_keep = 0;

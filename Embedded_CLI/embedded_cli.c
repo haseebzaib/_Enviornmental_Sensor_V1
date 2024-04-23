@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "embedded_cli.h"
+#include "app_main.h"
 
 #define CLI_TOKEN_NPOS 0xffff
 
@@ -845,6 +846,22 @@ static void onHelp(EmbeddedCli *cli, char *tokens, void *context) {
         writeToOutput(cli, "Help is not available");
         writeToOutput(cli, lineBreak);
         return;
+    }
+
+    if(_RunTime_Packet.showPrompt )
+    {
+    	_RunTime_Packet.showPrompt  = 0;
+        writeToOutput(cli, lineBreak);
+        writeToOutput(cli, lineBreak);
+		writeToOutput(cli, "This product is powered by BuildUp! "); //TM 0x99
+		writeToOutput(cli, lineBreak);
+		writeToOutput(cli, "Thingsfactory Inc. All rights reserved "); //copyright 0xA9
+        writeToOutput(cli, lineBreak);
+        writeToOutput(cli, "Montreal, Canada");
+        writeToOutput(cli, lineBreak);
+        writeToOutput(cli, "https://thingsfactory.com");
+        writeToOutput(cli, lineBreak);
+        writeToOutput(cli, lineBreak);
     }
 
     uint16_t tokenCount = embeddedCliGetTokenCount(tokens);

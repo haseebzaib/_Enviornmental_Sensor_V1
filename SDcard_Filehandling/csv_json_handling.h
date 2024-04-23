@@ -12,7 +12,7 @@
 
 extern uint8_t file_already_exist;
 extern char filename_with_format[100];
-extern char filename_ver_date[100];
+extern char filename_ver_date[150];
 extern uint8_t fileWrite_day;
 extern uint8_t fileWrite_month;
 extern uint8_t fileWrite_year;

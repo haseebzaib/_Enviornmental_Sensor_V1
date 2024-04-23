@@ -58,7 +58,8 @@ Embedded_CLI/console.o: ../Embedded_CLI/console.c \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_arch_config.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sps30.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/internal_adc.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd4x_i2c.h
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd4x_i2c.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd30_i2c.h
 ../Embedded_CLI/embedded_cli.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -124,3 +125,4 @@ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sps30.h:
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/internal_adc.h:
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd4x_i2c.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd30_i2c.h:

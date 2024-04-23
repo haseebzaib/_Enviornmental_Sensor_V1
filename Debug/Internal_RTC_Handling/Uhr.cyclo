@@ -1,6 +1,6 @@
-Uhr.c:21:6:RtcInt	1
-Uhr.c:28:6:Set_Date	2
-Uhr.c:48:6:Rtc_set_alarm	4
-Uhr.c:110:6:Set_Time	2
-Uhr.c:128:6:Get_Date	1
-Uhr.c:133:6:Get_Time	1
+../Internal_RTC_Handling/Uhr.c:21:6:RtcInt	1
+../Internal_RTC_Handling/Uhr.c:28:6:Set_Date	2
+../Internal_RTC_Handling/Uhr.c:48:6:Rtc_set_alarm	4
+../Internal_RTC_Handling/Uhr.c:110:6:Set_Time	2
+../Internal_RTC_Handling/Uhr.c:128:6:Get_Date	1
+../Internal_RTC_Handling/Uhr.c:133:6:Get_Time	1

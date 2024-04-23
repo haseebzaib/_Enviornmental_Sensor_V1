@@ -59,6 +59,16 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
+
+    .noinit (NOLOAD):
+  {
+     . = ALIGN(4);
+      KEEP(*(.noinit))
+     . = ALIGN(4) ; 
+  } >RAM
+
+
+
   /* The program code and other data into "FLASH" Rom type memory */
   .text :
   {

@@ -1,12 +1,13 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+# Toolchain: GNU Tools for STM32 (12.3.rel1)
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Libs/Utils.c \
 ../Libs/internal_adc.c \
+../Libs/scd30_i2c.c \
 ../Libs/scd4x_i2c.c \
 ../Libs/sensirion_common.c \
 ../Libs/sensirion_i2c.c \
@@ -18,6 +19,7 @@ C_SRCS += \
 OBJS += \
 ./Libs/Utils.o \
 ./Libs/internal_adc.o \
+./Libs/scd30_i2c.o \
 ./Libs/scd4x_i2c.o \
 ./Libs/sensirion_common.o \
 ./Libs/sensirion_i2c.o \
@@ -29,6 +31,7 @@ OBJS += \
 C_DEPS += \
 ./Libs/Utils.d \
 ./Libs/internal_adc.d \
+./Libs/scd30_i2c.d \
 ./Libs/scd4x_i2c.d \
 ./Libs/sensirion_common.d \
 ./Libs/sensirion_i2c.d \
@@ -45,7 +48,7 @@ Libs/%.o Libs/%.su Libs/%.cyclo: ../Libs/%.c Libs/subdir.mk
 clean: clean-Libs
 
 clean-Libs:
-	-$(RM) ./Libs/Utils.cyclo ./Libs/Utils.d ./Libs/Utils.o ./Libs/Utils.su ./Libs/internal_adc.cyclo ./Libs/internal_adc.d ./Libs/internal_adc.o ./Libs/internal_adc.su ./Libs/scd4x_i2c.cyclo ./Libs/scd4x_i2c.d ./Libs/scd4x_i2c.o ./Libs/scd4x_i2c.su ./Libs/sensirion_common.cyclo ./Libs/sensirion_common.d ./Libs/sensirion_common.o ./Libs/sensirion_common.su ./Libs/sensirion_i2c.cyclo ./Libs/sensirion_i2c.d ./Libs/sensirion_i2c.o ./Libs/sensirion_i2c.su ./Libs/sensirion_i2c_hal.cyclo ./Libs/sensirion_i2c_hal.d ./Libs/sensirion_i2c_hal.o ./Libs/sensirion_i2c_hal.su ./Libs/sensirion_shdlc.cyclo ./Libs/sensirion_shdlc.d ./Libs/sensirion_shdlc.o ./Libs/sensirion_shdlc.su ./Libs/sensirion_uart_implementation.cyclo ./Libs/sensirion_uart_implementation.d ./Libs/sensirion_uart_implementation.o ./Libs/sensirion_uart_implementation.su ./Libs/sps30.cyclo ./Libs/sps30.d ./Libs/sps30.o ./Libs/sps30.su
+	-$(RM) ./Libs/Utils.cyclo ./Libs/Utils.d ./Libs/Utils.o ./Libs/Utils.su ./Libs/internal_adc.cyclo ./Libs/internal_adc.d ./Libs/internal_adc.o ./Libs/internal_adc.su ./Libs/scd30_i2c.cyclo ./Libs/scd30_i2c.d ./Libs/scd30_i2c.o ./Libs/scd30_i2c.su ./Libs/scd4x_i2c.cyclo ./Libs/scd4x_i2c.d ./Libs/scd4x_i2c.o ./Libs/scd4x_i2c.su ./Libs/sensirion_common.cyclo ./Libs/sensirion_common.d ./Libs/sensirion_common.o ./Libs/sensirion_common.su ./Libs/sensirion_i2c.cyclo ./Libs/sensirion_i2c.d ./Libs/sensirion_i2c.o ./Libs/sensirion_i2c.su ./Libs/sensirion_i2c_hal.cyclo ./Libs/sensirion_i2c_hal.d ./Libs/sensirion_i2c_hal.o ./Libs/sensirion_i2c_hal.su ./Libs/sensirion_shdlc.cyclo ./Libs/sensirion_shdlc.d ./Libs/sensirion_shdlc.o ./Libs/sensirion_shdlc.su ./Libs/sensirion_uart_implementation.cyclo ./Libs/sensirion_uart_implementation.d ./Libs/sensirion_uart_implementation.o ./Libs/sensirion_uart_implementation.su ./Libs/sps30.cyclo ./Libs/sps30.d ./Libs/sps30.o ./Libs/sps30.su
 
 .PHONY: clean-Libs
 

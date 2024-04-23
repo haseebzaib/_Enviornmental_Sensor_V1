@@ -17,6 +17,13 @@
 #include "main.h"
 #include "csv_json_handling.h"
 #include <File_Handling.h>
+
+
+/*uncomment which one ever you want to use and comment the other one*/
+//#define use_scd40x 1
+#define use_scd30  1
+
+
 #define BLUE_LED_TOGGLE() HAL_GPIO_TogglePin(BLUE_LED_GPIO_Port, BLUE_LED_Pin);
 
 #define disable_5v()  HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, GPIO_PIN_RESET);
@@ -46,20 +53,30 @@ extern Flash_Packet _Flash_Packet;
 
 typedef struct
 {
+
+#ifdef use_scd40x
 	uint16_t co2;
     int32_t temperature;
     int32_t humidity;
+#elif use_scd30
+	float co2;
+    float temperature;
+    float humidity;
+#endif
     uint8_t motion_detection;
     float pm1_0;
     float pm2_5;
     float pm4_0;
     float pm10_0;
     float battery_voltage;
+    uint8_t showPrompt;
     uint8_t filename_changed;
     uint8_t fileformat_changed;
     uint8_t fileformat_selection;
     uint8_t prev_day;
+    uint16_t prev_year;
     uint8_t day_changed;
+    uint8_t year_changed;
     uint8_t sps30_uart_error;
     uint8_t console_uart_error;
     uint8_t scd4x_i2c_error;
@@ -77,6 +94,7 @@ typedef struct
     uint8_t day;
     uint8_t month;
     uint8_t year;
+
 }RunTime_Packet;
 
 extern RunTime_Packet _RunTime_Packet;
@@ -103,10 +121,16 @@ extern uint32_t prev_sleep_time;
 extern uint32_t prev_usb_time_;
 extern uint8_t stop_measurement;
 
+extern uint8_t RetainState  __attribute__ ((section(".noinit")));
+
 
 extern void blink_red();
+#ifdef use_scd40x
 extern  void get_sps30_measurement();
 extern void get_scd4x_measurement();
+#elif use_scd30
+extern void get_scd30_measurement();
+#endif
 extern void toggle_blue_led();
 extern void power_off_detect();
 int16_t sensirion_uart_receive(uint8_t* data);

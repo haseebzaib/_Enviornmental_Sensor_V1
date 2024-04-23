@@ -42,6 +42,7 @@
 "./Internal_RTC_Handling/Uhr.o"
 "./Libs/Utils.o"
 "./Libs/internal_adc.o"
+"./Libs/scd30_i2c.o"
 "./Libs/scd4x_i2c.o"
 "./Libs/sensirion_common.o"
 "./Libs/sensirion_i2c.o"

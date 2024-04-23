@@ -36,6 +36,7 @@
 #include "internal_adc.h"
 #include "scd4x_i2c.h"
 #include "csv_json_handling.h"
+#include "scd30_i2c.h"
 
 static EmbeddedCli *cli;
 // Definitions for CLI UART peripheral
@@ -236,7 +237,7 @@ void SetID(EmbeddedCli *cli, char *args, void *context) {
 	len = strlen(buffer);
 	if (len < 30) {
 		if (buffer[0] != '\0') {
-			if (buffer != NULL) {
+			if (buffer !=  NULL) {
 				strcpy(_Flash_Packet.id, buffer);
 				set_param_flags();
 				cli_printf(cli, "ID is set to: %s", _Flash_Packet.id);
@@ -669,14 +670,19 @@ void co2calibrate(EmbeddedCli *cli, char *args, void *context) {
 				1000);
 		cli_printf(cli, "Co2 is calibrating, please wait.");
 		if (!_RunTime_Packet.scd4x_i2c_error) {
+
+#ifdef use_scd40x
 			scd4x_perform_forced_recalibration(
 					_RunTime_Packet._target_co2_concentration,
 					&_RunTime_Packet._frc_correction);
+#elif use_scd30
+		scd30_force_recalibration(_RunTime_Packet._target_co2_concentration);
+#endif
 		}
 		while (counter < 8) {
 			HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) dot, strlen(dot),
 					1000);
-			HAL_Delay(800);
+			HAL_Delay(1000);
 			toggle_blue_led();
 			counter++;
 		}
@@ -715,28 +721,56 @@ void SystemRestart(EmbeddedCli *cli, char *args, void *context) {
 void Co2Level(EmbeddedCli *cli, char *args, void *context) {
 
 	if (!_RunTime_Packet.scd4x_i2c_error) {
-		get_scd4x_measurement();
-	}
 
+
+#ifdef use_scd40x
+		get_scd4x_measurement();
+#elif use_scd30
+	get_scd30_measurement();
+#endif
+	}
+#ifdef use_scd40x
 	cli_printf(cli, "Co2 Value: %d", _RunTime_Packet.co2);
+#elif use_scd30
+	cli_printf(cli, "Co2 Value: %.2f", _RunTime_Packet.co2);
+#endif
 }
 
 void TempLevel(EmbeddedCli *cli, char *args, void *context) {
 
 	if (!_RunTime_Packet.scd4x_i2c_error) {
+#ifdef use_scd40x
 		get_scd4x_measurement();
+#elif use_scd30
+	get_scd30_measurement();
+#endif
 	}
 
+
+#ifdef use_scd40x
 	cli_printf(cli, "Temperature Value: %dC ", _RunTime_Packet.temperature);
+#elif use_scd30
+	cli_printf(cli, "Temperature Value: %.2fC ", _RunTime_Packet.temperature);
+#endif
 }
 
 void HumidLevel(EmbeddedCli *cli, char *args, void *context) {
 
 	if (!_RunTime_Packet.scd4x_i2c_error) {
+#ifdef use_scd40x
 		get_scd4x_measurement();
+#elif use_scd30
+	get_scd30_measurement();
+#endif
 	}
 
+
+
+#ifdef use_scd40x
 	cli_printf(cli, "Humidity Value: %d ", _RunTime_Packet.humidity);
+#elif use_scd30
+	cli_printf(cli, "Humidity Value: %.2f ", _RunTime_Packet.humidity);
+#endif
 }
 
 uint8_t prev_motion;
@@ -839,7 +873,11 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 	}
 
 	if (!_RunTime_Packet.scd4x_i2c_error) {
+#ifdef use_scd40x
 		get_scd4x_measurement();
+#elif use_scd30
+	get_scd30_measurement();
+#endif
 	}
 
 	RTC_DateTypeDef gDate;
@@ -880,12 +918,22 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 			_Flash_Packet.group);
 	cli_printf(cli, " *Interval         | %dmin                       ",
 			_Flash_Packet.Time_Interval);
+#ifdef use_scd40x
 	cli_printf(cli, " *Co2              | %d                       ",
 			_RunTime_Packet.co2);
 	cli_printf(cli, " *Temperature      | %dC                      ",
 			_RunTime_Packet.temperature);
 	cli_printf(cli, " *Humidity         | %d%%                     ",
 			_RunTime_Packet.humidity);
+#elif use_scd30
+	cli_printf(cli, " *Co2              | %.2f                       ",
+			_RunTime_Packet.co2);
+	cli_printf(cli, " *Temperature      | %.2fC                      ",
+			_RunTime_Packet.temperature);
+	cli_printf(cli, " *Humidity         | %.2f%%                     ",
+			_RunTime_Packet.humidity);
+#endif
+
 	cli_printf(cli, " *PIR              | %s                       ",
 			_RunTime_Packet.motion_detection == 1 ? "TRUE" : "FALSE");
 	cli_printf(cli, " *Pm2.5            | %s                       ", buff_pm);
@@ -920,7 +968,20 @@ void systemversion(EmbeddedCli *cli, char *args, void *context) {
 
 }
 
-
+void aboutDev(EmbeddedCli *cli, char *args, void *context)
+{
+	  cli_printf(cli, "");
+	cli_printf(cli, "");
+	cli_printf(cli, "This product is powered by BuildUp! "); //TM 0x99
+	cli_printf(cli, "");
+	cli_printf(cli, "Thingsfactory Inc. All rights reserved "); //copyright 0xA9
+	cli_printf(cli, "");
+	cli_printf(cli, "Montreal, Canada");
+	cli_printf(cli, "");
+	cli_printf(cli, "https://thingsfactory.com");
+	cli_printf(cli, "");
+	cli_printf(cli, "");
+}
 /**
  * Initializes the Embedded CLI instance and sets up command bindings.
  */
@@ -1041,7 +1102,7 @@ void initializeEmbeddedCli() {
 			.binding = AirQuality };
 
 	CliCommandBinding Battery_Voltage = { .name = "battery-voltage", .help =
-			"Measure voltage from 4.17v(Full Charge) to 3.0v",
+			"Measure voltage from 4.17v(Full Charge) to 3.0v(Battery Low)",
 			.tokenizeArgs = true, .context = NULL, .binding = BattVolt };
 
 	CliCommandBinding _port = { .name = "port", .help = "Inactive field",
@@ -1054,6 +1115,10 @@ void initializeEmbeddedCli() {
 	CliCommandBinding getversion = { .name = "get-version", .help =
 				"Shows hardware and software version", .tokenizeArgs = true, .context = NULL,
 				.binding = systemversion };
+
+	CliCommandBinding aboutdev = { .name = "about", .help =
+				"Information about device", .tokenizeArgs = true, .context = NULL,
+				.binding = aboutDev };
 
 	// EmbeddedCli *cli = getCliPointer;debug_scd4x_PM25
 	embeddedCliAddBinding(cli, clear_binding);
@@ -1089,6 +1154,7 @@ void initializeEmbeddedCli() {
 	embeddedCliAddBinding(cli, _port);
 	embeddedCliAddBinding(cli, _showall);
 	embeddedCliAddBinding(cli, getversion);
+	embeddedCliAddBinding(cli, aboutdev);
 	// Assign character write function
 	cli->writeChar = writeCharToCli;
 	// cli->onCommand = onCommand;

@@ -52,6 +52,7 @@ Core/Src/app_main.o: ../Core/Src/app_main.c ../Core/Inc/main.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Internal_RTC_Handling/Uhr.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd4x_i2c.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_config.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd30_i2c.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_common.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_i2c_hal.h \
  C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_uart.h \
@@ -121,6 +122,7 @@ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Internal_RTC_Handling/Uhr.h:
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd4x_i2c.h:
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_config.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/scd30_i2c.h:
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_common.h:
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_i2c_hal.h:
 C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/sensirion_uart.h:

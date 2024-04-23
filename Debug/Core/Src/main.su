@@ -13,6 +13,6 @@
 ../Core/Src/main.c:644:13:MX_GPIO_Init	48	static
 ../Core/Src/main.c:743:6:HAL_TIM_PeriodElapsedCallback	16	static
 ../Core/Src/main.c:753:6:HAL_GPIO_EXTI_Callback	16	static
-../Core/Src/main.c:773:6:HAL_RTC_AlarmAEventCallback	16	static
-../Core/Src/main.c:778:6:HAL_UART_ErrorCallback	16	static
-../Core/Src/main.c:803:6:Error_Handler	8	static,ignoring_inline_asm
+../Core/Src/main.c:774:6:HAL_RTC_AlarmAEventCallback	16	static
+../Core/Src/main.c:779:6:HAL_UART_ErrorCallback	16	static
+../Core/Src/main.c:804:6:Error_Handler	8	static,ignoring_inline_asm

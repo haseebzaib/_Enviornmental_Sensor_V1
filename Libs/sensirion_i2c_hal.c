@@ -71,7 +71,7 @@ void sensirion_i2c_hal_init(void) {
     /* TODO:IMPLEMENT */
 	HAL_I2C_DeInit(&hi2c1);
 	  hi2c1.Instance = I2C1;
-	  hi2c1.Init.ClockSpeed = 400000;
+	  hi2c1.Init.ClockSpeed = 100000;
 	  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
 	  hi2c1.Init.OwnAddress1 = 0;
 	  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -124,7 +124,7 @@ int8_t sensirion_i2c_hal_read(uint8_t address, uint8_t* data, uint16_t count) {
 int8_t sensirion_i2c_hal_write(uint8_t address, const uint8_t* data,
                                uint16_t count) {
     /* TODO:IMPLEMENT */
-	return HAL_I2C_Master_Transmit(&hi2c1,(uint16_t)(address << 1),data,count,HAL_MAX_DELAY);
+	return HAL_I2C_Master_Transmit(&hi2c1,(uint16_t)(address << 1),(uint8_t *)data,count,HAL_MAX_DELAY);
 	//return NOT_IMPLEMENTED_ERROR;
 }
 
@@ -138,6 +138,9 @@ int8_t sensirion_i2c_hal_write(uint8_t address, const uint8_t* data,
  */
 void sensirion_i2c_hal_sleep_usec(uint32_t useconds) {
     /* TODO:IMPLEMENT */
-
-	HAL_Delay(useconds/1000);
+	   uint32_t msec = useconds / 1000;
+	    if (useconds % 1000 > 0) {
+	        msec++;
+	    }
+	    HAL_Delay(msec);
 }

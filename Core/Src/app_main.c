@@ -19,6 +19,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "scd4x_i2c.h"
+#include "scd30_i2c.h"
 #include "sensirion_common.h"
 #include "sensirion_i2c_hal.h"
 #include "sensirion_uart.h"
@@ -30,6 +31,10 @@
 #include "Utils.h"
 #include "File_Handling.h"
 #include "stm32_hal_legacy.h"
+
+
+ uint8_t RetainState  __attribute__ ((section(".noinit")));
+ uint8_t show_prompt = 0;
 
 char buf_sdcard[] =
 		"sdcard error, this can cause issue in mass storage also\r\n";
@@ -407,6 +412,8 @@ static void save_data() {
 	}
 
 }
+
+#ifdef use_scd40x
 static void init_scd4x_i2c() {
 
 	sensirion_i2c_hal_init();
@@ -453,6 +460,55 @@ void get_scd4x_measurement() {
 	}
 	//error = scd4x_stop_periodic_measurement();
 }
+
+#elif use_scd30
+static void init_scd30_i2c()
+{
+	 int16_t error = 0;
+	  sensirion_i2c_hal_init();
+	  init_driver(SCD30_I2C_ADDR_61);
+	    scd30_stop_periodic_measurement();
+	 //   scd30_soft_reset();
+	    uint8_t major = 0;
+	    uint8_t minor = 0;
+	    error = scd30_read_firmware_version(&major, &minor);
+}
+
+void get_scd30_measurement()
+{
+	 int16_t error = NO_ERROR;
+	scd30_start_periodic_measurement(0);
+
+	  uint16_t repetition = 0;
+	    for (repetition = 0; repetition < 1; repetition++) {
+	    	sensirion_i2c_hal_sleep_usec(1500000);
+	        error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
+					&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);
+
+			if (debug_scd_pm) {
+				char buf[100];
+				if (error) {
+					sprintf(buf, "error executing blocking_read_measurement_data(): %i\n",
+							error);
+					HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+				} else if (_RunTime_Packet.co2 == 0) {
+					sprintf(buf, "Invalid sample detected, skipping.\n");
+					HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+				} else {
+
+					sprintf(buf, "Co2: %.2f , Temperature: %.2f C, Humidity: %.2f  \r\n",
+										_RunTime_Packet.co2, _RunTime_Packet.temperature,
+										_RunTime_Packet.humidity);
+					HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+				}
+			}
+	    }
+}
+
+#endif
+
+
+
 static void init_sps30() {
 	char serial[SPS30_MAX_SERIAL_LEN];
 
@@ -548,11 +604,24 @@ static void check_peripheral_error() {
 		init_sps30();
 	}
 
+#ifdef use_scd40x
 	if (HAL_I2C_IsDeviceReady(&hi2c1, (uint16_t) (0x62 << 1), 5, 100)
 			!= HAL_OK) {
 
 		_RunTime_Packet.scd4x_i2c_error = 1;
 	}
+#elif use_scd30
+	if (HAL_I2C_IsDeviceReady(&hi2c1, (uint16_t) (0x61 << 1), 5, 1000)
+			!= HAL_OK) {
+
+		if(debug_scd_pm)
+		{char buf_error[50];
+		sprintf(buf_error, "error in scd30 i2c so not running it\n");
+					HAL_UART_Transmit(&huart1, (uint8_t*) buf_error, strlen(buf_error), 1000);
+		}
+		_RunTime_Packet.scd4x_i2c_error = 1;
+	}
+#endif
 
 }
 static void sensor_calibration() {
@@ -581,8 +650,12 @@ static void sleep() {
 	HAL_UART_Transmit(&huart1, (uint8_t*) "sleepTime\r\n", 11, 1000);
 	disable_5v();
 	disable_motion();
+#ifdef use_scd40x
 	scd4x_stop_periodic_measurement();
 	scd4x_power_down();
+#elif use_scd30
+	scd30_stop_periodic_measurement();
+#endif
 	console_uart_deinit();
 	sensirion_i2c_hal_free();
 	sensirion_uart_close();
@@ -616,7 +689,11 @@ static void wakeup() {
 	MX_TIM2_Init();
 	MX_TIM3_Init();
 
+#ifdef use_scd40x
 	init_scd4x_i2c();
+#elif use_scd30
+	init_scd30_i2c();
+#endif
 
 	if (Mount_SD("/") == FR_OK) {
 		Unmount_SD("/");
@@ -995,16 +1072,22 @@ void app_main() {
 		_RunTime_Packet.usb_active_disable_pm = 1;
 		_RunTime_Packet.usb_start_timer = 1;
 		usb_time_keep = 0;
+		_RunTime_Packet.showPrompt = 1;
 	}
 
 	//init_sps30();
+
+#ifdef use_scd40x
 	init_scd4x_i2c();
+#elif use_scd30
+	init_scd30_i2c();
+#endif
 	console_init();
 	Rtc_set_alarm();
 
 	RTC_DateTypeDef sDate;
 	HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
-	_RunTime_Packet.prev_day = sDate.Date;
+	_RunTime_Packet.prev_year = sDate.Year;
 
 	//if this flag is -1 this means that file creation failed at the start of program because usb was connected
 	//as accessing both usb and sdcard is not possible
@@ -1013,8 +1096,13 @@ void app_main() {
 
 	//if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))
 	//{
-	_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
+	if(RetainState != 1)
+	{
+		_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
 			_Flash_Packet.File_Format);
+
+		RetainState = 1;
+	}
 	//}
 	// else
 	// {
@@ -1063,9 +1151,9 @@ void app_main() {
 			_RunTime_Packet.month = sDate.Month;
 			_RunTime_Packet.year = sDate.Year;
 
-			if (_RunTime_Packet.prev_day != sDate.Date) {
-				_RunTime_Packet.day_changed = 1;
-				_RunTime_Packet.prev_day = sDate.Date;
+			if (_RunTime_Packet.prev_year != sDate.Year) {
+				_RunTime_Packet.year_changed = 1; //this for year now
+				_RunTime_Packet.prev_year = sDate.Year;
 			}
 
 			check_peripheral_error();
@@ -1119,7 +1207,12 @@ void app_main() {
 
 				console_process(); //run console here also so user can still access it
 				if (!_RunTime_Packet.scd4x_i2c_error) {
+#ifdef use_scd40x
 					get_scd4x_measurement();
+#elif use_scd30
+		get_scd30_measurement();
+#endif
+
 				}
 
 				get_sps30_measurement();
@@ -1140,7 +1233,12 @@ void app_main() {
 					&& !_RunTime_Packet.usb_first_start
 					&& !HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port,
 					USB_DETECT_Pin)) {
+#ifdef use_scd40x
 				scd4x_stop_periodic_measurement();
+#elif use_scd30
+				 scd30_stop_periodic_measurement();
+#endif
+
 				sps30_stop_measurement();
 				stop_measurement = 0;
 			}
@@ -1153,11 +1251,10 @@ void app_main() {
 					&& set_alarm_Time && !_RunTime_Packet.usb_detection) {
 				//if day changes create new file
 				//if user change filename or fileformat then also create new file with that format or name
-				if (_RunTime_Packet.day_changed
-						|| _RunTime_Packet.filename_changed
+				if (_RunTime_Packet.year_changed || _RunTime_Packet.filename_changed
 						|| _RunTime_Packet.fileformat_changed
 						|| _RunTime_Packet.sd_file_creation == -1) {
-					_RunTime_Packet.day_changed = 0;
+					_RunTime_Packet.year_changed = 0;
 					_RunTime_Packet.filename_changed = 0;
 					_RunTime_Packet.fileformat_changed = 0;
 					_RunTime_Packet.sd_file_creation = createfile(
@@ -1196,10 +1293,13 @@ void app_main() {
 
 		//if day changes create new file
 		//if user change filename or fileformat then also create new file with that format or name
-		if (_RunTime_Packet.day_changed || _RunTime_Packet.filename_changed
+		//_RunTime_Packet.day_changed ||
+		if (_RunTime_Packet.year_changed || _RunTime_Packet.filename_changed
 				|| _RunTime_Packet.fileformat_changed
 				|| _RunTime_Packet.sd_file_creation == -1) {
-			_RunTime_Packet.day_changed = 0;
+
+
+			_RunTime_Packet.year_changed = 0;
 			_RunTime_Packet.filename_changed = 0;
 			_RunTime_Packet.fileformat_changed = 0;
 			_RunTime_Packet.sd_file_creation = createfile(
@@ -1228,27 +1328,5 @@ void app_main() {
 
 }
 
-/**
- ret = sps30_stop_measurement();
- if (ret) {
- printf("Stopping measurement failed\r\n");
- }
 
- if (version_information.firmware_major >= 2) {
- ret = sps30_sleep();
- if (ret) {
- printf("Entering sleep failed\r\n");
- }
- }
-
- printf("No measurements for 1 minute\r\n");
- sensirion_sleep_usec(1000000 * 60);
-
- if (version_information.firmware_major >= 2) {
- ret = sps30_wake_up();
- if (ret) {
- printf("Error %i waking up sensor\r\n", ret);
- }
- }
- */
 

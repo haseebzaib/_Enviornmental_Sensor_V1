@@ -61,11 +61,11 @@ if(set_alarm_Time)
     HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
 
 
-    minute = gTime.Minutes + _Flash_Packet.Time_Interval;
+    minute = gTime.Seconds + 10;//gTime.Minutes + _Flash_Packet.Time_Interval;
     hour = gTime.Hours;
     if(minute > 59)
     {
-    	minute = minute%_Flash_Packet.Time_Interval;
+    	minute = minute%10;//minute%_Flash_Packet.Time_Interval;
 //    	if(minute == 0)
 //    	{
 //    		minute = 1;
@@ -85,12 +85,12 @@ if(set_alarm_Time)
 
       RTC_AlarmTypeDef sAlarm = {0};
 	  sAlarm.AlarmTime.Hours = 0;
-	  sAlarm.AlarmTime.Minutes = minute;
-	  sAlarm.AlarmTime.Seconds = 0;
+	  sAlarm.AlarmTime.Minutes = 0;//minute;
+	  sAlarm.AlarmTime.Seconds = minute;//0;
 	  sAlarm.AlarmTime.SubSeconds = 0;
 	  sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
 	  sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
-	  sAlarm.AlarmMask = RTC_ALARMMASK_SECONDS| RTC_ALARMMASK_HOURS | RTC_ALARMMASK_DATEWEEKDAY;
+	  sAlarm.AlarmMask = RTC_ALARMMASK_MINUTES| RTC_ALARMMASK_HOURS | RTC_ALARMMASK_DATEWEEKDAY;//RTC_ALARMMASK_SECONDS| RTC_ALARMMASK_HOURS | RTC_ALARMMASK_DATEWEEKDAY;
 	  sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
 	  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
 	  sAlarm.AlarmDateWeekDay = 1;

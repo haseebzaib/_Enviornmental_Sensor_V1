@@ -17,7 +17,7 @@
 FRESULT fresult1;
 
 char filename_with_format[100];
-char filename_ver_date[100];
+char filename_ver_date[150];
 uint8_t file_already_exist = 0;
 uint8_t fileWrite_day = 0;
 uint8_t fileWrite_month = 0;
@@ -74,6 +74,7 @@ void json_update() {
 		sprintf(buffer, "\"group\":\"%s\",\n", _Flash_Packet.group);
 		fresult1 = Update_File(filename_with_format, buffer);
 
+#ifdef use_scd40x
 		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"co2\":\"%d\",\n", _RunTime_Packet.co2);
 		fresult1 = Update_File(filename_with_format, buffer);
@@ -86,7 +87,20 @@ void json_update() {
 		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"humidity\":\"%ld\",\n", _RunTime_Packet.humidity);
 		fresult1 = Update_File(filename_with_format, buffer);
+#elif use_scd30
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "\"co2\":\"%.2f\",\n", _RunTime_Packet.co2);
+		fresult1 = Update_File(filename_with_format, buffer);
 
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "\"temperature\":\"%.2f\",\n",
+				_RunTime_Packet.temperature);
+		fresult1 = Update_File(filename_with_format, buffer);
+
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "\"humidity\":\"%.2f\",\n", _RunTime_Packet.humidity);
+		fresult1 = Update_File(filename_with_format, buffer);
+#endif
 		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "\"pir\":\"%s\",\n",
 				_RunTime_Packet.motion_detection ? "TRUE" : "FALSE");
@@ -167,7 +181,7 @@ void csv_update() {
 		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%s ,", _Flash_Packet.group);
 		fresult1 = Update_File(filename_with_format, buffer);
-
+#ifdef use_scd40x
 		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%d ,", _RunTime_Packet.co2);
 		fresult1 = Update_File(filename_with_format, buffer);
@@ -179,7 +193,19 @@ void csv_update() {
 		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%ld ,", _RunTime_Packet.humidity);
 		fresult1 = Update_File(filename_with_format, buffer);
+#elif use_scd30
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "%.2f ,", _RunTime_Packet.co2);
+		fresult1 = Update_File(filename_with_format, buffer);
 
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "%.2f ,", _RunTime_Packet.temperature);
+		fresult1 = Update_File(filename_with_format, buffer);
+
+		memset(buffer, 0, sizeof(buffer));
+		sprintf(buffer, "%.2f ,", _RunTime_Packet.humidity);
+		fresult1 = Update_File(filename_with_format, buffer);
+#endif
 		memset(buffer, 0, sizeof(buffer));
 		sprintf(buffer, "%s ,",
 				_RunTime_Packet.motion_detection == 1 ? "TRUE" : "FALSE");

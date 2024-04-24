@@ -1325,7 +1325,7 @@ void app_main() {
 		}
 		prev_sleep_time = HAL_GetTick();
 
-		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin) && !save_param) {
+		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin) ) {
 
 			sleep();
 			wakeup();

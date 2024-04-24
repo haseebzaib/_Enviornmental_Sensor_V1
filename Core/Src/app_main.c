@@ -1308,6 +1308,11 @@ void app_main() {
 			_RunTime_Packet.fileformat_changed = 0;
 			_RunTime_Packet.sd_file_creation = createfile(
 					_Flash_Packet.File_Name, _Flash_Packet.File_Format);
+
+			while(save_param)
+			{
+				save_data();
+			}
 		}
 		if (filesaving_process()) {
 			HAL_Delay(1500);
@@ -1320,7 +1325,7 @@ void app_main() {
 		}
 		prev_sleep_time = HAL_GetTick();
 
-		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {
+		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin) && !save_param) {
 
 			sleep();
 			wakeup();

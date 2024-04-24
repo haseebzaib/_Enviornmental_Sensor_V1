@@ -45,6 +45,8 @@ typedef struct PACKED{
   char location[50];
   char name[50];
   char group[50];
+  char filename_with_format[100];
+  char filename_ver_date[100];
   uint16_t valid_pattern; //this is to verify if flash data is valid
 } Flash_Packet;
 
@@ -121,7 +123,7 @@ extern uint32_t prev_sleep_time;
 extern uint32_t prev_usb_time_;
 extern uint8_t stop_measurement;
 
-extern uint8_t RetainState  __attribute__ ((section(".noinit")));
+extern uint8_t RetainState  ;
 
 
 extern void blink_red();

@@ -26,7 +26,7 @@
 #include "File_Handling.h"
 #include "stm32_hal_legacy.h"
 
-uint8_t RetainState __attribute__ ((section(".noinit")));
+uint8_t RetainState;
 uint8_t show_prompt = 0;
 
 char buf_sdcard[] =
@@ -66,7 +66,7 @@ int16_t blue_led_pwm_val = 0;
 Flash_Packet _Flash_Packet;
 RunTime_Packet _RunTime_Packet;
 const Flash_Packet m_Flash_Packet = { "devEUI", ".CSV", 15, 0,
-		"0000000000000000", "default", "default", "default", 0x1840, };
+		"0000000000000000", "default", "default", "default","default" ,"default",0x1840, };
 
 uint8_t debug_scd_pm = 0;
 uint8_t save_param = 0;
@@ -1094,11 +1094,18 @@ void app_main() {
 
 	//if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))
 	//{
-	if (RetainState != 1) {
+	 if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0xBEBE) //we save this value and dont change it untill and untless RTC data is not lost
+	    {
+
+		   HAL_PWR_EnableBkUpAccess();
+		   HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0xBEBE);
+		   HAL_PWR_DisableBkUpAccess();
+
+
 		_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
 				_Flash_Packet.File_Format);
 
-		RetainState = 1;
+
 	}
 	//}
 	// else

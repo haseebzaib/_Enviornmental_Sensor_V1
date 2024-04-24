@@ -516,7 +516,7 @@ void SetFilename(EmbeddedCli *cli, char *args, void *context) {
 				HAL_RTC_GetTime(RTC_Handle, &sTime, RTC_FORMAT_BIN);
 
 
-				sprintf(filename_ver_date, "%s_%02d-%02d-%02d", _Flash_Packet.File_Name, sDate.Year,sDate.Month, sDate.Date);
+				sprintf(_Flash_Packet.filename_ver_date, "%s_%02d-%02d-%02d", _Flash_Packet.File_Name, sDate.Year,sDate.Month, sDate.Date);
 			}
 		}
 	} else {
@@ -530,7 +530,7 @@ void SetFilename(EmbeddedCli *cli, char *args, void *context) {
 
 void GetFilename(EmbeddedCli *cli, char *args, void *context) {
 
-	cli_printf(cli, "Filename is set to: %s", filename_ver_date);
+	cli_printf(cli, "Filename is set to: %s", _Flash_Packet.filename_ver_date);
 
 }
 
@@ -911,7 +911,7 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 	cli_printf(cli, " *Location         | %s                       ",
 			_Flash_Packet.location);
 	cli_printf(cli, " *Filename         | %s                       ",
-			filename_ver_date);
+			_Flash_Packet.filename_ver_date);
 	cli_printf(cli, " *Fileformat       | %s                       ",
 			_Flash_Packet.File_Format);
 	cli_printf(cli, " *Group            | %s                       ",
@@ -942,7 +942,7 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 			_RunTime_Packet.battery_voltage);
 	cli_printf(cli, " *Last_Packet      | [Date:%02d.%02d.%02d] [Time: %02d:%02d:%02d] [Filename: %s] [Packet Status: %s]",
 			fileWrite_day, fileWrite_month, fileWrite_year, fileWrite_hour,
-			fileWrite_min, fileWrite_sec, filename_ver_date,
+			fileWrite_min, fileWrite_sec, _Flash_Packet.filename_ver_date,
 			buff_filewritten);
 	cli_printf(cli, " *Scheduled_Packet | [Time: %s]               ",
 			scheduled_packet);

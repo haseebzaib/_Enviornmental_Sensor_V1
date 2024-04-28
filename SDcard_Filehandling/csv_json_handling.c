@@ -327,7 +327,8 @@ int8_t createfile(char *filename, char *fileformat) {
 
 
 	//if rtc backup register has nothing or our filename with foirmat is not same as filename then create a file otheriwse just go forward
-	if((HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0xBEBE) || !strstr(_Flash_Packet.filename_with_format,_Flash_Packet.File_Name))
+	if((HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0xBEBE) || !strstr(_Flash_Packet.filename_with_format,_Flash_Packet.File_Name)
+			|| _RunTime_Packet.year_changed || _RunTime_Packet.filename_changed || _RunTime_Packet.fileformat_changed || (_RunTime_Packet.sd_file_creation == -1))
 	{
 	  sprintf(_Flash_Packet.filename_with_format, "%s_%02d-%02d-%02d%s", filename,sDate.Year, sDate.Month, sDate.Date, fileformat);
 	  sprintf(_Flash_Packet.filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,sDate.Month, sDate.Date);

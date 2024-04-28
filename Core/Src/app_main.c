@@ -1357,11 +1357,12 @@ void app_main() {
 						|| _RunTime_Packet.filename_changed
 						|| _RunTime_Packet.fileformat_changed
 						|| _RunTime_Packet.sd_file_creation == -1) {
+					_RunTime_Packet.sd_file_creation = createfile(
+							_Flash_Packet.File_Name, _Flash_Packet.File_Format);
+
 					_RunTime_Packet.year_changed = 0;
 					_RunTime_Packet.filename_changed = 0;
 					_RunTime_Packet.fileformat_changed = 0;
-					_RunTime_Packet.sd_file_creation = createfile(
-							_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 				}
 				if (filesaving_process()) {
 					HAL_Delay(1500);
@@ -1401,13 +1402,13 @@ void app_main() {
 				|| _RunTime_Packet.fileformat_changed
 				|| _RunTime_Packet.sd_file_creation == -1) {
 
-			_RunTime_Packet.year_changed = 0;
-			_RunTime_Packet.filename_changed = 0;
-			_RunTime_Packet.fileformat_changed = 0;
+
 			_RunTime_Packet.sd_file_creation = createfile(
 					_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 
-
+			_RunTime_Packet.year_changed = 0;
+			_RunTime_Packet.filename_changed = 0;
+			_RunTime_Packet.fileformat_changed = 0;
 			/*be sure to save data before going to sleep*/
 			while(save_param)
 			{

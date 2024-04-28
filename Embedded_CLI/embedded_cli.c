@@ -378,7 +378,7 @@ EmbeddedCliConfig *embeddedCliDefaultConfig(void) {
     defaultConfig.historyBufferSize = 128;
     defaultConfig.cliBuffer = NULL;
     defaultConfig.cliBufferSize = 0;
-    defaultConfig.maxBindingCount = 50;
+    defaultConfig.maxBindingCount = 70;
     defaultConfig.enableAutoComplete = true;
     defaultConfig.invitation = "> ";
     return &defaultConfig;

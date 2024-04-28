@@ -70,6 +70,7 @@ UART_HandleTypeDef huart2;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
+static void MX_SDIO_SD_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_RTC_Init(void);
 static void MX_I2C1_Init(void);
@@ -91,6 +92,7 @@ static void MX_IWDG_Init(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -420,7 +422,7 @@ static void MX_RTC_Init(void)
   * @param None
   * @retval None
   */
-void MX_SDIO_SD_Init(void)
+static void MX_SDIO_SD_Init(void)
 {
 
   /* USER CODE BEGIN SDIO_Init 0 */
@@ -783,6 +785,137 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void gpio_analog()
+{  GPIO_InitTypeDef GPIO_InitStruct = {0};
+	  __HAL_RCC_GPIOC_CLK_ENABLE();
+	  __HAL_RCC_GPIOH_CLK_ENABLE();
+	  __HAL_RCC_GPIOA_CLK_ENABLE();
+	  __HAL_RCC_GPIOB_CLK_ENABLE();
+	  __HAL_RCC_GPIOD_CLK_ENABLE();
+
+	  GPIO_InitStruct.Pin = BLUE_LED_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  HAL_GPIO_Init(BLUE_LED_GPIO_Port, &GPIO_InitStruct);
+
+	  GPIO_InitStruct.Pin = EN_5V_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  HAL_GPIO_Init(EN_5V_GPIO_Port, &GPIO_InitStruct);
+
+	  /*Configure GPIO pin : OUT_MOTION_Pin */
+	  GPIO_InitStruct.Pin = OUT_MOTION_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  HAL_GPIO_Init(OUT_MOTION_GPIO_Port, &GPIO_InitStruct);
+
+	  /*Configure GPIO pin : EN_MOTION_Pin */
+	  GPIO_InitStruct.Pin = EN_MOTION_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  HAL_GPIO_Init(EN_MOTION_GPIO_Port, &GPIO_InitStruct);
+
+	  GPIO_InitStruct.Pin = GPIO_PIN_14|GPIO_PIN_13;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+}
+void i2c1_gpio_analog()
+{
+	  GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = SCD4x_SCL_Pin|SCD4x_SDA_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+
+}
+void uart_gpio_analog()
+{  GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = CLI_UART1_TX_Pin|CLI_UART1_RX_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = PM_USART2_TX_Pin|PM_USART2_RX_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+void usb_gpio_analog()
+{
+	 GPIO_InitTypeDef GPIO_InitStruct = {0};
+	    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_12;
+		  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+		  GPIO_InitStruct.Pull = GPIO_NOPULL;
+		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+}
+void timer_gpio_analog()
+{  GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = GREEN_LED_Pin|RED_LED_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+}
+
+
+
+void gpio_disable()
+{
+	i2c1_gpio_analog();
+	 uart_gpio_analog();
+	// usb_gpio_analog();
+	 timer_gpio_analog();
+	 gpio_analog();
+
+	 GPIO_InitTypeDef GPIO_InitStruct = {0};
+	    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_12;
+		  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+		  GPIO_InitStruct.Pull = GPIO_NOPULL;
+		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	    GPIO_InitStruct.Pin = GPIO_PIN_2;
+		  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+		  GPIO_InitStruct.Pull = GPIO_NOPULL;
+		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+}
+void gpio_enable()
+{
+	MX_GPIO_Init();
+
+	 GPIO_InitTypeDef GPIO_InitStruct = {0};
+	    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_12;
+	    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
+	    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	    GPIO_InitStruct.Pin = GPIO_PIN_2;
+	    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
+	    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+}
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 

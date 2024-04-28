@@ -54,7 +54,13 @@ extern IWDG_HandleTypeDef hiwdg;
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+void gpio_analog();
+void i2c1_gpio_analog();
+void uart_gpio_analog();
+void usb_gpio_analog();
+void timer_gpio_analog();
+void gpio_disable();
+void gpio_enable();
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -66,7 +72,6 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-void MX_SDIO_SD_Init(void);
 void MX_TIM2_Init(void);
 void MX_TIM1_Init(void);
 void MX_TIM3_Init(void);

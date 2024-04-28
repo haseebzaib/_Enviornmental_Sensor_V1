@@ -40,6 +40,8 @@
 #include "sensirion_common.h"
 #include "sensirion_i2c.h"
 #include "sensirion_i2c_hal.h"
+#include "app_main.h"
+#include "main.h"
 
 #define sensirion_hal_sleep_us sensirion_i2c_hal_sleep_usec
 
@@ -57,11 +59,16 @@ int16_t scd30_await_data_ready() {
         return local_error;
     }
     while (data_ready == 0) {
+    	if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))//dont give delay when usb connected as we want to service console aswell
+    			{
         sensirion_hal_sleep_us(100000);
+    			}
         local_error = scd30_get_data_ready(&data_ready);
         if (local_error != NO_ERROR) {
             return local_error;
         }
+
+        run_console_from_scd30();
     }
     return local_error;
 }

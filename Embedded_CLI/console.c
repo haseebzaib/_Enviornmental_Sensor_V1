@@ -178,7 +178,8 @@ void receiveString(EmbeddedCli *cli, char *buffer, size_t bufferSize) {
 			flag_cli = 0;
 		}
 
-		if (HAL_GetTick() - prev_max_wait_time > max_wait_time) {
+		//incase no usb then also break it
+		if ((HAL_GetTick() - prev_max_wait_time > max_wait_time) || !HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {
 			//we break the loop if time goes above 5min
 			break;
 		}
@@ -696,6 +697,468 @@ void co2calibrate(EmbeddedCli *cli, char *args, void *context) {
 	cli_other = 0;
 }
 
+
+void statco2calibrate(EmbeddedCli *cli, char *args, void *context)
+{
+
+	uint16_t calib_val;
+	int16_t stat;
+	char status[20];
+	stat = scd30_get_force_recalibration_status(&calib_val);
+
+	switch(stat)
+	{
+
+	case 0:
+	{
+		strcpy(status,"Success");
+		break;
+	}
+	default:
+	{
+		strcpy(status,"Error  ");
+		break;
+	}
+	}
+
+	cli_printf(cli, "Calibration Status: %s",status);
+	cli_printf(cli, "Calibration Value: %d",calib_val);
+
+
+
+}
+
+
+void co2_auto_calibration(EmbeddedCli *cli, char *args, void *context)
+{
+
+	uint16_t calib;
+	const char *newLine = "\r\n";
+		cli_printf(cli, "Enter \"y\" to enable auto calibration!");
+		cli_printf(cli, "Enter \"n\" to disable auto calibration!");
+
+
+
+		cli_other = 1;
+		flag_cli = 0;
+		char buffer[50];
+		receiveString(cli, buffer, sizeof(buffer));
+		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+				1000);
+
+		if (strstr(buffer, "y")) {
+			calib = 1;
+
+			cli_printf(cli, "Auto calibration enabled");
+		} else if (strstr(buffer, "n")) {
+			calib = 0;
+			cli_printf(cli, "Auto calibration disabled");
+		}
+
+		flag_cli = 0;
+		cli_other = 0;
+
+
+
+	scd30_activate_auto_calibration(calib);
+}
+
+
+void get_auto_calibration(EmbeddedCli *cli, char *args, void *context)
+{
+	uint16_t calib_val;
+	int16_t stat;
+	char status[20];
+	stat = scd30_get_auto_calibration_status(&calib_val);
+
+	switch(stat)
+	{
+
+	case 0:
+	{
+		strcpy(status,"Success");
+		break;
+	}
+	default:
+	{
+		strcpy(status,"Error  ");
+		break;
+	}
+	}
+
+	cli_printf(cli, "Calibration Status: %s",status);
+	cli_printf(cli, "Auto calibration active status: %d",calib_val);
+}
+
+void set_co2_temp_offset(EmbeddedCli *cli, char *args, void *context)
+{
+	const char *newLine = "\r\n";
+	uint32_t val;
+	int counter = 0;
+	const char *dot = "........";
+	uint8_t do_Calibration = 0;
+	cli_other = 1;
+		flag_cli = 0;
+		char buffer[50];
+		memset(buffer, '\0', sizeof(buffer));
+		cli_printf(cli,
+				"To calibrate Co2 sensor Temperature offset, please provide value.");
+		cli_printf(cli,
+				"If temperature offset is unknown then just press enter to cancel.");
+
+		receiveString(cli, buffer, sizeof(buffer));
+		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+				1000);
+
+		if (buffer[0] != '\0') {
+			_RunTime_Packet.temp_offset = 1;
+
+			val = atoi(buffer);
+
+			if (val < 65535) {
+				_RunTime_Packet._tempOffset_co2_concentration = val;
+			}
+
+			cli_printf(cli,
+					"Co2 sensor temperature offset is going to be Calibrated now : %d",
+					_RunTime_Packet._tempOffset_co2_concentration);
+
+			do_Calibration = 1;
+		} else {
+			cli_printf(cli, "Co2 sensor Temperature Offset aborted.");
+			do_Calibration = 0;
+		}
+
+		if (do_Calibration == 1) {
+			HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+					1000);
+			cli_printf(cli, "Co2 is calibrating temperature offset, please wait.");
+			if (!_RunTime_Packet.scd4x_i2c_error) {
+
+
+				scd30_set_temperature_offset(_RunTime_Packet._tempOffset_co2_concentration);
+
+			}
+			while (counter < 8) {
+				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) dot, strlen(dot),
+						1000);
+				HAL_Delay(1000);
+				toggle_blue_led();
+				counter++;
+			}
+
+			HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+					1000);
+			cli_printf(cli, "Sensor calibration done.");
+		}
+
+		flag_cli = 0;
+		cli_other = 0;
+}
+
+void get_co2_temp_offset(EmbeddedCli *cli, char *args, void *context)
+{
+	uint16_t calib_val;
+		int16_t stat;
+		char status[20];
+		stat = scd30_get_temperature_offset(&calib_val);
+
+		switch(stat)
+		{
+
+		case 0:
+		{
+			strcpy(status,"Success");
+			break;
+		}
+		default:
+		{
+			strcpy(status,"Error  ");
+			break;
+		}
+		}
+
+		cli_printf(cli, "Temperature Offset Status: %s",status);
+		cli_printf(cli, "Temperature Offset Value: %d",calib_val);
+}
+
+void set_co2_altitude_compensation(EmbeddedCli *cli, char *args, void *context)
+{
+	const char *newLine = "\r\n";
+	uint32_t val;
+	int counter = 0;
+	const char *dot = "........";
+	uint8_t do_Calibration = 0;
+	cli_other = 1;
+		flag_cli = 0;
+		char buffer[50];
+		memset(buffer, '\0', sizeof(buffer));
+		cli_printf(cli,
+				"To calibrate Co2 sensor Altitude compensation, please provide value.");
+		cli_printf(cli,
+				"If Altitude compensation is unknown then just press enter to cancel.");
+
+		receiveString(cli, buffer, sizeof(buffer));
+		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+				1000);
+
+		if (buffer[0] != '\0') {
+			_RunTime_Packet.temp_offset = 1;
+
+			val = atoi(buffer);
+
+			if (val < 65535) {
+				_RunTime_Packet._tempOffset_co2_concentration = val;
+			}
+
+			cli_printf(cli,
+					"Co2 sensor Altitude compensation is going to be Calibrated now : %d",
+					_RunTime_Packet._tempOffset_co2_concentration);
+
+			do_Calibration = 1;
+		} else {
+			cli_printf(cli, "Co2 sensor Altitude compensation aborted.");
+			do_Calibration = 0;
+		}
+
+		if (do_Calibration == 1) {
+			HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+					1000);
+			cli_printf(cli, "Co2 is calibrating Altitude compensation, please wait.");
+			if (!_RunTime_Packet.scd4x_i2c_error) {
+
+
+				scd30_set_altitude_compensation(_RunTime_Packet._tempOffset_co2_concentration);
+
+			}
+			while (counter < 8) {
+				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) dot, strlen(dot),
+						1000);
+				HAL_Delay(1000);
+				toggle_blue_led();
+				counter++;
+			}
+
+			HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+					1000);
+			cli_printf(cli, "Sensor calibration done.");
+		}
+
+		flag_cli = 0;
+		cli_other = 0;
+}
+
+void get_co2_altitude_compensation(EmbeddedCli *cli, char *args, void *context)
+{
+	uint16_t calib_val;
+		int16_t stat;
+		char status[20];
+		stat = scd30_get_altitude_compensation(&calib_val);
+
+		switch(stat)
+		{
+
+		case 0:
+		{
+			strcpy(status,"Success");
+			break;
+		}
+		default:
+		{
+			strcpy(status,"Error  ");
+			break;
+		}
+		}
+
+		cli_printf(cli, "Altitude_compensation Status: %s",status);
+		cli_printf(cli, "Altitude_compensation Value: %d",calib_val);
+}
+
+
+void run_co2_calibration_routine(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t maxTime = 120000;
+	uint32_t prev_maxTime =  HAL_GetTick();
+	uint32_t cur_tick = 0;
+	const char *newLine = "\r\n";
+	uint32_t val;
+	int counter = 0;
+	const char *dot = "........";
+	char progressbar_buf[50] = "ProgressBar: ";
+	uint8_t calib = 0;
+	uint8_t do_Calibration = 0;
+	cli_other = 1;
+		flag_cli = 0;
+		char buffer[50];
+		memset(buffer, '\0', sizeof(buffer));
+
+		     cli_printf(cli,"");
+				cli_printf(cli,"It takes about 2-3min to run complete routine. ");
+				cli_printf(cli,"once this routine is activated it cant be canceled. ");
+				cli_printf(cli,"Do you want to run calibration routine y/n?. ");
+
+		receiveString(cli, buffer, sizeof(buffer));
+		HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+				1000);
+
+		if (strstr(buffer, "y")) {
+			calib = 1;
+
+			cli_printf(cli, "Calibration routine running");
+		} else if (strstr(buffer, "n")) {
+			calib = 0;
+			cli_printf(cli, "Calibration routine aborted");
+		}
+
+
+		if(calib)
+		{
+			if (!_RunTime_Packet.scd4x_i2c_error) {
+				scd30_start_periodic_measurement(0);
+			}
+			cli_printf(cli,"");
+			cli_printf(cli,"GuideLines");
+			cli_printf(cli,"");
+			cli_printf(cli,"1)Donot remove USB, otherwise calibrations will be canceled. ");
+			cli_printf(cli,"2)Expose the sensor to a controlled environment with a known value of Co2. ");
+			cli_printf(cli,"3)After 2min, apply known value of Co2. ");
+			cli_printf(cli,"4)Calibration routine finished. ");
+			memset(buffer, '\0', sizeof(buffer));
+
+			 prev_maxTime =  HAL_GetTick();
+				cur_tick = HAL_GetTick();
+				cli_printf(cli,"");
+				cli_printf(cli,"");
+				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) progressbar_buf, strlen(progressbar_buf),
+									1000);
+			 while (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) {
+
+					if ((HAL_GetTick() - cur_tick > 5000)) {
+
+
+							HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*)"##", 2,
+									1000);
+							cur_tick = HAL_GetTick();
+						}
+
+			        if ((HAL_GetTick() - prev_maxTime > maxTime)) {
+					//we break the loop if time goes above 5min
+					break;
+				}
+
+			}
+
+			 cli_printf(cli,"");
+			 cli_printf(cli,"");
+			 cli_printf(cli,"");
+			 cli_printf(cli,"Enter Known Co2 reference value!");
+
+				receiveString(cli, buffer, sizeof(buffer));
+				HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+						1000);
+
+				if (buffer[0] != '\0') {
+					_RunTime_Packet.CO2_calibration = 1;
+
+					val = atoi(buffer);
+
+					if (val < 65535) {
+						_RunTime_Packet._target_co2_concentration = val;
+					}
+
+					cli_printf(cli,
+							"Co2 sensor is going to be Calibrated now. Co2 concentration value provided : %d",
+							_RunTime_Packet._target_co2_concentration);
+					do_Calibration = 1;
+				} else {
+					cli_printf(cli, "Co2 sensor Calibration aborted. No value provided");
+					_RunTime_Packet.CO2_calibration = 0;
+					do_Calibration = 0;
+				}
+
+				if (do_Calibration == 1) {
+					HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+							1000);
+					cli_printf(cli, "Co2 is calibrating, please wait.");
+					if (!_RunTime_Packet.scd4x_i2c_error) {
+
+			#ifdef use_scd40x
+						scd4x_perform_forced_recalibration(
+								_RunTime_Packet._target_co2_concentration,
+								&_RunTime_Packet._frc_correction);
+			#elif use_scd30
+					scd30_force_recalibration(_RunTime_Packet._target_co2_concentration);
+			#endif
+					}
+					while (counter < 8) {
+						HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) dot, strlen(dot),
+								1000);
+						HAL_Delay(1000);
+						toggle_blue_led();
+						counter++;
+					}
+
+					HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+							1000);
+					cli_printf(cli, "Sensor calibration done.");
+				}
+
+
+		}
+
+
+
+
+		flag_cli = 0;
+			cli_other = 0;
+
+}
+
+
+void set_co2_samples(EmbeddedCli *cli, char *args, void *context)
+{
+	const char *newLine = "\r\n";
+	cli_printf(cli, "Disclaimer: It takes 30second for any changes to save.");
+	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+			1000);
+	cli_printf(cli, "Enter the number of Samples: ");
+
+	uint16_t val;
+	cli_other = 1;
+	flag_cli = 0;
+	char buffer[50];
+	memset(buffer, '\0', sizeof(buffer));
+	receiveString(cli, buffer, sizeof(buffer));
+	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
+			1000);
+
+	if (buffer[0] != '\0') {
+
+		val = atoi(buffer);
+
+			if (val < 65535) {
+				_Flash_Packet.co2_samples = val;
+			}
+
+		cli_printf(cli, "Samples: %d", _Flash_Packet.co2_samples);
+		set_param_flags();
+	}
+	else
+	{
+		cli_printf(cli, "No Value provided");
+	}
+
+	flag_cli = 0;
+	cli_other = 0;
+
+}
+
+void get_co2_samples(EmbeddedCli *cli, char *args, void *context)
+{
+	cli_printf(cli, "Co2 Samples: %d", _Flash_Packet.co2_samples);
+}
+
+
 void SystemRestart(EmbeddedCli *cli, char *args, void *context) {
 	const char *newLine = "\r\n";
 	cli_printf(cli, "Do you want to restart the device y/n?");
@@ -726,7 +1189,7 @@ void Co2Level(EmbeddedCli *cli, char *args, void *context) {
 #ifdef use_scd40x
 		get_scd4x_measurement();
 #elif use_scd30
-	get_scd30_measurement();
+	get_scd30_measurement_();
 #endif
 	}
 #ifdef use_scd40x
@@ -742,7 +1205,7 @@ void TempLevel(EmbeddedCli *cli, char *args, void *context) {
 #ifdef use_scd40x
 		get_scd4x_measurement();
 #elif use_scd30
-	get_scd30_measurement();
+	get_scd30_measurement_();
 #endif
 	}
 
@@ -760,7 +1223,7 @@ void HumidLevel(EmbeddedCli *cli, char *args, void *context) {
 #ifdef use_scd40x
 		get_scd4x_measurement();
 #elif use_scd30
-	get_scd30_measurement();
+	get_scd30_measurement_();
 #endif
 	}
 
@@ -872,13 +1335,16 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 		_RunTime_Packet.motion_detection = 0;
 	}
 
+	char co2_Sensor_stat[30] = "ERROR";
 	if (!_RunTime_Packet.scd4x_i2c_error) {
 #ifdef use_scd40x
 		get_scd4x_measurement();
 #elif use_scd30
-	get_scd30_measurement();
+	//get_scd30_measurement();
 #endif
+		strcpy(co2_Sensor_stat,"ACTIVE");
 	}
+
 
 	RTC_DateTypeDef gDate;
 	HAL_RTC_GetDate(RTC_Handle, &gDate, RTC_FORMAT_BIN);
@@ -895,6 +1361,17 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 
 		sprintf(buff_filewritten, " **FAILED** ");
 	}
+	uint16_t calib_val = 0;
+	uint16_t calib_stat = 0;
+	uint16_t temp_offset = 0;
+	uint16_t altitude_comp = 0;
+	if (!_RunTime_Packet.scd4x_i2c_error) {
+	scd30_get_force_recalibration_status(&calib_val);
+	scd30_get_auto_calibration_status(&calib_stat);
+	scd30_get_altitude_compensation(&altitude_comp);
+	scd30_get_temperature_offset(&temp_offset);
+	}
+
 
 	cli_printf(cli, "");
 	cli_printf(cli, "");
@@ -918,6 +1395,18 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 			_Flash_Packet.group);
 	cli_printf(cli, " *Interval         | %dmin                       ",
 			_Flash_Packet.Time_Interval);
+	cli_printf(cli, " *Co2 sensor status| %s                       ",
+			co2_Sensor_stat);
+	cli_printf(cli, " *Calibration Value| %d                       ",
+			calib_val);
+	cli_printf(cli, " *Auto calibration | %d                       ",
+			calib_stat);
+	cli_printf(cli, " *Temp offset      | %d                       ",
+			temp_offset);
+	cli_printf(cli, " *Altitude Comp    | %d                       ",
+			altitude_comp);
+	cli_printf(cli, " *Co2 Samples      | %d                       ",
+			_Flash_Packet.co2_samples);
 #ifdef use_scd40x
 	cli_printf(cli, " *Co2              | %d                       ",
 			_RunTime_Packet.co2);
@@ -1073,9 +1562,51 @@ void initializeEmbeddedCli() {
 			"Particle sensor fan cleaning", .tokenizeArgs = true, .context =
 			NULL, .binding = fanclean };
 
-	CliCommandBinding Co2_Calibration = { .name = "co2-calibration", .help =
-			"Calibrate the co2 sensor", .tokenizeArgs = true, .context = NULL,
+	CliCommandBinding Co2_Calibration = { .name = "co2-force-calibration", .help =
+			"Force calibration of Co2 sensor", .tokenizeArgs = true, .context = NULL,
 			.binding = co2calibrate };
+
+	CliCommandBinding getCo2_Calibration = { .name = "get-co2-force-calibration-status", .help =
+			"Get status of Force calibration of Co2 sensor", .tokenizeArgs = true, .context = NULL,
+			.binding = statco2calibrate };
+
+
+	CliCommandBinding Co2_AutoCalibration = { .name = "co2-auto-calibration", .help =
+			"Enable/Disable auto calibration of Co2 sensor", .tokenizeArgs = true, .context = NULL,
+			.binding = co2_auto_calibration };
+
+
+	CliCommandBinding getCo2_AutoCalibration = { .name = "get-co2-auto-calibration", .help =
+			"Get Co2 sensor auto calibration status ", .tokenizeArgs = true, .context = NULL,
+			.binding = get_auto_calibration };
+
+	CliCommandBinding Co2_Tempoffset = { .name = "set-co2-temp-offset", .help =
+			"Set temperature offset of Co2 sensor", .tokenizeArgs = true, .context = NULL,
+			.binding = set_co2_temp_offset };
+
+	CliCommandBinding getCo2_Tempoffset = { .name = "get-co2-temp-offset", .help =
+			"Get temperature offset of Co2 sensor", .tokenizeArgs = true, .context = NULL,
+			.binding = get_co2_temp_offset };
+
+	CliCommandBinding Co2_altitudecompsentation = { .name = "set-co2-altitude-comp", .help =
+			"Set altitude compensation of Co2 sensor", .tokenizeArgs = true, .context = NULL,
+			.binding = set_co2_altitude_compensation };
+
+	CliCommandBinding getCo2_altitudecompsentation = { .name = "get-co2-altitude-comp", .help =
+			"Get altitude compensation of Co2 sensor", .tokenizeArgs = true, .context = NULL,
+			.binding = get_co2_altitude_compensation };
+
+	CliCommandBinding Co2_Calibration_program = { .name = "run-co2-calib-prog", .help =
+			"Run Co2 sensor calibration program", .tokenizeArgs = true, .context = NULL,
+			.binding = run_co2_calibration_routine };
+
+	CliCommandBinding set_Co2_samples= { .name = "set-co2-samples", .help =
+			"Set how much samples you want Co2 sensor to take", .tokenizeArgs = true, .context = NULL,
+			.binding = set_co2_samples };
+
+	CliCommandBinding get_Co2_samples= { .name = "get-co2-samples", .help =
+			"Get Co2 samples", .tokenizeArgs = true, .context = NULL,
+			.binding = get_co2_samples };
 
 	CliCommandBinding Systemreset = { .name = "system-restart", .help =
 			"Restart the system", .tokenizeArgs = true, .context = NULL,
@@ -1144,6 +1675,16 @@ void initializeEmbeddedCli() {
 	embeddedCliAddBinding(cli, Get_Fileformat);
 	embeddedCliAddBinding(cli, Fan_Clean);
 	embeddedCliAddBinding(cli, Co2_Calibration);
+	embeddedCliAddBinding(cli, getCo2_Calibration);
+	embeddedCliAddBinding(cli, Co2_AutoCalibration);
+	embeddedCliAddBinding(cli, getCo2_AutoCalibration);
+	embeddedCliAddBinding(cli, Co2_Tempoffset);
+	embeddedCliAddBinding(cli, getCo2_Tempoffset);
+	embeddedCliAddBinding(cli, Co2_altitudecompsentation);
+	embeddedCliAddBinding(cli, getCo2_altitudecompsentation);
+	embeddedCliAddBinding(cli, Co2_Calibration_program);
+	embeddedCliAddBinding(cli, set_Co2_samples);
+	embeddedCliAddBinding(cli, get_Co2_samples);
 	embeddedCliAddBinding(cli, Systemreset);
 	embeddedCliAddBinding(cli, Co2_Level);
 	embeddedCliAddBinding(cli, Temp_Level);

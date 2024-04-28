@@ -47,6 +47,7 @@ typedef struct PACKED{
   char group[50];
   char filename_with_format[100];
   char filename_ver_date[100];
+  uint16_t co2_samples;
   uint16_t valid_pattern; //this is to verify if flash data is valid
 } Flash_Packet;
 
@@ -90,7 +91,11 @@ typedef struct
     int8_t sd_card_disk_write_error;
     uint8_t PM_calibration;
     uint8_t CO2_calibration;
+    uint8_t temp_offset;
+    uint8_t altitude_comp;
     uint16_t _target_co2_concentration;
+    uint16_t _tempOffset_co2_concentration;
+    uint16_t _altitudeComp_co2_concentration;
     uint16_t _frc_correction;
     uint8_t pwr_off_det;
     uint8_t day;
@@ -132,6 +137,7 @@ extern  void get_sps30_measurement();
 extern void get_scd4x_measurement();
 #elif use_scd30
 extern void get_scd30_measurement();
+extern void get_scd30_measurement_();
 #endif
 extern void toggle_blue_led();
 extern void power_off_detect();
@@ -139,6 +145,7 @@ int16_t sensirion_uart_receive(uint8_t* data);
 extern void pir_interrupt();
 extern void timer_interrupt();
 extern char *ver_GetUid();
+extern void run_console_from_scd30();
 
 
 extern void app_main();

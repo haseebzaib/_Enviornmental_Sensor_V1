@@ -26,6 +26,10 @@
 #include "File_Handling.h"
 #include "stm32_hal_legacy.h"
 
+
+static void led_awake_routine1();
+
+uint8_t run_console_co2 = 0;
 uint8_t RetainState;
 uint8_t show_prompt = 0;
 
@@ -66,7 +70,7 @@ int16_t blue_led_pwm_val = 0;
 Flash_Packet _Flash_Packet;
 RunTime_Packet _RunTime_Packet;
 const Flash_Packet m_Flash_Packet = { "devEUI", ".CSV", 15, 0,
-		"0000000000000000", "default", "default", "default","default" ,"default",0x1840, };
+		"0000000000000000", "default", "default", "default","default" ,"default",10,0x1840, };
 
 uint8_t debug_scd_pm = 0;
 uint8_t save_param = 0;
@@ -165,20 +169,7 @@ static void pwr_off_detected() {
  */
 static void clock_speed_slow() {
 
-//	uint16_t timeout;
-//
-//	/* Enable HSI clock */
-//	RCC->CR |= RCC_CR_HSION;
-//
-//	/* Wait till HSI is ready */
-//	timeout = 0xFFFF;
-//	while (!(RCC->CR & RCC_CR_HSIRDY) && timeout--);
-//
-//	/* Select HSI clock as main clock */
-//	RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_SW)) | RCC_CFGR_SW_HSI;
-//
-//	/* Disable PLL */
-//	RCC->CR &= ~RCC_CR_PLLON;
+
 
 //we will set clock speed to 250khz
 	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
@@ -211,9 +202,10 @@ static void clock_speed_slow() {
 	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK) {
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK) {
 		Error_Handler();
 	}
+
 
 }
 
@@ -221,22 +213,22 @@ static void clock_speed_slow() {
  * setting clock speed to 84Mhz
  */
 static void clock_speed_high() {
-	//we will set clock speed to 84Mhz
-	uint16_t timeout;
-
-	/* Enable HSI clock */
-	RCC->CR |= RCC_CR_HSION;
-
-	/* Wait till HSI is ready */
-	timeout = 0xFFFF;
-	while (!(RCC->CR & RCC_CR_HSIRDY) && timeout--)
-		;
-
-	/* Select HSI clock as main clock */
-	RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_SW)) | RCC_CFGR_SW_HSI;
-
-	/* Disable PLL */
-	RCC->CR &= ~RCC_CR_PLLON;
+//	//we will set clock speed to 84Mhz
+//	uint16_t timeout;
+//
+//	/* Enable HSI clock */
+//	RCC->CR |= RCC_CR_HSION;
+//
+//	/* Wait till HSI is ready */
+//	timeout = 0xFFFF;
+//	while (!(RCC->CR & RCC_CR_HSIRDY) && timeout--)
+//		;
+//
+//	/* Select HSI clock as main clock */
+//	RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_SW)) | RCC_CFGR_SW_HSI;
+//
+//	/* Disable PLL */
+//	RCC->CR &= ~RCC_CR_PLLON;
 
 	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
@@ -456,10 +448,24 @@ void get_scd4x_measurement() {
 
 #elif use_scd30
 static void init_scd30_i2c() {
+
+
+
 	int16_t error = 0;
 	sensirion_i2c_hal_init();
+
+
+	scd4x_wake_up();
+	scd4x_stop_periodic_measurement();
+	scd4x_reinit();
+	scd4x_power_down();
+
+
 	init_driver(SCD30_I2C_ADDR_61);
 	scd30_stop_periodic_measurement();
+scd30_set_measurement_interval(2);
+//uint16_t inter;
+//scd30_get_measurement_interval(&inter);
 	//   scd30_soft_reset();
 	uint8_t major = 0;
 	uint8_t minor = 0;
@@ -470,9 +476,14 @@ void get_scd30_measurement() {
 	int16_t error = NO_ERROR;
 	scd30_start_periodic_measurement(0);
 
-	uint16_t repetition = 0;
-	for (repetition = 0; repetition < 1; repetition++) {
+	uint8_t repetition = 0;
+	for (repetition = 0; repetition < _Flash_Packet.co2_samples; repetition++) {
+		run_console_co2 = 1;
+	  if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))//dont give delay when usb connected as we want to service console aswell
+		{
 		sensirion_i2c_hal_sleep_usec(1500000);
+		}
+		console_process();
 		error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
 				&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);
 
@@ -495,6 +506,47 @@ void get_scd30_measurement() {
 				HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
 			}
 		}
+
+		led_awake_routine1();
+		console_process();
+	}
+	run_console_co2 = 0;
+
+}
+
+void get_scd30_measurement_()
+{
+	int16_t error = NO_ERROR;
+	scd30_start_periodic_measurement(0);
+
+	uint8_t repetition = 0;
+	for (repetition = 0; repetition < _Flash_Packet.co2_samples; repetition++) {
+		//sensirion_i2c_hal_sleep_usec(1500000);
+		error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
+				&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);
+
+		if (debug_scd_pm) {
+			char buf[100];
+			if (error) {
+				sprintf(buf,
+						"error executing blocking_read_measurement_data(): %i\n",
+						error);
+				HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+			} else if (_RunTime_Packet.co2 == 0) {
+				sprintf(buf, "Invalid sample detected, skipping.\n");
+				HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+			} else {
+
+				sprintf(buf,
+						"Co2: %.2f , Temperature: %.2f C, Humidity: %.2f  \r\n",
+						_RunTime_Packet.co2, _RunTime_Packet.temperature,
+						_RunTime_Packet.humidity);
+				HAL_UART_Transmit(&huart1, (uint8_t*) buf, strlen(buf), 1000);
+			}
+		}
+
+		led_awake_routine1();
+
 	}
 }
 
@@ -646,7 +698,14 @@ static void sleep() {
 	scd4x_stop_periodic_measurement();
 	scd4x_power_down();
 #elif use_scd30
+//	scd4x_stop_periodic_measurement();
+//	scd4x_power_down();
+	//check_peripheral_error() ;
+	if (!_RunTime_Packet.scd4x_i2c_error) {
 	scd30_stop_periodic_measurement();
+	scd30_activate_auto_calibration(0);
+	scd30_soft_reset();
+	}
 #endif
 	console_uart_deinit();
 	sensirion_i2c_hal_free();
@@ -657,16 +716,27 @@ static void sleep() {
 	HAL_TIM_Base_DeInit(&htim2);
 	HAL_TIM_Base_DeInit(&htim3);
 	HAL_DMA_DeInit(&hdma_tim1_up);
-
-	clock_speed_slow();
-
 	HAL_SuspendTick();
+	gpio_disable();
+//	   __HAL_RCC_GPIOB_CLK_DISABLE();
+//	   __HAL_RCC_GPIOC_CLK_DISABLE();
+//	   __HAL_RCC_GPIOD_CLK_DISABLE();
+//	   __HAL_RCC_GPIOE_CLK_DISABLE();
+//	   __HAL_RCC_GPIOH_CLK_DISABLE();
+
+	   /* FLASH Deep Power Down Mode enabled */
+	   HAL_PWREx_EnableFlashPowerDown();
+
+	//HAL_RCC_DeInit();
+	//clock_speed_slow();
+
+
 	Rtc_Alarm_watchdog();
 	do {
 	HAL_IWDG_Refresh(&hiwdg);
 	/*## Enter Stop Mode #######################################################*/
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-	HAL_IWDG_Refresh(&hiwdg);
+	//HAL_IWDG_Refresh(&hiwdg);
 	Rtc_Alarm_watchdog();
 	}while(set_alarm_Time == 0 && _RunTime_Packet.pwr_off_det == 0 && _RunTime_Packet.usb_detection == 0);
 
@@ -676,8 +746,13 @@ static void wakeup() {
 
 	//also add usb stuff
 
-	HAL_ResumeTick();
+	HAL_RCC_DeInit();
 	clock_speed_high();
+
+	HAL_PWREx_DisableFlashPowerDown();
+	HAL_ResumeTick();
+	gpio_enable();
+
 	enable_5v();
 	enable_motion();
 	console_uart_init();
@@ -1034,6 +1109,17 @@ char* ver_GetUid(void) {
 	return ((char*) sUid);
 }
 
+void run_console_from_scd30()
+{
+
+
+	if(run_console_co2)
+	{
+		console_process();
+	}
+	led_awake_routine1();
+}
+
 void app_main() {
 
 	memset(&_RunTime_Packet, 0, sizeof(_RunTime_Packet));
@@ -1094,7 +1180,7 @@ void app_main() {
 
 	//if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))
 	//{
-	 if (HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0xBEBE) //we save this value and dont change it untill and untless RTC data is not lost
+	 if ((HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0xBEBE) || (strcmp(_Flash_Packet.filename_with_format,"default") == 0)) //we save this value and dont change it untill and untless RTC data is not lost
 	    {
 
 		   HAL_PWR_EnableBkUpAccess();
@@ -1134,7 +1220,7 @@ void app_main() {
 //				HAL_UART_Transmit(&huart1, (uint8_t*)buf_sdcard, strlen(buf_sdcard), 1000);
 //
 //			}
-
+			adc_Measure(&_RunTime_Packet.battery_voltage);
 			if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is active dont go to sleep
 					{
 				prev_sleep_time = HAL_GetTick();
@@ -1240,7 +1326,7 @@ void app_main() {
 #ifdef use_scd40x
 				scd4x_stop_periodic_measurement();
 #elif use_scd30
-				scd30_stop_periodic_measurement();
+				//scd30_stop_periodic_measurement();
 #endif
 
 				sps30_stop_measurement();
@@ -1280,7 +1366,7 @@ void app_main() {
 
 			Rtc_set_alarm();
 
-			adc_Measure(&_RunTime_Packet.battery_voltage);
+		//	adc_Measure(&_RunTime_Packet.battery_voltage);
 			led_awake_routine();
 			save_data();
 
@@ -1309,6 +1395,8 @@ void app_main() {
 			_RunTime_Packet.sd_file_creation = createfile(
 					_Flash_Packet.File_Name, _Flash_Packet.File_Format);
 
+
+			/*be sure to save data before going to sleep*/
 			while(save_param)
 			{
 				save_data();

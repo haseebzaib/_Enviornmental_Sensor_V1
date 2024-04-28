@@ -1189,13 +1189,16 @@ void app_main() {
 	 if ((HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0xBEBE) || (strcmp(_Flash_Packet.filename_with_format,"default") == 0)) //we save this value and dont change it untill and untless RTC data is not lost
 	    {
 
-		   HAL_PWR_EnableBkUpAccess();
-		   HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0xBEBE);
-		   HAL_PWR_DisableBkUpAccess();
+
 
 
 		_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,
 				_Flash_Packet.File_Format);
+
+
+		   HAL_PWR_EnableBkUpAccess();
+			   HAL_RTCEx_BKUPWrite(&hrtc, RTC_BKP_DR1, 0xBEBE);
+			   HAL_PWR_DisableBkUpAccess();
 
 
 	}

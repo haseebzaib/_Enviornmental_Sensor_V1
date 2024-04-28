@@ -283,6 +283,20 @@ void csv_header() {
 uint8_t filesaving_process() {
 //	__disable_irq();
 
+	 Mount_SD("/");
+	 if(check_file_exists(_Flash_Packet.filename_with_format)) //if file does not exists then create it
+	 {
+		Unmount_SD("/");
+		_RunTime_Packet.sd_file_creation = createfile(_Flash_Packet.File_Name,_Flash_Packet.File_Format);
+	 }
+	 else
+	 {
+		Unmount_SD("/");
+	 }
+
+
+
+
 	memset(buffer, 0, sizeof(buffer));
 	if (_RunTime_Packet.fileformat_selection) {
 		csv_update();
@@ -311,10 +325,14 @@ int8_t createfile(char *filename, char *fileformat) {
 	RTC_TimeTypeDef sTime;
 	HAL_RTC_GetTime(RTC_Handle, &sTime, RTC_FORMAT_BIN);
 
-	sprintf(_Flash_Packet.filename_with_format, "%s_%02d-%02d-%02d%s", filename,sDate.Year, sDate.Month, sDate.Date, fileformat);
-	sprintf(_Flash_Packet.filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,sDate.Month, sDate.Date);
 
-	set_param_flags();
+	//if rtc backup register has nothing or our filename with foirmat is not same as filename then create a file otheriwse just go forward
+	if((HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR1) != 0xBEBE) || !strstr(_Flash_Packet.filename_with_format,_Flash_Packet.File_Name))
+	{
+	  sprintf(_Flash_Packet.filename_with_format, "%s_%02d-%02d-%02d%s", filename,sDate.Year, sDate.Month, sDate.Date, fileformat);
+	  sprintf(_Flash_Packet.filename_ver_date, "%s_%02d-%02d-%02d", filename, sDate.Year,sDate.Month, sDate.Date);
+	  set_param_flags();
+	}
 	//__disable_irq();
 	if (Mount_SD("/") == FR_OK) {
 	} else {

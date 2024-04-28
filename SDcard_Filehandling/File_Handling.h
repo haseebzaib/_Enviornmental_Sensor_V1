@@ -56,4 +56,7 @@ FRESULT Update_File(char *name, char *data);
 
 void sd_init();
 
+
+uint8_t check_file_exists(char *name);
+
 #endif /* FILE_HANDLING_H_ */

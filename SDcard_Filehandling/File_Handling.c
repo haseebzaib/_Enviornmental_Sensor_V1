@@ -98,6 +98,8 @@ FRESULT Scan_SD(char *pat) {
 				if (sdioPrints)
 					printf(buf);
 				free(buf);
+
+
 			}
 		}
 		f_closedir(&dir);
@@ -451,3 +453,16 @@ void Check_SD_Space(void) {
 
 }
 
+
+/**
+ * 0 file exists
+ * 1 file is not there
+ */
+uint8_t check_file_exists(char *name)
+{
+	fresult = f_stat(name, &fno);
+
+
+	return fresult;
+
+}

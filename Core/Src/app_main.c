@@ -690,6 +690,8 @@ static void sensor_calibration() {
 static void sleep() {
 
 //save stuff to sd card right here then go to sleep
+
+	check_peripheral_error();
 	GREEN_LED_PWM(disable_led);
 	RED_LED_PWM(disable_led);
 	BLUE_LED_PWM(disable_led);
@@ -1208,6 +1210,8 @@ void app_main() {
 //MX_USB_DEVICE_DeInit();
 	HAL_UART_Transmit(&huart1, (uint8_t*) "System Has Started \r\n", 21, 200);
 
+
+
 	while (1) {
 
 		prev_sleep_time = HAL_GetTick();
@@ -1407,6 +1411,9 @@ void app_main() {
 				save_data();
 			}
 		}
+
+
+
 		if (filesaving_process()) {
 			HAL_Delay(1500);
 			if (filesaving_process()) {
@@ -1417,6 +1424,11 @@ void app_main() {
 			}
 		}
 		prev_sleep_time = HAL_GetTick();
+
+		while(save_param)
+		{
+			save_data();
+		}
 
 		if (!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin) ) {
 

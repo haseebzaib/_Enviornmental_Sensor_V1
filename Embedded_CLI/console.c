@@ -1119,6 +1119,7 @@ void set_co2_samples(EmbeddedCli *cli, char *args, void *context)
 {
 	const char *newLine = "\r\n";
 	cli_printf(cli, "Disclaimer: It takes 30second for any changes to save.");
+	cli_printf(cli, "Disclaimer: Increase in Samples number also reduces battery life.");
 	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),
 			1000);
 	cli_printf(cli, "Enter the number of Samples: ");
@@ -1145,7 +1146,7 @@ void set_co2_samples(EmbeddedCli *cli, char *args, void *context)
 	}
 	else
 	{
-		cli_printf(cli, "No Value provided");
+		cli_printf(cli, "No Value provided, operation aborted!");
 	}
 
 	flag_cli = 0;

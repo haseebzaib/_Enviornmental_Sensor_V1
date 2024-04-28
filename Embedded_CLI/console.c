@@ -1337,6 +1337,18 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 	}
 
 	char co2_Sensor_stat[30] = "ERROR";
+
+	if (HAL_I2C_IsDeviceReady(&hi2c1, (uint16_t) (0x61 << 1), 5, 1000)
+			!= HAL_OK) {
+
+		if (debug_scd_pm) {
+			char buf_error[50];
+			sprintf(buf_error, "error in scd30 i2c so not running it\n");
+			HAL_UART_Transmit(&huart1, (uint8_t*) buf_error, strlen(buf_error),
+					1000);
+		}
+		_RunTime_Packet.scd4x_i2c_error = 1;
+	}
 	if (!_RunTime_Packet.scd4x_i2c_error) {
 #ifdef use_scd40x
 		get_scd4x_measurement();

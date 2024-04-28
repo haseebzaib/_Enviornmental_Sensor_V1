@@ -1310,6 +1310,7 @@ void app_main() {
 				adc_Measure(&_RunTime_Packet.battery_voltage);
 				led_awake_routine1();
 				pwr_off_detected();
+				check_peripheral_error();
 				//HAL_Delay(20);
 			}
 

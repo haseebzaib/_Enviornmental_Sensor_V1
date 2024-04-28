@@ -1349,6 +1349,10 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 		}
 		_RunTime_Packet.scd4x_i2c_error = 1;
 	}
+	else
+	{
+		_RunTime_Packet.scd4x_i2c_error = 0;
+	}
 	if (!_RunTime_Packet.scd4x_i2c_error) {
 #ifdef use_scd40x
 		get_scd4x_measurement();

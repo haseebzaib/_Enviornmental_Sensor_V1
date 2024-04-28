@@ -665,6 +665,10 @@ static void check_peripheral_error() {
 		}
 		_RunTime_Packet.scd4x_i2c_error = 1;
 	}
+	else
+	{
+		_RunTime_Packet.scd4x_i2c_error = 0;
+	}
 #endif
 
 }

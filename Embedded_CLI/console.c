@@ -1358,6 +1358,8 @@ void showall(EmbeddedCli *cli, char *args, void *context) {
 		get_scd4x_measurement();
 #elif use_scd30
 	//get_scd30_measurement();
+
+		get_scd30_measurement_();
 #endif
 		strcpy(co2_Sensor_stat,"ACTIVE");
 	}

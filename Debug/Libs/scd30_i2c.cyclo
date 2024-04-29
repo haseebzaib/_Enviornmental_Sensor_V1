@@ -1,5 +1,5 @@
 ../Libs/scd30_i2c.c:50:6:init_driver	1
-../Libs/scd30_i2c.c:54:9:scd30_await_data_ready	5
+../Libs/scd30_i2c.c:54:9:scd30_await_data_ready	4
 ../Libs/scd30_i2c.c:76:9:scd30_blocking_read_measurement_data	2
 ../Libs/scd30_i2c.c:89:9:scd30_start_periodic_measurement	2
 ../Libs/scd30_i2c.c:105:9:scd30_stop_periodic_measurement	2

@@ -41,8 +41,8 @@ Internal_RTC_Handling/Uhr.o: ../Internal_RTC_Handling/Uhr.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
  ../Core/Inc/app_main.h ../Core/Inc/main.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h \
  ../FATFS/App/fatfs.h ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../FATFS/Target/bsp_driver_sd.h \
@@ -50,7 +50,7 @@ Internal_RTC_Handling/Uhr.o: ../Internal_RTC_Handling/Uhr.c \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/sd_diskio.h \
  ../Internal_RTC_Handling/Uhr.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/Utils.h
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/Utils.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -95,8 +95,8 @@ Internal_RTC_Handling/Uhr.o: ../Internal_RTC_Handling/Uhr.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
 ../Core/Inc/app_main.h:
 ../Core/Inc/main.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h:
 ../FATFS/App/fatfs.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
@@ -107,4 +107,4 @@ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../FATFS/Target/sd_diskio.h:
 ../Internal_RTC_Handling/Uhr.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Libs/Utils.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/Utils.h:

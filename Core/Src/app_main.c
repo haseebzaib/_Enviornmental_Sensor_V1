@@ -28,6 +28,7 @@
 
 
 static void led_awake_routine1();
+void get_sps30_measurement();
 
 uint8_t run_console_co2 = 0;
 uint8_t RetainState;
@@ -483,6 +484,10 @@ void get_scd30_measurement() {
 		{
 		sensirion_i2c_hal_sleep_usec(1500000);
 		}
+	  else
+	  {
+		  sensirion_i2c_hal_sleep_usec(700000);
+	  }
 		console_process();
 		error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
 				&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);
@@ -509,6 +514,7 @@ void get_scd30_measurement() {
 
 		led_awake_routine1();
 		console_process();
+		get_sps30_measurement();
 	}
 	run_console_co2 = 0;
 
@@ -520,8 +526,8 @@ void get_scd30_measurement_()
 	scd30_start_periodic_measurement(0);
 
 	uint8_t repetition = 0;
-	for (repetition = 0; repetition < _Flash_Packet.co2_samples; repetition++) {
-		//sensirion_i2c_hal_sleep_usec(1500000);
+	for (repetition = 0; repetition < 1; repetition++) {
+		sensirion_i2c_hal_sleep_usec(1500000);
 		error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
 				&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);
 
@@ -545,7 +551,7 @@ void get_scd30_measurement_()
 			}
 		}
 
-		led_awake_routine1();
+		//led_awake_routine1();
 
 	}
 }
@@ -789,7 +795,9 @@ static void wakeup() {
 		usb_time_keep = 0;
 		prev_usb_time_ = HAL_GetTick();
 	}
-
+	BLUE_LED_PWM(disable_led);
+	GREEN_LED_PWM(disable_led);
+	RED_LED_PWM(disable_led);
 	HAL_TIM_Base_Start(&htim1);
 	HAL_DMA_Start(&hdma_tim1_up, (uint32_t) &(dataA[0]),
 			(uint32_t) &(BLUE_LED_GPIO_Port->BSRR),
@@ -824,7 +832,7 @@ static void green_led_blink() {
 
 }
 
-static void led_awake_routine() {
+ void led_awake_routine() {
 
 	if (_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard
 			{
@@ -966,6 +974,7 @@ void blink_red() {
 
 static void led_awake_routine1() {
 
+
 	if (_RunTime_Packet.sd_card_disk_write_error == 0) //no errors in sdcard
 			{
 		if (HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin)) //if usb is detected, then just turn the blue led on
@@ -990,9 +999,9 @@ static void led_awake_routine1() {
 				BLUE_LED_PWM(disable_led);
 
 				if (!green_led_pwm_flag) {
-					green_led_pwm_val += 40;
+					green_led_pwm_val += 60;
 				} else {
-					green_led_pwm_val -= 40;
+					green_led_pwm_val -= 60;
 				}
 
 				if (green_led_pwm_val > 1000) {
@@ -1009,9 +1018,9 @@ static void led_awake_routine1() {
 				BLUE_LED_PWM(disable_led);
 
 				if (!green_led_pwm_flag) {
-					green_led_pwm_val += 40;
+					green_led_pwm_val += 60;
 				} else {
-					green_led_pwm_val -= 40;
+					green_led_pwm_val -= 60;
 				}
 
 				if (green_led_pwm_val > 1000) {
@@ -1032,9 +1041,9 @@ static void led_awake_routine1() {
 				BLUE_LED_PWM(disable_led);
 
 				if (!green_led_pwm_flag) {
-					green_led_pwm_val += 40;
+					green_led_pwm_val += 60;
 				} else {
-					green_led_pwm_val -= 40;
+					green_led_pwm_val -= 60;
 				}
 
 				if (green_led_pwm_val > 1000) {
@@ -1044,9 +1053,9 @@ static void led_awake_routine1() {
 				}
 
 				if (!red_led_pwm_flag) {
-					red_led_pwm_val += 40;
+					red_led_pwm_val += 60;
 				} else {
-					red_led_pwm_val -= 40;
+					red_led_pwm_val -= 60;
 				}
 
 				if (red_led_pwm_val > 1000) {
@@ -1062,9 +1071,9 @@ static void led_awake_routine1() {
 				GREEN_LED_PWM(disable_led);
 				BLUE_LED_PWM(disable_led);
 				if (!red_led_pwm_flag) {
-					red_led_pwm_val += 40;
+					red_led_pwm_val += 60;
 				} else {
-					red_led_pwm_val -= 40;
+					red_led_pwm_val -= 60;
 				}
 
 				if (red_led_pwm_val > 1000) {
@@ -1341,7 +1350,7 @@ void app_main() {
 				//scd30_stop_periodic_measurement();
 #endif
 
-				sps30_stop_measurement();
+				//sps30_stop_measurement();
 				stop_measurement = 0;
 			}
 

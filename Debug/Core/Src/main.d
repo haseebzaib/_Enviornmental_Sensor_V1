@@ -50,9 +50,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
  ../USB_DEVICE/Target/usbd_conf.h ../Core/Inc/app_main.h \
  ../Core/Inc/main.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Internal_RTC_Handling/Uhr.h
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Internal_RTC_Handling/Uhr.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -109,6 +109,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../USB_DEVICE/Target/usbd_conf.h:
 ../Core/Inc/app_main.h:
 ../Core/Inc/main.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/Enviornmental_Sensor/_Enviornmental_Sensor_V1/Internal_RTC_Handling/Uhr.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Internal_RTC_Handling/Uhr.h:

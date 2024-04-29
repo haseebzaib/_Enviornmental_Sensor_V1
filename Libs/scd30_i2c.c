@@ -59,10 +59,10 @@ int16_t scd30_await_data_ready() {
         return local_error;
     }
     while (data_ready == 0) {
-    	if(!HAL_GPIO_ReadPin(USB_DETECT_GPIO_Port, USB_DETECT_Pin))//dont give delay when usb connected as we want to service console aswell
-    			{
+
         sensirion_hal_sleep_us(100000);
-    			}
+
+
         local_error = scd30_get_data_ready(&data_ready);
         if (local_error != NO_ERROR) {
             return local_error;

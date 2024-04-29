@@ -44,10 +44,10 @@
 ../Embedded_CLI/console.c:1308:6:BattVolt	24	static
 ../Embedded_CLI/console.c:1316:6:port	24	static
 ../Embedded_CLI/console.c:1320:6:showall	256	static
-../Embedded_CLI/console.c:1461:6:systemversion	24	static
-../Embedded_CLI/console.c:1477:6:aboutDev	24	static
-../Embedded_CLI/console.c:1494:6:initializeEmbeddedCli	864	static
-../Embedded_CLI/console.c:1724:6:console_process	8	static
-../Embedded_CLI/console.c:1728:6:console_uart_deinit	8	static
-../Embedded_CLI/console.c:1732:6:console_uart_init	8	static
-../Embedded_CLI/console.c:1748:6:console_init	8	static
+../Embedded_CLI/console.c:1463:6:systemversion	24	static
+../Embedded_CLI/console.c:1479:6:aboutDev	24	static
+../Embedded_CLI/console.c:1496:6:initializeEmbeddedCli	864	static
+../Embedded_CLI/console.c:1726:6:console_process	8	static
+../Embedded_CLI/console.c:1730:6:console_uart_deinit	8	static
+../Embedded_CLI/console.c:1734:6:console_uart_init	8	static
+../Embedded_CLI/console.c:1750:6:console_init	8	static

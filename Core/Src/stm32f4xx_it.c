@@ -62,7 +62,9 @@ extern TIM_HandleTypeDef htim2;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
+extern void led_awake_routine();
 
+uint8_t var = 0;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -189,6 +191,7 @@ void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	HAL_IWDG_Refresh(&hiwdg);
+
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */

@@ -78,8 +78,8 @@ all: main-build
 main-build: _Enviornmental_Sensor_V1.elf secondary-outputs
 
 # Tool invocations
-_Enviornmental_Sensor_V1.elf _Enviornmental_Sensor_V1.map: $(OBJS) $(USER_OBJS) C:\Users\hzaib\Documents\Freelance\ Projects\Mughees\ proj\Enviornmental_Sensor\_Enviornmental_Sensor_V1\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "_Enviornmental_Sensor_V1.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\hzaib\Documents\Freelance Projects\Mughees proj\Enviornmental_Sensor\_Enviornmental_Sensor_V1\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="_Enviornmental_Sensor_V1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+_Enviornmental_Sensor_V1.elf _Enviornmental_Sensor_V1.map: $(OBJS) $(USER_OBJS) C:\Users\hzaib\Documents\Freelance\ Projects\Mughees\ proj\git\Enviornmental_Sensor\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "_Enviornmental_Sensor_V1.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\hzaib\Documents\Freelance Projects\Mughees proj\git\Enviornmental_Sensor\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="_Enviornmental_Sensor_V1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

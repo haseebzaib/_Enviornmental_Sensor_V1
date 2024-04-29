@@ -794,11 +794,11 @@ void gpio_analog()
 	  __HAL_RCC_GPIOB_CLK_ENABLE();
 	  __HAL_RCC_GPIOD_CLK_ENABLE();
 
-	  GPIO_InitStruct.Pin = BLUE_LED_Pin;
-	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	  HAL_GPIO_Init(BLUE_LED_GPIO_Port, &GPIO_InitStruct);
+//	  GPIO_InitStruct.Pin = BLUE_LED_Pin;
+//	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+//	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+//	  HAL_GPIO_Init(BLUE_LED_GPIO_Port, &GPIO_InitStruct);
 
 	  GPIO_InitStruct.Pin = EN_5V_Pin;
 	  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
@@ -899,6 +899,8 @@ void gpio_disable()
 void gpio_enable()
 {
 	MX_GPIO_Init();
+
+
 
 	 GPIO_InitTypeDef GPIO_InitStruct = {0};
 	    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_12;

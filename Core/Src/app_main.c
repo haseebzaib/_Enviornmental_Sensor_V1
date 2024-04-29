@@ -764,7 +764,7 @@ static void wakeup() {
 	HAL_PWREx_DisableFlashPowerDown();
 	HAL_ResumeTick();
 	gpio_enable();
-
+	pwr_off_detected();
 	enable_5v();
 	enable_motion();
 	console_uart_init();
@@ -795,6 +795,7 @@ static void wakeup() {
 		usb_time_keep = 0;
 		prev_usb_time_ = HAL_GetTick();
 	}
+	pwr_off_detected();
 	BLUE_LED_PWM(disable_led);
 	GREEN_LED_PWM(disable_led);
 	RED_LED_PWM(disable_led);

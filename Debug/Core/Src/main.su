@@ -19,8 +19,8 @@
 ../Core/Src/main.c:865:6:timer_gpio_analog	32	static
 ../Core/Src/main.c:877:6:gpio_disable	32	static
 ../Core/Src/main.c:899:6:gpio_enable	32	static
-../Core/Src/main.c:919:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:929:6:HAL_GPIO_EXTI_Callback	16	static
-../Core/Src/main.c:950:6:HAL_RTC_AlarmAEventCallback	16	static
-../Core/Src/main.c:957:6:HAL_UART_ErrorCallback	16	static
-../Core/Src/main.c:982:6:Error_Handler	8	static,ignoring_inline_asm
+../Core/Src/main.c:921:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:931:6:HAL_GPIO_EXTI_Callback	16	static
+../Core/Src/main.c:952:6:HAL_RTC_AlarmAEventCallback	16	static
+../Core/Src/main.c:959:6:HAL_UART_ErrorCallback	16	static
+../Core/Src/main.c:984:6:Error_Handler	8	static,ignoring_inline_asm

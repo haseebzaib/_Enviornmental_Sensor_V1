@@ -526,7 +526,7 @@ void get_scd30_measurement_()
 	scd30_start_periodic_measurement(0);
 
 	uint8_t repetition = 0;
-	for (repetition = 0; repetition < 1; repetition++) {
+	for (repetition = 0; repetition < _Flash_Packet.co2_samples; repetition++) {
 		sensirion_i2c_hal_sleep_usec(1500000);
 		error = scd30_blocking_read_measurement_data(&_RunTime_Packet.co2,
 				&_RunTime_Packet.temperature, &_RunTime_Packet.humidity);

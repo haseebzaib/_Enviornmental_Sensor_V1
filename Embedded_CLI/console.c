@@ -638,6 +638,7 @@ void co2calibrate(EmbeddedCli *cli, char *args, void *context) {
 	flag_cli = 0;
 	char buffer[50];
 	memset(buffer, '\0', sizeof(buffer));
+	cli_printf(cli, "Disclaimer: Only input wholenumbers, decimals and negative numbers not supported.");
 	cli_printf(cli,
 			"To calibrate Co2 sensor, please provide Co2 concentration value.");
 	cli_printf(cli,
@@ -801,6 +802,7 @@ void set_co2_temp_offset(EmbeddedCli *cli, char *args, void *context)
 		flag_cli = 0;
 		char buffer[50];
 		memset(buffer, '\0', sizeof(buffer));
+		cli_printf(cli, "Disclaimer: Only input wholenumbers, decimals and negative numbers not supported.");
 		cli_printf(cli,
 				"To calibrate Co2 sensor Temperature offset, please provide value.");
 		cli_printf(cli,
@@ -893,6 +895,7 @@ void set_co2_altitude_compensation(EmbeddedCli *cli, char *args, void *context)
 		flag_cli = 0;
 		char buffer[50];
 		memset(buffer, '\0', sizeof(buffer));
+		cli_printf(cli, "Disclaimer: Only input wholenumbers, decimals and negative numbers not supported.");
 		cli_printf(cli,
 				"To calibrate Co2 sensor Altitude compensation, please provide value.");
 		cli_printf(cli,
@@ -1118,6 +1121,7 @@ void run_co2_calibration_routine(EmbeddedCli *cli, char *args, void *context)
 void set_co2_samples(EmbeddedCli *cli, char *args, void *context)
 {
 	const char *newLine = "\r\n";
+	cli_printf(cli, "Disclaimer: Only input wholenumbers, decimals and negative numbers not supported.");
 	cli_printf(cli, "Disclaimer: It takes 30second for any changes to save.");
 	cli_printf(cli, "Disclaimer: Increase in Samples number also reduces battery life.");
 	HAL_UART_Transmit(UART_CLI_PERIPH, (uint8_t*) newLine, strlen(newLine),

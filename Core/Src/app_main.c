@@ -809,7 +809,12 @@ static void wakeup() {
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); //for red led
 	RED_LED_PWM(disable_led);
 
+	adc_Measure(&_RunTime_Packet.battery_voltage);
+		led_awake_routine();
+
 	pwr_off_detected();
+
+
 
 	HAL_UART_Transmit(&huart1, (uint8_t*) "wakeTime\r\n", 10, 1000);
 }
@@ -1245,7 +1250,7 @@ void app_main() {
 					{
 				prev_sleep_time = HAL_GetTick();
 			}
-
+			led_awake_routine();
 			/**
 			 * This is some kind of bug in this rtc that if time is not read continously with ddate inside the loop it does not update
 			 * sometimes it does but this is the solution to solve it.
@@ -1388,7 +1393,7 @@ void app_main() {
 
 			Rtc_set_alarm();
 
-		//	adc_Measure(&_RunTime_Packet.battery_voltage);
+		 // adc_Measure(&_RunTime_Packet.battery_voltage);
 			led_awake_routine();
 			save_data();
 

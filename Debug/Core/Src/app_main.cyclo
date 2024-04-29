@@ -19,10 +19,10 @@
 ../Core/Src/app_main.c:681:13:sensor_calibration	3
 ../Core/Src/app_main.c:696:13:sleep	5
 ../Core/Src/app_main.c:757:13:wakeup	3
-../Core/Src/app_main.c:817:13:green_led_blink	1
-../Core/Src/app_main.c:835:7:led_awake_routine	26
-../Core/Src/app_main.c:961:6:blink_red	1
-../Core/Src/app_main.c:975:13:led_awake_routine1	26
-../Core/Src/app_main.c:1105:7:ver_GetUid	3
-../Core/Src/app_main.c:1127:6:run_console_from_scd30	2
-../Core/Src/app_main.c:1138:6:app_main	43
+../Core/Src/app_main.c:822:13:green_led_blink	1
+../Core/Src/app_main.c:840:7:led_awake_routine	26
+../Core/Src/app_main.c:966:6:blink_red	1
+../Core/Src/app_main.c:980:13:led_awake_routine1	26
+../Core/Src/app_main.c:1110:7:ver_GetUid	3
+../Core/Src/app_main.c:1132:6:run_console_from_scd30	2
+../Core/Src/app_main.c:1143:6:app_main	43

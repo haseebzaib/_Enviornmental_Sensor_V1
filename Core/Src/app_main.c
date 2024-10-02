@@ -750,6 +750,10 @@ static void sleep() {
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
 	//HAL_IWDG_Refresh(&hiwdg);
 	Rtc_Alarm_watchdog();
+
+	Rtc_manual_alarm();
+
+
 	}while(set_alarm_Time == 0 && _RunTime_Packet.pwr_off_det == 0 && _RunTime_Packet.usb_detection == 0);
 
 	Rtc_Alarm_watchdog_disable();
@@ -1188,8 +1192,8 @@ void app_main() {
 	init_scd30_i2c();
 #endif
 	console_init();
-	Rtc_set_alarm();
-
+//	Rtc_set_alarm();
+	Rtc_manual_alarm();
 	RTC_DateTypeDef sDate;
 	HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
 	_RunTime_Packet.prev_year = sDate.Year;
@@ -1392,8 +1396,8 @@ void app_main() {
 				prev_sleep_time_pm_co2 = HAL_GetTick(); //we also enable sensors to take reading then
 			}
 
-			Rtc_set_alarm();
-
+	//		Rtc_set_alarm();
+			Rtc_manual_alarm();
 		 // adc_Measure(&_RunTime_Packet.battery_voltage);
 			led_awake_routine();
 			save_data();

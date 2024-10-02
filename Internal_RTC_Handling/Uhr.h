@@ -21,6 +21,9 @@ extern void Rtc_Alarm_watchdog_disable();
 extern void Rtc_Alarm_watchdog();
 extern void Rtc_set_alarm();
 
+extern void Rtc_manual_alarm();
+extern void Rtc_sleep_alarm();
+
 extern void Set_Date(char *Datebuffer);
 extern void Set_Time(char *Timebuffer);
 extern void Get_Date();

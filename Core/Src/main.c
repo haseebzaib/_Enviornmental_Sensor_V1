@@ -882,40 +882,87 @@ void gpio_disable()
 	 timer_gpio_analog();
 	 gpio_analog();
 
-	 GPIO_InitTypeDef GPIO_InitStruct = {0};
-	    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_12;
-		  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-		  GPIO_InitStruct.Pull = GPIO_NOPULL;
-		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-	    GPIO_InitStruct.Pin = GPIO_PIN_2;
-		  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-		  GPIO_InitStruct.Pull = GPIO_NOPULL;
-		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+//	 GPIO_InitTypeDef GPIO_InitStruct = {0};
+//	    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_12;
+//		  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+//		  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+//	    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+//
+//	    GPIO_InitStruct.Pin = GPIO_PIN_2;
+//		  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+//		  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+//	    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 }
 void gpio_enable()
 {
-	MX_GPIO_Init();
+	  GPIO_InitTypeDef GPIO_InitStruct = {0};
+	/* USER CODE BEGIN MX_GPIO_Init_1 */
+	/* USER CODE END MX_GPIO_Init_1 */
+
+	  /* GPIO Ports Clock Enable */
+	  __HAL_RCC_GPIOC_CLK_ENABLE();
+	  __HAL_RCC_GPIOH_CLK_ENABLE();
+	  __HAL_RCC_GPIOA_CLK_ENABLE();
+	  __HAL_RCC_GPIOB_CLK_ENABLE();
+	  __HAL_RCC_GPIOD_CLK_ENABLE();
+
+	  /*Configure GPIO pin Output Level */
+	  HAL_GPIO_WritePin(EN_MOTION_GPIO_Port, EN_MOTION_Pin, GPIO_PIN_RESET);
+
+	  /*Configure GPIO pin Output Level */
+	  HAL_GPIO_WritePin(EN_5V_GPIO_Port, EN_5V_Pin, GPIO_PIN_SET);
+
+	  /*Configure GPIO pin Output Level */
+
+
+	  /*Configure GPIO pin : OUT_MOTION_Pin */
+	  GPIO_InitStruct.Pin = OUT_MOTION_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  HAL_GPIO_Init(OUT_MOTION_GPIO_Port, &GPIO_InitStruct);
+
+	  /*Configure GPIO pin : EN_MOTION_Pin */
+	  GPIO_InitStruct.Pin = EN_MOTION_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	  HAL_GPIO_Init(EN_MOTION_GPIO_Port, &GPIO_InitStruct);
 
 
 
-	 GPIO_InitTypeDef GPIO_InitStruct = {0};
-	    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_12;
-	    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	    GPIO_InitStruct.Pull = GPIO_NOPULL;
-	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
-	    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+	  /*Configure GPIO pin : EN_5V_Pin */
+	  GPIO_InitStruct.Pin = EN_5V_Pin;
+	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	  HAL_GPIO_Init(EN_5V_GPIO_Port, &GPIO_InitStruct);
 
-	    GPIO_InitStruct.Pin = GPIO_PIN_2;
-	    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	    GPIO_InitStruct.Pull = GPIO_NOPULL;
-	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
-	    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+	  /* EXTI interrupt init*/
+	  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+	  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
+	  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+	  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+
+
+//	    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_12;
+//	    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+//	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+//	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+//	    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
+//	    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+//
+//	    GPIO_InitStruct.Pin = GPIO_PIN_2;
+//	    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+//	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+//	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+//	    GPIO_InitStruct.Alternate = GPIO_AF12_SDIO;
+//	    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

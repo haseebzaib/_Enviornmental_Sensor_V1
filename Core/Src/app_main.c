@@ -1341,6 +1341,9 @@ void app_main() {
 				led_awake_routine1();
 				pwr_off_detected();
 				check_peripheral_error();
+
+				/*due to edge cases*/
+				Rtc_manual_alarm_secondary();
 				//HAL_Delay(20);
 			}
 

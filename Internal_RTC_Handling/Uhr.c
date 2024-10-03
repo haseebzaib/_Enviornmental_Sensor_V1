@@ -191,6 +191,39 @@ void Rtc_manual_alarm()
 
 }
 
+void Rtc_manual_alarm_secondary()
+{
+	RTC_TimeTypeDef gTime;
+	HAL_RTC_GetTime(RTC_Handle, &gTime, RTC_FORMAT_BIN);
+	RTC_DateTypeDef sDate;
+    HAL_RTC_GetDate(RTC_Handle, &sDate, RTC_FORMAT_BIN);
+
+
+    uint16_t minute =0;
+	uint8_t hour = 0;
+
+	   hour = gTime.Hours;
+
+
+    if((gTime.Minutes % _Flash_Packet.Time_Interval) == 0 && (prev_min != gTime.Minutes))
+    {
+    	set_alarm_Time = 1;
+    	prev_min = gTime.Minutes;
+    	minute = gTime.Minutes +  _Flash_Packet.Time_Interval;
+    	   if(minute > 59)
+    	    {
+    	    	hour = hour + 1; //we go to next hour as our time is schedualed for next hour
+    	    	minute = 0;
+    	    	if(hour > 23)
+    	    	{
+    	          hour = 0;
+    	    	}
+    	    }
+
+    	   sprintf(scheduled_packet,"%02d:%02d:%02d",hour,minute,gTime.Seconds);
+    }
+}
+
 
 void Rtc_sleep_alarm()
 {

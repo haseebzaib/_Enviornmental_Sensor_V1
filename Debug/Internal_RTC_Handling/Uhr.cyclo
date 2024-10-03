@@ -4,7 +4,8 @@
 ../Internal_RTC_Handling/Uhr.c:70:6:Set_Date	2
 ../Internal_RTC_Handling/Uhr.c:90:6:Rtc_set_alarm	4
 ../Internal_RTC_Handling/Uhr.c:155:6:Rtc_manual_alarm	6
-../Internal_RTC_Handling/Uhr.c:195:6:Rtc_sleep_alarm	1
-../Internal_RTC_Handling/Uhr.c:199:6:Set_Time	2
-../Internal_RTC_Handling/Uhr.c:217:6:Get_Date	1
-../Internal_RTC_Handling/Uhr.c:222:6:Get_Time	1
+../Internal_RTC_Handling/Uhr.c:194:6:Rtc_manual_alarm_secondary	5
+../Internal_RTC_Handling/Uhr.c:228:6:Rtc_sleep_alarm	1
+../Internal_RTC_Handling/Uhr.c:232:6:Set_Time	2
+../Internal_RTC_Handling/Uhr.c:250:6:Get_Date	1
+../Internal_RTC_Handling/Uhr.c:255:6:Get_Time	1

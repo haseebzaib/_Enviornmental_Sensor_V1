@@ -42,25 +42,25 @@ Embedded_CLI/console.o: ../Embedded_CLI/console.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
  ../Core/Inc/app_main.h ../Core/Inc/main.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h \
  ../FATFS/App/fatfs.h ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../FATFS/Target/bsp_driver_sd.h \
  ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/sd_diskio.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Internal_RTC_Handling/Uhr.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/Utils.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_common.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_config.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_i2c_hal.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_uart.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_arch_config.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sps30.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/internal_adc.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/scd4x_i2c.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/scd30_i2c.h
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Internal_RTC_Handling/Uhr.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/Utils.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_common.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_config.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_i2c_hal.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_uart.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_arch_config.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sps30.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/internal_adc.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/scd4x_i2c.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/scd30_i2c.h
 ../Embedded_CLI/embedded_cli.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -106,8 +106,8 @@ Embedded_CLI/console.o: ../Embedded_CLI/console.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
 ../Core/Inc/app_main.h:
 ../Core/Inc/main.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h:
 ../FATFS/App/fatfs.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
@@ -117,14 +117,14 @@ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sen
 ../Middlewares/Third_Party/FatFs/src/diskio.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../FATFS/Target/sd_diskio.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Internal_RTC_Handling/Uhr.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/Utils.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_common.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_config.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_i2c_hal.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_uart.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sensirion_arch_config.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/sps30.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/internal_adc.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/scd4x_i2c.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/Libs/scd30_i2c.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Internal_RTC_Handling/Uhr.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/Utils.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_common.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_config.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_i2c_hal.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_uart.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sensirion_arch_config.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/sps30.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/internal_adc.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/scd4x_i2c.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/Libs/scd30_i2c.h:

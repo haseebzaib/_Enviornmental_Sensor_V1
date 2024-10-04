@@ -163,7 +163,7 @@ void Rtc_manual_alarm()
     uint16_t minute =0;
 	uint8_t hour = 0;
 
-	   hour = gTime.Hours;
+	    hour = gTime.Hours;
 
 
     if((gTime.Minutes % _Flash_Packet.Time_Interval) == 0 && (prev_min != gTime.Minutes))

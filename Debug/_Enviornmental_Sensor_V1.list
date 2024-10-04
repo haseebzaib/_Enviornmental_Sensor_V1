@@ -39,15 +39,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_macro  00026549  00000000  00000000  0006ccef  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00044f64  00000000  00000000  00093238  2**0
+ 18 .debug_line   00044f66  00000000  00000000  00093238  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000b4fcc  00000000  00000000  000d819c  2**0
+ 19 .debug_str    000b4fcc  00000000  00000000  000d819e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000086  00000000  00000000  0018d168  2**0
+ 20 .comment      00000043  00000000  00000000  0018d16a  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  0000df10  00000000  00000000  0018d1f0  2**2
+ 21 .debug_frame  0000df10  00000000  00000000  0018d1b0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 00000080  00000000  00000000  0019b100  2**0
+ 22 .debug_line_str 00000080  00000000  00000000  0019b0c0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -51173,7 +51173,7 @@ void Rtc_manual_alarm()
  8013e24:	2300      	movs	r3, #0
  8013e26:	777b      	strb	r3, [r7, #29]
 
-	   hour = gTime.Hours;
+	    hour = gTime.Hours;
  8013e28:	7a3b      	ldrb	r3, [r7, #8]
  8013e2a:	777b      	strb	r3, [r7, #29]
 

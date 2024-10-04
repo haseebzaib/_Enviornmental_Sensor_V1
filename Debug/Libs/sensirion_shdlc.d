@@ -43,8 +43,8 @@ Libs/sensirion_shdlc.o: ../Libs/sensirion_shdlc.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
  ../Core/Inc/main.h ../Core/Inc/app_main.h ../Core/Inc/main.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h \
  ../FATFS/App/fatfs.h ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../FATFS/Target/bsp_driver_sd.h \
@@ -98,8 +98,8 @@ Libs/sensirion_shdlc.o: ../Libs/sensirion_shdlc.c \
 ../Core/Inc/main.h:
 ../Core/Inc/app_main.h:
 ../Core/Inc/main.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/csv_json_handling.h:
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/csv_json_handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h:
 ../FATFS/App/fatfs.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:

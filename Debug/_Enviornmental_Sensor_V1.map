@@ -14903,7 +14903,7 @@ LOAD C:/ST/STM32CubeIDE_1.12.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x0002604b       0xdb ./USB_DEVICE/App/usbd_storage_if.o
  .debug_macro   0x00026126      0x423 ./USB_DEVICE/Target/usbd_conf.o
 
-.debug_line     0x00000000    0x44f64
+.debug_line     0x00000000    0x44f66
  .debug_line    0x00000000     0x199e ./Core/Src/app_main.o
  .debug_line    0x0000199e     0x1235 ./Core/Src/main.o
  .debug_line    0x00002bd3      0xb1e ./Core/Src/stm32f4xx_hal_msp.o
@@ -14941,34 +14941,34 @@ LOAD C:/ST/STM32CubeIDE_1.12.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_line    0x00028c2b      0xaa0 ./FATFS/App/fatfs.o
  .debug_line    0x000296cb      0xa49 ./FATFS/Target/bsp_driver_sd.o
  .debug_line    0x0002a114      0xb6a ./FATFS/Target/sd_diskio.o
- .debug_line    0x0002ac7e      0xe56 ./Internal_RTC_Handling/Uhr.o
- .debug_line    0x0002bad4      0xce8 ./Libs/Utils.o
- .debug_line    0x0002c7bc      0xc66 ./Libs/internal_adc.o
- .debug_line    0x0002d422      0xfe6 ./Libs/scd30_i2c.o
- .debug_line    0x0002e408      0xaaa ./Libs/scd4x_i2c.o
- .debug_line    0x0002eeb2      0x740 ./Libs/sensirion_common.o
- .debug_line    0x0002f5f2      0xbc0 ./Libs/sensirion_i2c.o
- .debug_line    0x000301b2      0xacb ./Libs/sensirion_i2c_hal.o
- .debug_line    0x00030c7d      0xf8b ./Libs/sensirion_shdlc.o
- .debug_line    0x00031c08      0xce2 ./Libs/sensirion_uart_implementation.o
- .debug_line    0x000328ea      0x6c6 ./Libs/sps30.o
- .debug_line    0x00032fb0      0xe40 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc.o
- .debug_line    0x00033df0      0xe5a ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_bot.o
- .debug_line    0x00034c4a      0xaae ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_data.o
- .debug_line    0x000356f8     0x15f5 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.o
- .debug_line    0x00036ced     0x1084 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
- .debug_line    0x00037d71     0x125d ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
- .debug_line    0x00038fce      0xb9e ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .debug_line    0x00039b6c      0xafa ./Middlewares/Third_Party/FatFs/src/diskio.o
- .debug_line    0x0003a666     0x3d8f ./Middlewares/Third_Party/FatFs/src/ff.o
- .debug_line    0x0003e3f5      0xb15 ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .debug_line    0x0003ef0a      0xb57 ./Middlewares/Third_Party/FatFs/src/option/ccsbcs.o
- .debug_line    0x0003fa61     0x1034 ./SDcard_Filehandling/File_Handling.o
- .debug_line    0x00040a95     0x1044 ./SDcard_Filehandling/csv_json_handling.o
- .debug_line    0x00041ad9      0xb9c ./USB_DEVICE/App/usb_device.o
- .debug_line    0x00042675      0xc13 ./USB_DEVICE/App/usbd_desc.o
- .debug_line    0x00043288      0xd74 ./USB_DEVICE/App/usbd_storage_if.o
- .debug_line    0x00043ffc      0xf68 ./USB_DEVICE/Target/usbd_conf.o
+ .debug_line    0x0002ac7e      0xe58 ./Internal_RTC_Handling/Uhr.o
+ .debug_line    0x0002bad6      0xce8 ./Libs/Utils.o
+ .debug_line    0x0002c7be      0xc66 ./Libs/internal_adc.o
+ .debug_line    0x0002d424      0xfe6 ./Libs/scd30_i2c.o
+ .debug_line    0x0002e40a      0xaaa ./Libs/scd4x_i2c.o
+ .debug_line    0x0002eeb4      0x740 ./Libs/sensirion_common.o
+ .debug_line    0x0002f5f4      0xbc0 ./Libs/sensirion_i2c.o
+ .debug_line    0x000301b4      0xacb ./Libs/sensirion_i2c_hal.o
+ .debug_line    0x00030c7f      0xf8b ./Libs/sensirion_shdlc.o
+ .debug_line    0x00031c0a      0xce2 ./Libs/sensirion_uart_implementation.o
+ .debug_line    0x000328ec      0x6c6 ./Libs/sps30.o
+ .debug_line    0x00032fb2      0xe40 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc.o
+ .debug_line    0x00033df2      0xe5a ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_bot.o
+ .debug_line    0x00034c4c      0xaae ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_data.o
+ .debug_line    0x000356fa     0x15f5 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.o
+ .debug_line    0x00036cef     0x1084 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
+ .debug_line    0x00037d73     0x125d ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
+ .debug_line    0x00038fd0      0xb9e ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
+ .debug_line    0x00039b6e      0xafa ./Middlewares/Third_Party/FatFs/src/diskio.o
+ .debug_line    0x0003a668     0x3d8f ./Middlewares/Third_Party/FatFs/src/ff.o
+ .debug_line    0x0003e3f7      0xb15 ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .debug_line    0x0003ef0c      0xb57 ./Middlewares/Third_Party/FatFs/src/option/ccsbcs.o
+ .debug_line    0x0003fa63     0x1034 ./SDcard_Filehandling/File_Handling.o
+ .debug_line    0x00040a97     0x1044 ./SDcard_Filehandling/csv_json_handling.o
+ .debug_line    0x00041adb      0xb9c ./USB_DEVICE/App/usb_device.o
+ .debug_line    0x00042677      0xc13 ./USB_DEVICE/App/usbd_desc.o
+ .debug_line    0x0004328a      0xd74 ./USB_DEVICE/App/usbd_storage_if.o
+ .debug_line    0x00043ffe      0xf68 ./USB_DEVICE/Target/usbd_conf.o
 
 .debug_str      0x00000000    0xb4fcc
  .debug_str     0x00000000    0xa5ef3 ./Core/Src/app_main.o
@@ -15102,73 +15102,72 @@ LOAD C:/ST/STM32CubeIDE_1.12.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_str     0x000b4f74       0x58 ./USB_DEVICE/Target/usbd_conf.o
                               0xa4e82 (size before relaxing)
 
-.comment        0x00000000       0x86
+.comment        0x00000000       0x43
  .comment       0x00000000       0x43 ./Core/Src/app_main.o
                                  0x44 (size before relaxing)
  .comment       0x00000043       0x44 ./Core/Src/main.o
- .comment       0x00000043       0x43 ./Core/Src/stm32f4xx_hal_msp.o
-                                 0x44 (size before relaxing)
- .comment       0x00000086       0x44 ./Core/Src/stm32f4xx_it.o
- .comment       0x00000086       0x44 ./Core/Src/syscalls.o
- .comment       0x00000086       0x44 ./Core/Src/sysmem.o
- .comment       0x00000086       0x44 ./Core/Src/system_stm32f4xx.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sd.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_sdmmc.o
- .comment       0x00000086       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
- .comment       0x00000086       0x44 ./Embedded_CLI/console.o
- .comment       0x00000086       0x44 ./Embedded_CLI/embedded_cli.o
- .comment       0x00000086       0x44 ./FATFS/App/fatfs.o
- .comment       0x00000086       0x44 ./FATFS/Target/bsp_driver_sd.o
- .comment       0x00000086       0x44 ./FATFS/Target/sd_diskio.o
- .comment       0x00000086       0x44 ./Internal_RTC_Handling/Uhr.o
- .comment       0x00000086       0x44 ./Libs/Utils.o
- .comment       0x00000086       0x44 ./Libs/internal_adc.o
- .comment       0x00000086       0x44 ./Libs/scd30_i2c.o
- .comment       0x00000086       0x44 ./Libs/scd4x_i2c.o
- .comment       0x00000086       0x44 ./Libs/sensirion_common.o
- .comment       0x00000086       0x44 ./Libs/sensirion_i2c.o
- .comment       0x00000086       0x44 ./Libs/sensirion_i2c_hal.o
- .comment       0x00000086       0x44 ./Libs/sensirion_shdlc.o
- .comment       0x00000086       0x44 ./Libs/sensirion_uart_implementation.o
- .comment       0x00000086       0x44 ./Libs/sps30.o
- .comment       0x00000086       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc.o
- .comment       0x00000086       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_bot.o
- .comment       0x00000086       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_data.o
- .comment       0x00000086       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.o
- .comment       0x00000086       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
- .comment       0x00000086       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
- .comment       0x00000086       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .comment       0x00000086       0x44 ./Middlewares/Third_Party/FatFs/src/diskio.o
- .comment       0x00000086       0x44 ./Middlewares/Third_Party/FatFs/src/ff.o
- .comment       0x00000086       0x44 ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
- .comment       0x00000086       0x44 ./Middlewares/Third_Party/FatFs/src/option/ccsbcs.o
- .comment       0x00000086       0x44 ./SDcard_Filehandling/File_Handling.o
- .comment       0x00000086       0x44 ./SDcard_Filehandling/csv_json_handling.o
- .comment       0x00000086       0x44 ./USB_DEVICE/App/usb_device.o
- .comment       0x00000086       0x44 ./USB_DEVICE/App/usbd_desc.o
- .comment       0x00000086       0x44 ./USB_DEVICE/App/usbd_storage_if.o
- .comment       0x00000086       0x44 ./USB_DEVICE/Target/usbd_conf.o
+ .comment       0x00000043       0x44 ./Core/Src/stm32f4xx_hal_msp.o
+ .comment       0x00000043       0x44 ./Core/Src/stm32f4xx_it.o
+ .comment       0x00000043       0x44 ./Core/Src/syscalls.o
+ .comment       0x00000043       0x44 ./Core/Src/sysmem.o
+ .comment       0x00000043       0x44 ./Core/Src/system_stm32f4xx.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sd.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_sdmmc.o
+ .comment       0x00000043       0x44 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
+ .comment       0x00000043       0x44 ./Embedded_CLI/console.o
+ .comment       0x00000043       0x44 ./Embedded_CLI/embedded_cli.o
+ .comment       0x00000043       0x44 ./FATFS/App/fatfs.o
+ .comment       0x00000043       0x44 ./FATFS/Target/bsp_driver_sd.o
+ .comment       0x00000043       0x44 ./FATFS/Target/sd_diskio.o
+ .comment       0x00000043       0x44 ./Internal_RTC_Handling/Uhr.o
+ .comment       0x00000043       0x44 ./Libs/Utils.o
+ .comment       0x00000043       0x44 ./Libs/internal_adc.o
+ .comment       0x00000043       0x44 ./Libs/scd30_i2c.o
+ .comment       0x00000043       0x44 ./Libs/scd4x_i2c.o
+ .comment       0x00000043       0x44 ./Libs/sensirion_common.o
+ .comment       0x00000043       0x44 ./Libs/sensirion_i2c.o
+ .comment       0x00000043       0x44 ./Libs/sensirion_i2c_hal.o
+ .comment       0x00000043       0x44 ./Libs/sensirion_shdlc.o
+ .comment       0x00000043       0x44 ./Libs/sensirion_uart_implementation.o
+ .comment       0x00000043       0x44 ./Libs/sps30.o
+ .comment       0x00000043       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc.o
+ .comment       0x00000043       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_bot.o
+ .comment       0x00000043       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_data.o
+ .comment       0x00000043       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src/usbd_msc_scsi.o
+ .comment       0x00000043       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
+ .comment       0x00000043       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
+ .comment       0x00000043       0x44 ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
+ .comment       0x00000043       0x44 ./Middlewares/Third_Party/FatFs/src/diskio.o
+ .comment       0x00000043       0x44 ./Middlewares/Third_Party/FatFs/src/ff.o
+ .comment       0x00000043       0x44 ./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o
+ .comment       0x00000043       0x44 ./Middlewares/Third_Party/FatFs/src/option/ccsbcs.o
+ .comment       0x00000043       0x44 ./SDcard_Filehandling/File_Handling.o
+ .comment       0x00000043       0x44 ./SDcard_Filehandling/csv_json_handling.o
+ .comment       0x00000043       0x44 ./USB_DEVICE/App/usb_device.o
+ .comment       0x00000043       0x44 ./USB_DEVICE/App/usbd_desc.o
+ .comment       0x00000043       0x44 ./USB_DEVICE/App/usbd_storage_if.o
+ .comment       0x00000043       0x44 ./USB_DEVICE/Target/usbd_conf.o
 
 .debug_frame    0x00000000     0xdf10
  .debug_frame   0x00000000      0x3bc ./Core/Src/app_main.o

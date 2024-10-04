@@ -1,6 +1,6 @@
 SDcard_Filehandling/File_Handling.o: \
  ../SDcard_Filehandling/File_Handling.c \
- C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h \
+ C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h \
  ../FATFS/App/fatfs.h ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
@@ -49,7 +49,7 @@ SDcard_Filehandling/File_Handling.o: \
  ../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/sd_diskio.h \
  ../SDcard_Filehandling/csv_json_handling.h
-C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/git/Enviornmental_Sensor/SDcard_Filehandling/File_Handling.h:
+C:/Users/hzaib/Documents/Freelance\ Projects/Mughees\ proj/_Enviornmental_Sensor_V1/SDcard_Filehandling/File_Handling.h:
 ../FATFS/App/fatfs.h:
 ../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
